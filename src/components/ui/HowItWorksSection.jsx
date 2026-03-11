@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function HowItWorksSection({ data }) {
   const { howItWorks } = data;
   return (
@@ -28,7 +30,7 @@ export default function HowItWorksSection({ data }) {
           </div>
         </div>
         <h5 className="how-sec-text mt-50 wow fadeInUp animated" data-wow-delay=".3s">
-          {howItWorks.footerText} <a href="/contact">{howItWorks.footerLink}</a>
+          {howItWorks.footerText} <Link href="/contact">{howItWorks.footerLink}</Link>
         </h5>
       </div>
     </section>

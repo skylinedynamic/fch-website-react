@@ -35,7 +35,8 @@ const borrowerPortalStyle = {
 export default function Header() {
   return (
     <header className="main-header header-style-one header-3">
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .sticky-header .sticky-header-btn,
         .mobile-menu .sticky-header-btn {
           margin-top: 2px !important;
@@ -52,11 +53,11 @@ export default function Header() {
             <div className="logo-box">
               <div className="logo">
                 <Link href="/">
-                  <img 
-                    src="/images/black-logo.png" 
-                    alt="" 
-                    title="finclix" 
-                    style={{ maxHeight: '76px', width: 'auto' }} 
+                  <img
+                    src="/images/black-logo.png"
+                    alt=""
+                    title="finclix"
+                    style={{ maxHeight: '76px', width: 'auto' }}
                   />
                 </Link>
               </div>
@@ -68,9 +69,9 @@ export default function Header() {
               </nav>
 
               <a href="https://app.fourcornerfunding.com/" target="_blank"
-                 rel="noopener noreferrer" 
-                 className="theme-btn btn-style-one"
-                 style={{ padding: '24px 35px', marginTop: '10px' }}>
+                rel="noopener noreferrer"
+                className="theme-btn btn-style-one"
+                style={{ padding: '24px 35px', marginTop: '10px' }}>
                 Borrower Portal
               </a>
 
@@ -96,15 +97,15 @@ export default function Header() {
           </div>
 
           <div className="navigation-wrapper">
-             <Navigation className="clearfix" />
+            <Navigation className="clearfix" />
           </div>
 
           <ul className="contact-list-one">
             <li>
               <div className="sticky-button">
                 <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
-                   className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
-                   data-wow-delay=".6s">
+                  className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
+                  data-wow-delay=".6s">
                   Borrower Portal
                 </a>
               </div>
@@ -140,10 +141,10 @@ export default function Header() {
           <div className="inner-container">
             <div className="logo" style={{ width: '176px' }}>
               <Link href="/">
-                <img 
-                  src="/images/black-logo.png" 
-                  alt="img" 
-                  style={{ maxHeight: '76px', width: 'auto' }} 
+                <img
+                  src="/images/black-logo.png"
+                  alt="img"
+                  style={{ maxHeight: '76px', width: 'auto' }}
                 />
               </Link>
             </div>
@@ -154,8 +155,8 @@ export default function Header() {
                   <Navigation className="clearfix" />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
                     <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
-                       className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
-                       data-wow-delay=".6s">
+                      className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
+                      data-wow-delay=".6s">
                       Borrower Portal
                     </a>
                   </div>

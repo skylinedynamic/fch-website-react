@@ -1,6 +1,6 @@
 import { getFaqData } from '@/lib/api/cmsService';
 import Link from 'next/link';
-import FaqList from '@/components/ui/FaqList';
+import FaqSection from '@/components/faq/FaqSection';
 
 export const metadata = {
   title: 'FAQ | Four Corner Funding',
@@ -12,6 +12,7 @@ export default async function FaqPage() {
 
   return (
     <main>
+      {/* Hero section remains static and separate from the dynamic FAQ logic */}
       <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
         <div className="row g-4 align-items-center">
           <div className="col-xl-7 col-lg-6">
@@ -20,7 +21,7 @@ export default async function FaqPage() {
                 <li><Link href="/">Home</Link></li>
                 <li>FAQ</li>
               </ul>
-              <h1 className="wow fadeInUp">{data.hero.title}</h1>
+              <h1 className="wow fadeInUp" data-wow-delay=".2s">{data.hero.title}</h1>
               <div className="text-item wow fadeInUp" data-wow-delay=".4s">
                 <p>{data.hero.text}</p>
               </div>
@@ -35,14 +36,8 @@ export default async function FaqPage() {
         </div>
       </section>
 
-      <section className="faq-section fix section-padding section-bg bg-cover"
-        style={{ backgroundImage: "url('/images/home-3/world-map.png')", backgroundSize: 'contain', backgroundPosition: 'top center' }}>
-        <div className="auto-container">
-          <div className="row g-4 justify-content-center align-items-center">
-            <FaqList categories={data.categories} items={data.items} />
-          </div>
-        </div>
-      </section>
+      {/* The FAQ data and filtering are handled purely inside this dedicated child component */}
+      <FaqSection data={data} />
     </main>
   );
 }

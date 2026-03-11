@@ -1,6 +1,7 @@
 import { getCreditBuilderData } from '@/lib/api/cmsService';
 import Image from 'next/image';
 import Link from 'next/link';
+import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
 export const metadata = {
   title: 'Credit Builder',
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default async function CreditBuilderPage() {
   const data = await getCreditBuilderData();
-  
+
   return (
     <main>
       {/* Hero Section */}
@@ -53,7 +54,9 @@ export default async function CreditBuilderPage() {
                     <div className="text">{data.about.text}</div>
                   </div>
                   <div className="feature-box">
-                    <div className="shape-image"><Image src="/images/home-5/about/about-shape-image.png" alt="" width={100} height={100} /></div>
+                    <div className="shape-image">
+                      <Image src="/images/home-5/about/about-shape-image.png" alt="shape" width={100} height={100} />
+                    </div>
                     <div className="feature-title">We help you:</div>
                     <ul className="feature-list">
                       {data.about.features.map((f, i) => (
@@ -74,7 +77,7 @@ export default async function CreditBuilderPage() {
                     <Image src="/images/home-5/about/about-image.jpg" alt="img" width={600} height={400} />
                   </div>
                   <div className="count-box counted">
-                    <div className="counter"><span className="count-text">40</span>+</div>
+                    <div className="counter"><span className="count-text" data-speed="3000" data-stop="40">40</span>+</div>
                     <div className="counter-title">Expert Team Members</div>
                     <div className="counter-btn color-white"><Link href="/contact">Contact Us</Link></div>
                   </div>
@@ -99,7 +102,7 @@ export default async function CreditBuilderPage() {
           <div className="how-it-work-wrapper border-none">
             <div className="row">
               {data.process.steps.map((s, i) => (
-                <div key={i} className="col-xl-4 col-lg-4 col-md-6 col-sm-6 wow fadeInUp animated" data-wow-delay={`${(i+1)*2}00ms`}>
+                <div key={i} className="col-xl-4 col-lg-4 col-md-6 col-sm-6 wow fadeInUp animated" data-wow-delay={`${(i + 1) * 2}00ms`}>
                   <div className="how-it-work-items-style-3 style-2">
                     <h3 className="number">{s.number}</h3>
                     <h4 className="title">{s.title}</h4>
@@ -128,7 +131,7 @@ export default async function CreditBuilderPage() {
           </div>
           <div className="row g-4">
             {data.strategy.cards.map((c, i) => (
-              <div key={i} className={`col-lg-6 wow ${i === 0 ? 'fadeInLeft' : 'fadeInRight'} animated`} data-wow-delay=".3s">
+              <div key={i} className={`col-lg-6 wow ${i === 0 ? 'fadeInLeft' : 'fadeInRight'} animated`} data-wow-delay={i === 0 ? ".3s" : ".4s"}>
                 <div className="strategy-card">
                   <h3>{c.title}</h3>
                   <ul className="feature-list style-two">
@@ -142,6 +145,74 @@ export default async function CreditBuilderPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What's Included Section */}
+      <section className="whats-included-section fix">
+        <div className="auto-container">
+          <div className="sec-title text-center mb-60">
+            <h6 className="sub-title wow fadeInUp animated">
+              <span className="triangle triangle1"></span>
+              <span className="triangle triangle2"></span>
+              {data.whatsIncluded.subtitle}
+            </h6>
+            <h2 className="title wow fadeInUp animated" data-wow-delay=".2s">{data.whatsIncluded.title}</h2>
+          </div>
+          <div className="row g-4 justify-content-center">
+            {data.whatsIncluded.features.map((feature, i) => (
+              <div key={i} className="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-delay={`${(i % 3 + 1) * 1}00ms`}>
+                <div className="platform-card">
+                  <h3>{feature}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ideal Users Section */}
+      <section className="why-choose-section fix section-bg-2">
+        <div className="shape-1 bounce-y"><img src="/images/home-5/shape/shape-image-1.png" alt="shape" /></div>
+        <div className="auto-container">
+          <div className="why-choose-us-wrapper">
+            <div className="row g-4 align-items-center">
+              <div className="col-xl-5">
+                <div className="why-choose-us-image-1">
+                  <img src="/images/home-3/123703.jpg" alt="img" className="wow img-custom-anim-left animated animated" />
+                </div>
+              </div>
+              <div className="col-xl-7">
+                <div className="why-choose-us-content-1">
+                  <div className="sec-title mb-0">
+                    <h6 className="sub-title light">
+                      <span className="triangle triangle1"></span>
+                      <span className="triangle triangle2"></span>
+                      {data.idealUsers.subtitle}
+                    </h6>
+                    <h2 className="title light wow fadeInUp animated animated" data-wow-delay=".2s">{data.idealUsers.title}</h2>
+                  </div>
+                  <div className="tab-content light">
+                    <div id="Mission" className="tab-pane fade show active">
+                      <div className="why-choose-list wow fadeInUp animated animated" data-wow-delay=".3s">
+                        <p>{data.idealUsers.text}</p>
+                      </div>
+                      <div className="why-choose-list-items">
+                        <ul className="why-list wow fadeInUp animated animated" data-wow-delay=".5s">
+                          {data.idealUsers.list.map((item, i) => (
+                            <li key={i}>
+                              <img src="/images/home-3/list-icon.png" alt="icon" />{' '}
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -175,6 +246,30 @@ export default async function CreditBuilderPage() {
           </div>
         </div>
       </section>
+
+      {/* Growth CTA Section */}
+      <section className="growth-section section-padding bg-cover parallaxie" style={{ backgroundImage: "url('/images/home-2/choose-us/choose-us-bg.jpg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+        <div className="sec-shape">
+          <Image className="sway_Y__animation" src="/images/growth-shape.png" alt="Image" width={100} height={100} />
+        </div>
+        <div className="auto-container">
+          <div className="sec-title text-center">
+            <h2 className="text-white wow fadeInUp animated" data-wow-delay=".2s">{data.growth.title}</h2>
+            <div className="cta-action-btns mt-4 wow fadeInUp animated" data-wow-delay=".4s">
+              {data.growth.cta.map((btn, i) => (
+                <Link key={i} href={btn.link} className={`cta-action-btn ${i === 0 ? 'enroll' : 'specialist'}`}>
+                  {btn.text}
+                  <span className="icon-circle"><i className={`fa-solid fa-arrow-up-right${i === 1 ? '' : ''}`}></i></span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <CreditBuilderFaq data={data.faq} />
     </main>
   );
 }
+

@@ -7,42 +7,48 @@ export default function Preloader() {
   const [opacity, setOpacity] = useState(1);
 
   useEffect(() => {
-    // 1. Initial wait of 2 seconds as requested by the user
+    // Check if we've already shown the loader in this session to avoid "re-loading" on every client-side nav
+    // Actually, RootLayout SHOULD persist, but if something causes a remount, this guard helps.
+    const hasLoaded = sessionStorage.getItem('fch_loaded');
+    if (hasLoaded) {
+      setHidden(true);
+      return;
+    }
+
+    // 1. Reduced wait time for a snappier feel
     const timer = setTimeout(() => {
       // 2. Start the CSS transitions for the preloader sections
       setLoaded(true);
-      
-      // 3. Wait for the preloader background sections to start opening (0.6s delay in original)
-      // Then re-initialize WOW to ensure animations start at the right moment
+
+      // 3. Re-trigger WOW precisely when the content starts becoming visible
       const animationTimer = setTimeout(() => {
         if (typeof window !== 'undefined') {
-          // Re-trigger WOW precisely when the content starts becoming visible
           if (window.WOW) {
             try {
               new window.WOW().init();
-            } catch (e) {}
+            } catch (e) { }
           }
-          // Force visibility check for elements already in viewport
           window.dispatchEvent(new Event('scroll'));
         }
-      }, 600);
+      }, 300); // Faster trigger
 
       // 4. Start fading out the entire preloader container
       const fadeTimer = setTimeout(() => {
         setOpacity(0);
-      }, 800);
+      }, 500);
 
       // 5. Finally remove from DOM after all transitions complete
       const hideTimer = setTimeout(() => {
         setHidden(true);
-      }, 1500);
-      
+        sessionStorage.setItem('fch_loaded', 'true');
+      }, 1100);
+
       return () => {
         clearTimeout(animationTimer);
         clearTimeout(fadeTimer);
         clearTimeout(hideTimer);
       };
-    }, 2000);
+    }, 800); // Reduced from 2000ms to 800ms for better UX
 
     return () => {
       clearTimeout(timer);
@@ -52,11 +58,11 @@ export default function Preloader() {
   if (hidden) return null;
 
   return (
-    <div 
-      id="preloader" 
+    <div
+      id="preloader"
       className={`preloader ${loaded ? 'loaded' : ''}`}
-      style={{ 
-        opacity: opacity, 
+      style={{
+        opacity: opacity,
         transition: 'opacity 0.6s ease-out',
         pointerEvents: loaded ? 'none' : 'auto'
       }}
