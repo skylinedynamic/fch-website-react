@@ -43,7 +43,7 @@ export default function BuildRightSection({ data }) {
                 </div>
 
                 <div className="tab-content light">
-                  <div id="Mission" class="tab-pane fade show active">
+                  <div id="Mission" className="tab-pane fade show active">
                     <div className="why-choose-list wow fadeInUp animated" data-wow-delay=".3s">
                       <p>{buildRight.text}</p>
                     </div>

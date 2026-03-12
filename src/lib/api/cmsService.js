@@ -1,9 +1,22 @@
 import { homeData } from '@/data/homeData';
+import { blogData, blogCategories, blogTags } from '@/data/blogData';
 
 // Simulated API service
 export const getHomeData = async () => {
   // In a real app, this would be a fetch call to a CMS or API
   return homeData;
+};
+
+export const getBlogPostBySlug = async (slug) => {
+  return blogData.find(post => post.slug === slug);
+};
+
+export const getBlogCategories = async () => {
+  return blogCategories;
+};
+
+export const getBlogTags = async () => {
+  return blogTags;
 };
 
 export const getCreditBuilderData = async () => {

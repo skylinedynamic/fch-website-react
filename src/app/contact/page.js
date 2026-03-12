@@ -1,8 +1,27 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 
 export default function ContactPage() {
+    const [phone, setPhone] = useState('');
+
+    const formatPhoneNumber = (value) => {
+        if (!value) return value;
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        const phoneNumberLength = phoneNumber.length;
+        if (phoneNumberLength < 4) return phoneNumber;
+        if (phoneNumberLength < 7) {
+            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+        }
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    };
+
+    const handlePhoneChange = (e) => {
+        const formattedValue = formatPhoneNumber(e.target.value);
+        setPhone(formattedValue);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Form handling logic would go here
@@ -109,8 +128,24 @@ export default function ContactPage() {
                                             <input type="text" name="form_name" id="name" placeholder="Your Name*" required />
                                         </div>
                                         <div className="type-feild">
+                                            <i className="fa-light fa-building"></i>
+                                            <input type="text" name="form_company" id="company" placeholder="Company Name" />
+                                        </div>
+                                        <div className="type-feild">
                                             <i className="fa-light fa-envelope"></i>
                                             <input type="email" name="form_email" id="email" placeholder="Email Address*" required />
+                                        </div>
+                                        <div className="type-feild">
+                                            <i className="fa-light fa-phone"></i>
+                                            <input
+                                                type="tel"
+                                                name="form_phone"
+                                                id="phone"
+                                                placeholder="Phone Number (XXX) XXX-XXXX*"
+                                                required
+                                                value={phone}
+                                                onChange={handlePhoneChange}
+                                            />
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-pen-to-square"></i>

@@ -329,7 +329,7 @@ export const homeData = {
         author: "Admin",
         comments: "3 Comments",
         title: "Errors with financial consequences in tax ?",
-        link: "/blog-details",
+        link: "/blog/financial-consequences-tax-errors",
         image: "/images/home-1/news/news-01.jpg",
       },
       {
@@ -338,7 +338,7 @@ export const homeData = {
         author: "Admin",
         comments: "3 Comments",
         title: "Achieving Work Life Balance in a Hectic World",
-        link: "/blog-details",
+        link: "/blog/work-life-balance-hectic-world",
         image: "/images/home-1/news/news-02.jpg",
       },
       {
@@ -347,7 +347,7 @@ export const homeData = {
         author: "Admin",
         comments: "3 Comments",
         title: "Mastering Work-Life On Target Business Goal",
-        link: "/blog-details",
+        link: "/blog/mastering-work-life-business-goal",
         image: "/images/home-1/news/news-03.jpg",
       },
     ],

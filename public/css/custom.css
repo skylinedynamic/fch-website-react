@@ -2118,7 +2118,7 @@ html {
   background-color: #f9f8f4;
   background-image: radial-gradient(#103c3b08 1.5px, transparent 1.5px);
   background-size: 24px 24px;
-  padding-top: 0;
+  padding-top: 100px;
   padding-bottom: 100px;
   position: relative;
 }
@@ -3344,7 +3344,22 @@ html {
   font-size: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.prequal-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 25px center !important;
+  cursor: pointer !important;
+  padding-right: 50px !important;
+}
+
+.prequal-select:hover {
+  border-color: #2D9A96 !important;
+  background-color: #ffffff !important;
 }
 
 .prequal-input.invalid,
@@ -3578,18 +3593,53 @@ html {
   gap: 5px;
 }
 
-.country-code {
-  width: 110px;
-  background: #103C3B;
-  border: none;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(16, 60, 59, 0.1);
+/* Hide the original select to prevent double dropdown */
+select.country-code {
+  display: none !important;
+}
+
+/* Style the interactive replacement (nice-select) specifically */
+.nice-select.country-code {
+  width: 140px !important;
+  height: 60px !important;
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  border: none !important;
+  border-radius: 15px !important;
+  display: block !important;
+  line-height: 58px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: #fff !important;
+  padding-left: 15px !important;
+  cursor: pointer !important;
+  float: none !important;
+  transition: background 0.3s ease !important;
+}
+
+/* Custom white arrow for nice-select */
+.nice-select.country-code:after {
+  border-bottom: 2px solid #fff !important;
+  border-right: 2px solid #fff !important;
+  width: 8px !important;
+  height: 8px !important;
+  right: 15px !important;
+}
+
+.nice-select.country-code .list {
+  background: #fff !important;
+  color: #103C3B !important;
+  width: 100% !important;
+}
+
+.nice-select.country-code .option:hover,
+.nice-select.country-code .option.focus,
+.nice-select.country-code .option.selected.focus {
+  background-color: #f1f5f9 !important;
+  color: #2D9A96 !important;
+}
+
+.nice-select.country-code:hover {
+  background: #2D9A96 !important;
 }
 
 .conditional-field {
@@ -3744,4 +3794,1070 @@ html {
 .preloader .animation-preloader .txt-loading .letters-loading:nth-child(17):before { animation-delay: 1.6s; }
 .preloader .animation-preloader .txt-loading .letters-loading:nth-child(18):before { animation-delay: 1.7s; }
 .preloader .animation-preloader .txt-loading .letters-loading:nth-child(19):before { animation-delay: 1.8s; }
+
+
+/* Header Custom Transitions/Fixes */
+.main-header {
+  z-index: 9999 !important;
+}
+
+.header-style-one .main-box .btn-style-one {
+  display: inline-flex !important;
+}
+
+.header-style-one .header-lower .btn-style-one {
+  padding: 24px 35px !important;
+  margin-top: 10px !important;
+}
+
+.header-style-one .logo img {
+  max-height: 76px !important;
+  width: auto !important;
+}
+
+.sticky-header .sticky-header-btn,
+.mobile-menu .sticky-header-btn {
+  margin-top: 2px !important;
+  padding: 16px 35px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  animation-delay: 0.6s !important;
+  animation-name: fadeInUp !important;
+}
+
+/* Contact Form Mobile/Country Code Styles */
+.contact-form-phone-wrap {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.contact-form-country-select {
+  border: none !important;
+  background: transparent !important;
+  padding-bottom: 15px !important;
+  padding-left: 35px !important;
+  margin-right: 10px !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
+.contact-form-phone-input {
+  border-left: none !important;
+  padding-left: 5px !important;
+  width: 100% !important;
+}
+
+.sticky-header .logo {
+  width: 176px !important;
+}
+.sticky-header .sticky-button {
+  margin-left: 45px !important;
+}
+.mobile-menu .nav-logo img {
+  max-height: 54px !important;
+}
+
+.contact-page-hero {
+  background-image: url('/images/home-3/hero/hero-bg.png') !important;
+}
+.contact-details-link {
+  color: inherit !important;
+}
+.contact-map-iframe {
+  border: 0 !important;
+}
+
+.nice-select .current {
+    font-size: 13px;
+    color: #ffffff;
+}
+.nice-select::before{
+  color: #ffffff;
+}/* ===================================================
+   SBA Article Page Styles
+   =================================================== */
+
+.sba-article-section {
+  background-color: #f9f8f4;
+  background-image: radial-gradient(#103c3b08 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  padding-top: 0;
+  padding-bottom: 100px;
+  position: relative;
+}
+
+/* --- Intro Block --- */
+.sba-intro-block {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 40px;
+  border-left: 5px solid #2D9A96;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.sba-intro-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45, 154, 150, 0.1);
+  color: #2D9A96;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+
+.sba-intro-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #103C3B;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.pre-padding {
+  padding-top: 200px;
+}
+
+.sba-intro-text {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #555;
+  margin-bottom: 20px !important;
+}
+
+.sba-intro-callout {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #103C3B, #1a5857);
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.sba-intro-callout i {
+  font-size: 22px;
+  color: #4BD7D4;
+  flex-shrink: 0;
+}
+
+/* --- Section Headers --- */
+.sba-section-head {
+  margin-bottom: 24px;
+  margin-top: 50px;
+}
+
+.sba-section-label {
+  display: inline-block;
+  background: rgba(45, 154, 150, 0.12);
+  color: #2D9A96;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.sba-section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.sba-section-desc {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* --- Program Cards --- */
+.sba-program-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  height: 100%;
+  border: 1px solid #e8e8e8;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+
+.sba-program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(16, 60, 59, 0.12);
+  border-color: #2D9A96;
+}
+
+.sba-program-card--dark {
+  background: #103C3B;
+  border-color: #103C3B;
+}
+
+.sba-program-card--dark:hover {
+  border-color: #2D9A96;
+  box-shadow: 0 20px 40px rgba(16, 60, 59, 0.3);
+}
+
+.sba-program-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.sba-program-card--dark .sba-program-icon {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.sba-program-badge {
+  display: inline-block;
+  background: rgba(45, 154, 150, 0.12);
+  color: #2D9A96;
+  padding: 3px 12px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.sba-program-badge--light {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.sba-program-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.sba-program-card--dark .sba-program-title {
+  color: #fff;
+}
+
+.sba-program-sub {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.sba-program-card--dark .sba-program-sub {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.sba-program-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sba-program-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.sba-program-card--dark .sba-program-list li {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sba-program-list li i {
+  color: #2D9A96;
+  font-size: 14px;
+}
+
+.sba-program-card--dark .sba-program-list li i {
+  color: #4BD7D4;
+}
+
+/* --- Metric Cards --- */
+.sba-metric-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 30px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  border: 1px solid #ebebeb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sba-metric-card:hover {
+  border-color: #2D9A96;
+  box-shadow: 0 10px 30px rgba(16, 60, 59, 0.08);
+  transform: translateX(4px);
+}
+
+.sba-metric-number {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 60px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.sba-metric-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.sba-metric-body {
+  flex: 1;
+}
+
+.sba-metric-body h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.sba-metric-body p {
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 12px;
+  line-height: 1.65;
+}
+
+.sba-metric-body code {
+  background: rgba(16, 60, 59, 0.06);
+  color: #103C3B;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.sba-metric-note {
+  font-size: 13px !important;
+  color: #999 !important;
+  font-style: italic;
+  margin-top: 8px !important;
+}
+
+/* DSCR Bar */
+.sba-dscr-bar {
+  background: #e8f0ef;
+  border-radius: 50px;
+  height: 32px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.sba-dscr-fill {
+  background: linear-gradient(90deg, #103C3B, #2D9A96);
+  height: 100%;
+  width: 78%;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 16px;
+  animation: dscrGrow 1.5s ease-out;
+}
+
+.sba-dscr-fill span {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@keyframes dscrGrow {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 78%;
+  }
+}
+
+/* Credit Tiers */
+.sba-credit-tiers {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.sba-credit-tier {
+  flex: 1;
+  min-width: 90px;
+  text-align: center;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+}
+
+.sba-credit-tier span {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.sba-credit-tier small {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sba-credit-tier--best {
+  background: rgba(16, 60, 59, 0.08);
+  border-color: #103C3B;
+}
+
+.sba-credit-tier--best span {
+  color: #103C3B;
+}
+
+.sba-credit-tier--best small {
+  color: #103C3B;
+}
+
+.sba-credit-tier--good {
+  background: rgba(45, 154, 150, 0.08);
+  border-color: #2D9A96;
+}
+
+.sba-credit-tier--good span {
+  color: #2D9A96;
+}
+
+.sba-credit-tier--good small {
+  color: #2D9A96;
+}
+
+.sba-credit-tier--weak {
+  background: rgba(220, 53, 69, 0.06);
+  border-color: #dc3545;
+}
+
+.sba-credit-tier--weak span {
+  color: #dc3545;
+}
+
+.sba-credit-tier--weak small {
+  color: #dc3545;
+}
+
+/* --- Timeline --- */
+.sba-timeline-block {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 16px;
+  border: 1px solid #ebebeb;
+}
+
+.sba-timeline-alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  color: #856404;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.sba-timeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sba-timeline-step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sba-timeline-connector {
+  width: 3px;
+  height: 30px;
+  background: linear-gradient(to bottom, #2D9A96, #103C3B);
+  margin-left: 23px;
+}
+
+.sba-timeline-dot {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.sba-timeline-dot--end {
+  background: linear-gradient(135deg, #2D9A96, #4BD7D4);
+}
+
+.sba-timeline-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sba-timeline-info strong {
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+.sba-timeline-info span {
+  font-size: 14px;
+  color: #2D9A96;
+  font-weight: 600;
+}
+
+/* --- Fit Cards --- */
+.sba-fit-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  height: 100%;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.sba-fit-card--yes {
+  border-color: rgba(45, 154, 150, 0.3);
+}
+
+.sba-fit-card--yes:hover {
+  border-color: #2D9A96;
+  box-shadow: 0 12px 30px rgba(45, 154, 150, 0.12);
+}
+
+.sba-fit-card--no {
+  border-color: rgba(220, 53, 69, 0.2);
+}
+
+.sba-fit-card--no:hover {
+  border-color: #dc3545;
+  box-shadow: 0 12px 30px rgba(220, 53, 69, 0.08);
+}
+
+.sba-fit-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.sba-fit-header i {
+  font-size: 24px;
+}
+
+.sba-fit-card--yes .sba-fit-header i {
+  color: #2D9A96;
+}
+
+.sba-fit-card--no .sba-fit-header i {
+  color: #dc3545;
+}
+
+.sba-fit-header h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.sba-fit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sba-fit-list li {
+  font-size: 15px;
+  color: #555;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  padding-left: 22px;
+  position: relative;
+}
+
+.sba-fit-list li:last-child {
+  border-bottom: none;
+}
+
+.sba-fit-card--yes .sba-fit-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2D9A96;
+  font-weight: 700;
+}
+
+.sba-fit-card--no .sba-fit-list li::before {
+  content: "✕";
+  position: absolute;
+  left: 0;
+  color: #dc3545;
+  font-weight: 700;
+}
+
+/* --- Case Example --- */
+.sba-case-block {
+  background: linear-gradient(135deg, #103C3B 0%, #0d2f2e 100%);
+  border-radius: 20px;
+  padding: 36px;
+  margin-bottom: 16px;
+}
+
+.sba-case-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.sba-case-block h4 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.sba-case-math {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.sba-case-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 18px 24px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.sba-case-item--result {
+  background: rgba(45, 154, 150, 0.25);
+  border-color: #2D9A96;
+}
+
+.sba-case-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.sba-case-key {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+.sba-case-operator {
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.sba-case-note {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin: 0;
+}
+
+/* --- Checklist --- */
+.sba-checklist-block {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 16px;
+  border: 1px solid #ebebeb;
+}
+
+.sba-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px dashed #e8e8e8;
+  font-size: 15px;
+  color: #444;
+  transition: color 0.2s ease;
+}
+
+.sba-checklist-item:last-child {
+  border-bottom: none;
+}
+
+.sba-checklist-item:hover {
+  color: #103C3B;
+}
+
+.sba-check-num {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* --- SBA FAQ --- */
+.sba-faq-block {
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px 30px;
+  margin-bottom: 16px;
+  border: 1px solid #ebebeb;
+}
+
+.sba-faq-item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sba-faq-item:last-child {
+  border-bottom: none;
+}
+
+.sba-faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 22px 0;
+  gap: 16px;
+}
+
+.sba-faq-q span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+  transition: color 0.2s ease;
+}
+
+.sba-faq-item.active .sba-faq-q span,
+.sba-faq-q:hover span {
+  color: #2D9A96;
+}
+
+.sba-faq-q i {
+  font-size: 14px;
+  color: #aaa;
+  transition: transform 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.sba-faq-item.active .sba-faq-q i {
+  transform: rotate(180deg);
+  color: #2D9A96;
+}
+
+.sba-faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.sba-faq-item.active .sba-faq-a {
+  max-height: 200px;
+  padding-bottom: 20px;
+}
+
+.sba-faq-a p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666;
+  margin: 0;
+}
+
+/* --- Article CTA Block --- */
+.sba-cta-block {
+  background: linear-gradient(135deg, #103C3B 0%, #1a5857 100%);
+  border-radius: 24px;
+  padding: 45px;
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sba-cta-block::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sba-cta-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #4BD7D4;
+  margin: 0 auto 20px;
+}
+
+.sba-cta-block h3 {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.sba-cta-block h3 em {
+  color: #4BD7D4;
+  font-style: normal;
+}
+
+.sba-cta-block p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sba-cta-block .theme-btn {
+  display: inline-flex;
+}
+
+/* --- Sticky Sidebar --- */
+.sba-sticky-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.sba-sidebar-nav {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #eee;
+  margin-bottom: 24px;
+}
+
+.sba-nav-list {
+  margin: 0;
+}
+
+.sba-nav-list li {
+  margin-bottom: 4px;
+}
+
+.sba-nav-list li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #444;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.sba-nav-list li a:hover {
+  background: rgba(45, 154, 150, 0.08);
+  color: #2D9A96;
+  padding-left: 20px;
+}
+
+.sba-nav-list li a i {
+  color: #2D9A96;
+  font-size: 14px;
+  width: 18px;
+}
+
+/* Key Metrics Sidebar */
+.sba-sidebar-metrics {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #eee;
+  margin-bottom: 24px;
+}
+
+.sba-metric-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sba-metric-mini-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e8e8e8;
+}
+
+.sba-metric-mini-row:last-child {
+  border-bottom: none;
+}
+
+.sba-mini-label {
+  font-size: 14px;
+  color: #888;
+}
+
+.sba-mini-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #103C3B;
+}
+
+/* Sidebar CTA */
+.sba-sidebar-cta {
+  background: linear-gradient(135deg, #103C3B, #2D9A96);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.sba-sidebar-cta h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.sba-sidebar-cta p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* --- Utility --- */
+.pt-100 {
+  padding-top: 100px !important;
+}
+
+.mb-50 {
+  margin-bottom: 50px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 991px) {
+  .sba-sticky-sidebar {
+    position: static;
+    margin-top: 50px;
+  }
+
+  .sba-case-math {
+    gap: 10px;
+  }
+
+  .sba-case-operator {
+    font-size: 22px;
+  }
+
+  .sba-intro-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 575px) {
+  .sba-case-math {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sba-case-operator {
+    text-align: center;
+  }
+
+  .sba-credit-tiers {
+    flex-direction: column;
+  }
+
+  .sba-cta-block {
+    padding: 30px 20px;
+  }
+}
 

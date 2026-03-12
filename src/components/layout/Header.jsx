@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const navLinks = [
@@ -8,10 +11,10 @@ const navLinks = [
   { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Sign In', external: true },
 ];
 
-const Navigation = ({ className }) => (
+const Navigation = ({ className, onLinkClick }) => (
   <ul className={`navigation ${className || ''}`}>
     {navLinks.map((link) => (
-      <li key={link.label}>
+      <li key={link.label} onClick={onLinkClick}>
         {link.external ? (
           <a href={link.href} target="_blank" rel="noopener noreferrer">
             {link.label}
@@ -24,24 +27,41 @@ const Navigation = ({ className }) => (
   </ul>
 );
 
-const borrowerPortalStyle = {
-  marginTop: '2px',
-  padding: '16px 35px',
-  visibility: 'visible',
-  animationDelay: '0.6s',
-  animationName: 'fadeInUp'
-};
-
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('mobile-menu-visible');
+    } else {
+      document.body.classList.remove('mobile-menu-visible');
+    }
+  }, [isMenuOpen]);
+
   return (
     <header className="main-header header-style-one header-3">
       <style dangerouslySetInnerHTML={{
         __html: `
+        .main-header {
+          z-index: 9999 !important;
+        }
+        .header-style-one .main-box .btn-style-one {
+          display: inline-flex !important;
+        }
         .sticky-header .sticky-header-btn,
         .mobile-menu .sticky-header-btn {
           margin-top: 2px !important;
           padding: 16px 35px !important;
           visibility: visible !important;
+          opacity: 1 !important;
           animation-delay: 0.6s !important;
           animation-name: fadeInUp !important;
         }
@@ -75,7 +95,7 @@ export default function Header() {
                 Borrower Portal
               </a>
 
-              <div className="mobile-nav-toggler">
+              <div className="mobile-nav-toggler" onClick={toggleMenu}>
                 <span className="icon lnr-icon-bars"></span>
               </div>
             </div>
@@ -85,7 +105,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div className="mobile-menu">
-        <div className="menu-backdrop"></div>
+        <div className="menu-backdrop" onClick={closeMenu}></div>
         <nav className="menu-box">
           <div className="upper-box">
             <div className="nav-logo">
@@ -93,18 +113,18 @@ export default function Header() {
                 <img src="/images/logo-white.png" alt="" style={{ maxHeight: '54px', width: 'auto' }} />
               </Link>
             </div>
-            <div className="close-btn"><i className="icon fa fa-times"></i></div>
+            <div className="close-btn" onClick={closeMenu}><i className="icon fa fa-times"></i></div>
           </div>
 
           <div className="navigation-wrapper">
-            <Navigation className="clearfix" />
+            <Navigation className="clearfix" onLinkClick={closeMenu} />
           </div>
 
           <ul className="contact-list-one">
             <li>
               <div className="sticky-button">
                 <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
-                  className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
+                  className="theme-btn btn-style-one sticky-header-btn"
                   data-wow-delay=".6s">
                   Borrower Portal
                 </a>
@@ -152,10 +172,10 @@ export default function Header() {
             <div className="nav-outer">
               <nav className="main-menu">
                 <div className="navbar-collapse show collapse clearfix d-flex">
-                  <Navigation className="clearfix" />
+                  <Navigation className="clearfix" onLinkClick={closeMenu} />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
                     <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
-                      className="theme-btn btn-style-one sticky-header-btn wow fadeInUp animated"
+                      className="theme-btn btn-style-one sticky-header-btn"
                       data-wow-delay=".6s">
                       Borrower Portal
                     </a>
@@ -163,7 +183,7 @@ export default function Header() {
                 </div>
               </nav>
 
-              <div className="mobile-nav-toggler">
+              <div className="mobile-nav-toggler" onClick={toggleMenu}>
                 <span className="icon lnr-icon-bars"></span>
               </div>
             </div>

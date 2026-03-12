@@ -2489,7 +2489,7 @@ Scroll To Top style
   background-image: linear-gradient(to left, var(--theme-color1) 0%, var(--theme-color7) 50%, var(--theme-color1) 100%);
   background-size: 200%;
   color: var(--theme-color-white);
-  padding: 24px 35px !important;
+  padding: 24px 35px;
   margin-top: 10px;
 }
 
