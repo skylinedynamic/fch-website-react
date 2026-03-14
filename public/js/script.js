@@ -44,15 +44,15 @@ var THEMEMASCOT = {};
 
 
 	//Hide Loading Box (Preloader)
-	function loader() {
-		$(window).on('load', function () {
-			// Animate loader off screen
-			$(".preloader").addClass('loaded');
-			$(".preloader").delay(600).fadeOut();
-		});
-	}
-
-	loader();
+	// NOTE: Handled by the React <Preloader> component — do NOT run here.
+	// function loader() {
+	// 	$(window).on('load', function () {
+	// 		// Animate loader off screen
+	// 		$(".preloader").addClass('loaded');
+	// 		$(".preloader").delay(600).fadeOut();
+	// 	});
+	// }
+	// loader();
 
 	// Call headerStyle on scroll
 	$(window).on('scroll', function () {
@@ -109,7 +109,7 @@ var THEMEMASCOT = {};
 	if ($('.mobile-menu').length) {
 
 		// var mobileMenuContent = $('.main-header .main-menu .navigation').html();
-// 
+		// 
 		// $('.mobile-menu .navigation').append(mobileMenuContent);
 		// $('.sticky-header .navigation').append(mobileMenuContent);
 		$('.mobile-menu .close-btn').on('click', function () {

@@ -29,6 +29,54 @@ const PreQualificationPage = () => {
         setFormData(initialData);
     }, []);
 
+    // Re-initialize nice-select after every mount (fixes client-side navigation bug)
+    useEffect(() => {
+        let retryTimer: ReturnType<typeof setTimeout> | null = null;
+
+        const init = () => {
+            const jq = (window as any).$;
+            if (!jq || typeof jq.fn?.niceSelect !== 'function') {
+                retryTimer = setTimeout(init, 300);
+                return;
+            }
+            const $selects = jq('#prequal-section select');
+            if (!$selects.length) {
+                retryTimer = setTimeout(init, 300);
+                return;
+            }
+            // Destroy stale instances first, then re-apply
+            try { $selects.niceSelect('destroy'); } catch (_) { }
+            $selects.niceSelect();
+
+            // Sync nice-select pick-events back to React state
+            $selects.off('change.prequal').on('change.prequal', function (this: HTMLSelectElement) {
+                const name = this.name;
+                const value = jq(this).val() as string;
+                if (name) {
+                    setFormData(prev => ({ ...prev, [name]: value }));
+                    setErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+                }
+            });
+        };
+
+        init();
+
+        return () => {
+            if (retryTimer) clearTimeout(retryTimer);
+            const jq = (window as any).$;
+            if (jq) {
+                try { jq('#prequal-section select').off('change.prequal').niceSelect('destroy'); } catch (_) { }
+            }
+        };
+    }, []);
+
+    // Keep nice-select display in sync whenever step changes
+    useEffect(() => {
+        const jq = (window as any).$;
+        if (!jq || typeof jq.fn?.niceSelect !== 'function') return;
+        try { jq('#prequal-section select').niceSelect('update'); } catch (_) { }
+    }, [currentStep]);
+
     const formatPhoneNumber = (value) => {
         if (!value) return value;
         const phoneNumber = value.replace(/[^\d]/g, '');
@@ -43,11 +91,11 @@ const PreQualificationPage = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-        
+
         if (name === 'phone') {
             newValue = formatPhoneNumber(value);
         }
-        
+
         setFormData(prev => ({ ...prev, [name]: newValue }));
         if (errors[name]) {
             setErrors(prev => {
@@ -66,7 +114,7 @@ const PreQualificationPage = () => {
         step.fields.forEach(field => {
             // Check if field is conditional and visible
             const isVisible = !field.condition || formData[field.condition.field] === field.condition.value;
-            
+
             if (field.required && isVisible) {
                 const val = formData[field.name];
                 if (!val || val === "" || val === "Select State" || val === "Select Industry" || val === "Select Structure" || val === "Select Duration" || val === "Select Urgency" || val === "Select Purpose" || val === "Select Score Range" || val === "Select Score") {
@@ -149,8 +197,8 @@ const PreQualificationPage = () => {
                             <div className="prequal-progress-steps">
                                 <div className="prequal-progress-bar" style={{ width: `${progressPercent}%` }}></div>
                                 {preQualificationSteps.map((step) => (
-                                    <div 
-                                        key={step.id} 
+                                    <div
+                                        key={step.id}
                                         className={`step-indicator ${step.id === currentStep ? 'active' : ''} ${step.id < currentStep ? 'completed' : ''}`}
                                     >
                                         <div className="step-number">
@@ -164,8 +212,8 @@ const PreQualificationPage = () => {
 
                         <form onSubmit={handleSubmit} className="prequal-form">
                             {preQualificationSteps.map((step) => (
-                                <div 
-                                    key={step.id} 
+                                <div
+                                    key={step.id}
                                     className={`prequal-step ${step.id === currentStep ? 'active' : ''}`}
                                     style={{ display: step.id === currentStep ? 'block' : 'none' }}
                                 >
@@ -182,10 +230,10 @@ const PreQualificationPage = () => {
                                                     <label className="form-group-label">
                                                         {field.label} {field.required && <span>*</span>}
                                                     </label>
-                                                    
+
                                                     {field.type === 'select' ? (
                                                         <div className="select-wrapper">
-                                                            <select 
+                                                            <select
                                                                 name={field.name}
                                                                 className={`prequal-select ${errors[field.name] ? 'invalid' : ''}`}
                                                                 required={field.required}
@@ -199,15 +247,20 @@ const PreQualificationPage = () => {
                                                         </div>
                                                     ) : field.isPhone ? (
                                                         <div className="phone-input-group">
-                                                            <select className="country-code" name="country_code">
+                                                            <select 
+                                                                className="prequal-country-code" 
+                                                                name="country_code"
+                                                                value={formData['country_code'] || "+1"}
+                                                                onChange={handleInputChange}
+                                                            >
                                                                 <option value="+1">USA (+1)</option>
-                                                                <option value="+1">CAN (+1)</option>
+                                                                <option value="+1-CA">CAN (+1)</option>
                                                             </select>
-                                                            <input 
-                                                                type="tel" 
+                                                            <input
+                                                                type="tel"
                                                                 name={field.name}
-                                                                className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`} 
-                                                                placeholder={field.placeholder} 
+                                                                className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`}
+                                                                placeholder={field.placeholder}
                                                                 required={field.required}
                                                                 value={formData[field.name] || ""}
                                                                 onChange={handleInputChange}
@@ -217,9 +270,9 @@ const PreQualificationPage = () => {
                                                         <div className="radio-group">
                                                             {field.options.map(opt => (
                                                                 <label key={opt.value} className="radio-label">
-                                                                    <input 
-                                                                        type="radio" 
-                                                                        name={field.name} 
+                                                                    <input
+                                                                        type="radio"
+                                                                        name={field.name}
                                                                         value={opt.value}
                                                                         checked={formData[field.name] === opt.value}
                                                                         onChange={handleInputChange}
@@ -228,7 +281,7 @@ const PreQualificationPage = () => {
                                                             ))}
                                                         </div>
                                                     ) : field.type === 'textarea' ? (
-                                                        <textarea 
+                                                        <textarea
                                                             name={field.name}
                                                             className={`prequal-textarea ${errors[field.name] ? 'invalid' : ''}`}
                                                             placeholder={field.placeholder}
@@ -236,11 +289,11 @@ const PreQualificationPage = () => {
                                                             onChange={handleInputChange}
                                                         ></textarea>
                                                     ) : (
-                                                        <input 
-                                                            type={field.type} 
+                                                        <input
+                                                            type={field.type}
                                                             name={field.name}
-                                                            className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`} 
-                                                            placeholder={field.placeholder} 
+                                                            className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`}
+                                                            placeholder={field.placeholder}
                                                             required={field.required}
                                                             value={formData[field.name] || ""}
                                                             onChange={handleInputChange}

@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { HomeData } from '@/types/cms';
 
-export default function HeroSection({ data }) {
+
+export default function HeroSection({ data }: { data: HomeData }) {
+
   const { hero } = data;
   return (
     <section className="hero-section hero-3" style={{ backgroundImage: `url('${hero.images.bg}')` }}>

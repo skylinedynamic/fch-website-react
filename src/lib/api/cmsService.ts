@@ -1,8 +1,10 @@
 import { homeData } from '@/data/homeData';
 import { blogData, blogCategories, blogTags } from '@/data/blogData';
+import { HomeData } from '@/types/cms';
 
 // Simulated API service
-export const getHomeData = async () => {
+export const getHomeData = async (): Promise<HomeData> => {
+
   // In a real app, this would be a fetch call to a CMS or API
   return homeData;
 };

@@ -1,4 +1,7 @@
-export const homeData = {
+import { HomeData } from '@/types/cms';
+
+export const homeData: HomeData = {
+
   hero: {
     title: "Fast, Flexible Business Funding — Powered by Intelligence",
     text: "Get matched with top funding options in minutes. No hard credit pull. No hidden fees.",
