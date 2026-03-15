@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// Minimum time (ms) the preloader is visible — gives letters animation time to play
-const MIN_DISPLAY_MS = 3000;
+// Minimum time (ms) the preloader is visible
+const MIN_DISPLAY_MS = 2500;
 
 export default function Preloader() {
   const preloaderRef = useRef<HTMLDivElement>(null);
@@ -11,7 +11,7 @@ export default function Preloader() {
     const el = preloaderRef.current;
     if (!el) return;
 
-    // Track when this component mounted so we can enforce MIN_DISPLAY_MS
+    // Track when this component matched the route so we can enforce its respective min display time
     const mountTime = Date.now();
 
     // Mirrors the original jQuery logic:
@@ -31,6 +31,9 @@ export default function Preloader() {
       //   .preloader.loaded .loader-section .bg  → width: 0  (0.3s delay, 0.7s duration)
       //   .preloader.loaded .animation-preloader → opacity: 0 (0.3s)
       el.classList.add('loaded');
+
+      // Dispatch immediately so WOW animations can start gracefully AS the doors open
+      window.dispatchEvent(new Event('preloader-done'));
 
       // Step 2: After 600ms, add 'fadeout' — mirrors jQuery .delay(600).fadeOut()
       //   .preloader.fadeout → opacity: 0, transition: 0.4s
@@ -54,7 +57,7 @@ export default function Preloader() {
       const elapsed = Date.now() - mountTime;
       const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
 
-      // Wait until MIN_DISPLAY_MS has passed, then begin exit animation
+      // Wait until minDisplayTime has passed, then begin exit animation
       const minTimer = setTimeout(() => {
         startExitAnimation();
       }, remaining);

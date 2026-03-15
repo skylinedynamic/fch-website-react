@@ -4,3 +4,8 @@
 *::after {
   box-sizing: border-box;
 }
+
+/* Prevent WOW elements from flashing before initialization */
+.wow:not(.animated) {
+  visibility: hidden;
+}

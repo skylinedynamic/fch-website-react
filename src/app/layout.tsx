@@ -2,6 +2,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
+import WowInit from '@/components/common/WowInit';
 import Script from 'next/script';
 
 import type { Metadata } from 'next';
@@ -77,6 +78,7 @@ export default function RootLayout({
       </head>
       <body className="body-bg">
         <Preloader />
+        <WowInit />
         <div className="page-wrapper body-bg">
           <Header />
           {children}

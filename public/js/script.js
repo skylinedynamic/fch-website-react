@@ -680,19 +680,19 @@ var THEMEMASCOT = {};
 		});
 	}
 
-	// Elements Animation
-	if ($('.wow').length) {
-		var wow = new WOW(
-			{
-				boxClass: 'wow',      // animated element css class (default is wow)
-				animateClass: 'animated', // animation css class (default is animated)
-				offset: 0,          // distance to the element when triggering the animation (default is 0)
-				mobile: false,       // trigger animations on mobile devices (default is true)
-				live: true       // act on asynchronously loaded content (default is true)
-			}
-		);
-		wow.init();
-	}
+	// Elements Animation (Disabled here so WowInit.tsx controls it natively in React)
+	// if ($('.wow').length) {
+	// 	var wow = new WOW(
+	// 		{
+	// 			boxClass: 'wow',
+	// 			animateClass: 'animated',
+	// 			offset: 0,
+	// 			mobile: false,
+	// 			live: true
+	// 		}
+	// 	);
+	// 	wow.init();
+	// }
 
 	//Jquery Knob animation  // Pie Chart Animation
 	if ($(".dial").length) {
