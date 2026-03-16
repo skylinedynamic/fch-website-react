@@ -99,7 +99,7 @@ export default function Footer() {
             </div>
             <div className="col-xl-2 col-lg-3 col-md-6 wow fadeInUp animated animated" data-wow-delay=".7s"
               style={{ visibility: 'visible', animationDelay: '0.7s', animationName: 'fadeInUp' }}>
-              <div className="footer-widget-items">
+              <div className="footer-widget-items mt-30">
                 <div className="widget-title mb-25">
                   <h3 className="font-size-24 text-white font-weight-500">Support</h3>
                 </div>

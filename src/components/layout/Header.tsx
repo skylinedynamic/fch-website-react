@@ -56,6 +56,12 @@ export default function Header() {
         .header-style-one .main-box .btn-style-one {
           display: inline-flex !important;
         }
+        @media (max-width: 1199px) {
+          .header-lower .outer-box .btn-style-one,
+          .sticky-header .sticky-button {
+            display: none !important;
+          }
+        }
         .sticky-header .sticky-header-btn,
         .mobile-menu .sticky-header-btn {
           margin-top: 2px !important;

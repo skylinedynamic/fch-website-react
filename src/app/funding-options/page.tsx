@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FundingFaq from './FundingFaq';
 
 export const metadata = {
   title: 'Funding Options | Four Corner Funding',
@@ -315,28 +316,7 @@ export default function FundingOptionsPage() {
             </div>
             <div className="col-xl-10 col-lg-10">
               <div className="faq-content-1">
-                <ul className="accordion-box">
-                  {faqs.map((faq, i) => (
-                    <li
-                      key={i}
-                      className={`accordion block wow fadeInUp animated${faq.active ? ' active-block' : ''}`}
-                      data-wow-delay={`${i * 2}00ms`}
-                    >
-                      <div className={`acc-btn${faq.active ? ' active' : ''}`}>
-                        {faq.question}
-                        <div className="icon fa fa-plus"></div>
-                      </div>
-                      <div
-                        className="acc-content"
-                        style={{ display: faq.active ? 'block' : 'none' }}
-                      >
-                        <div className="content">
-                          <div className="text">{faq.answer}</div>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <FundingFaq faqs={faqs} />
               </div>
             </div>
           </div>

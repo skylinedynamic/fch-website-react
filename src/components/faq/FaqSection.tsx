@@ -53,7 +53,7 @@ export default function FaqSection({ data }) {
                     <div className="col-xl-10 col-lg-11">
                         <div className="faq-content-1">
                             {/* Use custom id and class to block global jQuery/script.js interference */}
-                            <ul className="faq-custom-accordion-wrapper" id="faq-dynamic-list">
+                            <ul className="faq-custom-accordion-wrapper" id="faq-dynamic-list" style={{ minHeight: '300px' }}>
                                 {filteredItems.map((item, idx) => {
                                     const isActive = activeIndex === idx;
                                     return (
