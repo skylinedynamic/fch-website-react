@@ -172,6 +172,7 @@ export const homeData: HomeData = {
         image: "/images/home-3/short-term.jpeg",
         title: "Bridge / Short-Term",
         text: "Short-term capital options only when risk and cost make sense",
+        link: "/bridge-short-term",
       },
     ],
   },

@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 export default function ContactSection({ data }: any) {
   const { contact } = data;
   const [phone, setPhone] = useState('');
-  const [countryCode, setCountryCode] = useState('USA (+1)');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, '').substring(0, 10);
@@ -67,116 +65,55 @@ export default function ContactSection({ data }: any) {
               <div className="contact-box-style-3">
                 <h3 className="wow fadeInUp" data-wow-delay=".2s">Need Help For Project!</h3>
                 <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let’s work together</p>
-                <form action="#0" className="custom-contact-form" style={{ marginTop: '0' }}>
+                <form action="#0" className="custom-contact-form">
                   <div className="row g-4 text-start mt-4">
                     <div className="col-12 wow fadeInUp">
-                      <div className="d-flex align-items-center pb-3" style={{ borderBottom: '1px solid #e0e0e0' }}>
-                        <span className="me-3" style={{ fontSize: '20px', color: '#888' }}>
+                      <div className="contact-input-group">
+                        <span className="contact-icon-wrap">
                           <i className="lnr-icon-user1"></i>
                         </span>
                         <input
                           type="text"
-                          className="w-100 shadow-none bg-transparent border-0 px-0 m-0"
-                          style={{
-                            color: '#777',
-                            outline: 'none',
-                            fontSize: '16px'
-                          }}
+                          className="contact-field"
                           placeholder="Your Name*"
                           required
                         />
                       </div>
                     </div>
                     <div className="col-12 wow fadeInUp" data-wow-delay=".1s">
-                      <div className="d-flex align-items-center pb-3" style={{ borderBottom: '1px solid #e0e0e0' }}>
-                        <span className="me-3" style={{ fontSize: '20px', color: '#888' }}>
+                      <div className="contact-input-group">
+                        <span className="contact-icon-wrap">
                           <i className="lnr-icon-apartment"></i>
                         </span>
                         <input
                           type="text"
-                          className="w-100 shadow-none bg-transparent border-0 px-0 m-0"
-                          style={{
-                            color: '#777',
-                            outline: 'none',
-                            fontSize: '16px'
-                          }}
+                          className="contact-field"
                           placeholder="Company Name"
                         />
                       </div>
                     </div>
                     <div className="col-12 wow fadeInUp" data-wow-delay=".2s">
-                      <div className="d-flex align-items-center pb-3" style={{ borderBottom: '1px solid #e0e0e0' }}>
-                        <span className="me-3" style={{ fontSize: '20px', color: '#888' }}>
+                      <div className="contact-input-group">
+                        <span className="contact-icon-wrap">
                           <i className="lnr-icon-envelope1"></i>
                         </span>
                         <input
                           type="email"
-                          className="w-100 shadow-none bg-transparent border-0 px-0 m-0"
-                          style={{
-                            color: '#777',
-                            outline: 'none',
-                            fontSize: '16px'
-                          }}
+                          className="contact-field"
                           placeholder="Email Address*"
                           required
                         />
                       </div>
                     </div>
-                    <div className="col-12 wow fadeInUp" data-wow-delay=".3s" style={{ position: 'relative', zIndex: 99 }}>
-                      <div className="d-flex align-items-center pb-3" style={{ borderBottom: '1px solid #e0e0e0' }}>
-                        <span className="me-3" style={{ fontSize: '20px', color: '#888' }}>
+                    <div className="col-12 wow fadeInUp" data-wow-delay=".3s">
+                      <div className="contact-input-group">
+                        <span className="contact-icon-wrap">
                           <i className="lnr-icon-phone-handset"></i>
                         </span>
 
-                        {/* Dropdown Button */}
-                        <div
-                          className="d-flex align-items-center pe-3"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        >
-                          <span style={{ fontSize: '15px', color: '#777' }}>{countryCode === 'USA (+1)' ? '+1' : '+1'}</span>
-                          <i className={`lnr-icon-chevron-${isDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '12px', marginLeft: '5px', color: '#777' }}></i>
-                        </div>
-
-                        {/* Dropdown Menu */}
-                        {isDropdownOpen && (
-                          <div
-                            className="position-absolute bg-white shadow-sm"
-                            style={{
-                              top: '32px',
-                              left: '35px',
-                              width: '125px',
-                              borderRadius: '8px',
-                              zIndex: 10,
-                              border: '1px solid #e0e5e5',
-                              overflow: 'hidden'
-                            }}
-                          >
-                            <div
-                              className="px-3 py-3"
-                              style={{ cursor: 'pointer', fontSize: '14px', color: countryCode === 'USA (+1)' ? '#103e3d' : '#888', backgroundColor: countryCode === 'USA (+1)' ? '#f8f9fa' : 'transparent', borderBottom: '1px solid #f0f0f0' }}
-                              onClick={() => { setCountryCode('USA (+1)'); setIsDropdownOpen(false); }}
-                            >
-                              USA (+1)
-                            </div>
-                            <div
-                              className="px-3 py-3"
-                              style={{ cursor: 'pointer', fontSize: '14px', color: countryCode === 'CAN (+1)' ? '#103e3d' : '#888', backgroundColor: countryCode === 'CAN (+1)' ? '#f8f9fa' : 'transparent' }}
-                              onClick={() => { setCountryCode('CAN (+1)'); setIsDropdownOpen(false); }}
-                            >
-                              CAN (+1)
-                            </div>
-                          </div>
-                        )}
-
                         <input
                           type="tel"
-                          className="w-100 shadow-none bg-transparent border-0 px-0 m-0"
-                          style={{
-                            color: '#777',
-                            outline: 'none',
-                            fontSize: '16px'
-                          }}
+                          className="contact-field"
                           placeholder="Phone Number (XXX) XXX-XXXX*"
                           required
                           value={phone}
@@ -185,27 +122,20 @@ export default function ContactSection({ data }: any) {
                       </div>
                     </div>
                     <div className="col-12 wow fadeInUp" data-wow-delay=".4s">
-                      <div className="d-flex align-items-start pb-3" style={{ borderBottom: '1px solid #e0e0e0' }}>
-                        <span className="me-3 mt-1" style={{ fontSize: '20px', color: '#888' }}>
+                      <div className="contact-input-group contact-input-group--textarea">
+                        <span className="contact-icon-wrap contact-icon-wrap--textarea">
                           <i className="lnr-icon-pencil"></i>
                         </span>
                         <textarea
-                          className="w-100 shadow-none bg-transparent border-0 px-0 m-0"
-                          style={{
-                            color: '#777',
-                            outline: 'none',
-                            resize: 'none',
-                            height: '100px',
-                            fontSize: '16px'
-                          }}
+                          className="contact-field contact-field--textarea"
                           placeholder="Enter Your Messege here"
                           required
                         ></textarea>
                       </div>
                     </div>
                     <div className="col-12 wow fadeInUp" data-wow-delay=".5s">
-                      <div style={{ paddingBottom: '30px' }}></div>
-                      <button type="submit" className="border-0 rounded-1" style={{ backgroundColor: '#103e3d', color: '#ffffff', padding: '15px 35px', fontWeight: 'bold', fontSize: '16px' }}>
+                      <div className="form-spacing"></div>
+                      <button type="submit" className="contact-submit-btn">
                         Submit Now
                       </button>
                     </div>
