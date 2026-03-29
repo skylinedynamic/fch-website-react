@@ -9,6 +9,18 @@ export default function ContactSection({ data }: any) {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, '').substring(0, 10);
     let formattedNumber = '';
@@ -28,23 +40,22 @@ export default function ContactSection({ data }: any) {
     setSuccessMessage('');
     setErrorMessage('');
 
-    const form = e.currentTarget;
-    const name = (form.elements.namedItem('cs_name') as HTMLInputElement).value.trim();
-    const email = (form.elements.namedItem('cs_email') as HTMLInputElement).value.trim();
-    const company = (form.elements.namedItem('cs_company') as HTMLInputElement).value.trim();
-    const message = (form.elements.namedItem('cs_message') as HTMLTextAreaElement).value.trim();
-
     try {
       await submitLead({
-        contact_person: name,
-        email,
+        contact_person: formData.name,
+        email: formData.email,
         phone_number: phone || undefined,
-        company_name: company || undefined,
-        requirements_details: message || undefined,
+        company_name: formData.company || undefined,
+        requirements_details: formData.message || undefined,
       });
 
       setSuccessMessage('Thank you! Your message has been sent successfully.');
-      form.reset();
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        message: ''
+      });
       setPhone('');
     } catch (err: any) {
       setErrorMessage(err.message || 'Something went wrong. Please try again.');
@@ -110,9 +121,11 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="text"
-                          name="cs_name"
+                          name="name"
                           className="contact-field"
                           placeholder="Your Name*"
+                          value={formData.name}
+                          onChange={handleChange}
                           required
                         />
                       </div>
@@ -124,9 +137,11 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="text"
-                          name="cs_company"
+                          name="company"
                           className="contact-field"
                           placeholder="Company Name"
+                          value={formData.company}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -137,9 +152,11 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="email"
-                          name="cs_email"
+                          name="email"
                           className="contact-field"
                           placeholder="Email Address*"
+                          value={formData.email}
+                          onChange={handleChange}
                           required
                         />
                       </div>
@@ -151,7 +168,7 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="tel"
-                          name="cs_phone"
+                          name="phone"
                           className="contact-field"
                           placeholder="Phone Number (XXX) XXX-XXXX"
                           value={phone}
@@ -165,9 +182,11 @@ export default function ContactSection({ data }: any) {
                           <i className="lnr-icon-pencil"></i>
                         </span>
                         <textarea
-                          name="cs_message"
+                          name="message"
                           className="contact-field contact-field--textarea"
                           placeholder="Enter Your Message here"
+                          value={formData.message}
+                          onChange={handleChange}
                         ></textarea>
                       </div>
                     </div>

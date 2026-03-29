@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { submitLead } from '@/lib/api/leadsService';
 
@@ -9,6 +9,13 @@ export default function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        company: '',
+        message: ''
+    });
 
     const formatPhoneNumber = (value: string) => {
         if (!value) return value;
@@ -19,6 +26,11 @@ export default function ContactPage() {
             return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
         }
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,23 +44,22 @@ export default function ContactPage() {
         setSuccessMessage('');
         setErrorMessage('');
 
-        const form = e.currentTarget;
-        const name = (form.elements.namedItem('form_name') as HTMLInputElement).value.trim();
-        const email = (form.elements.namedItem('form_email') as HTMLInputElement).value.trim();
-        const company = (form.elements.namedItem('form_company') as HTMLInputElement).value.trim();
-        const message = (form.elements.namedItem('form_message') as HTMLTextAreaElement).value.trim();
-
         try {
             await submitLead({
-                contact_person: name,
-                email,
+                contact_person: formData.name,
+                email: formData.email,
                 phone_number: phone || undefined,
-                company_name: company || undefined,
-                requirements_details: message || undefined,
+                company_name: formData.company || undefined,
+                requirements_details: formData.message || undefined,
             });
 
             setSuccessMessage('Thank you for reaching out! Your message has been sent.');
-            form.reset();
+            setFormData({
+                name: '',
+                email: '',
+                company: '',
+                message: ''
+            });
             setPhone('');
         } catch (err: any) {
             setErrorMessage(err.message || 'Something went wrong. Please try again.');
@@ -155,21 +166,21 @@ export default function ContactPage() {
                                     <form id="contact_form" onSubmit={handleSubmit}>
                                         <div className="type-feild">
                                             <i className="fa-light fa-user"></i>
-                                            <input type="text" name="form_name" id="name" placeholder="Your Name*" required />
+                                            <input type="text" name="name" id="name" placeholder="Your Name*" value={formData.name} onChange={handleChange} required />
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-building"></i>
-                                            <input type="text" name="form_company" id="company" placeholder="Company Name" />
+                                            <input type="text" name="company" id="company" placeholder="Company Name" value={formData.company} onChange={handleChange} />
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-envelope"></i>
-                                            <input type="email" name="form_email" id="email" placeholder="Email Address*" required />
+                                            <input type="email" name="email" id="email" placeholder="Email Address*" value={formData.email} onChange={handleChange} required />
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-phone"></i>
                                             <input
                                                 type="tel"
-                                                name="form_phone"
+                                                name="phone"
                                                 id="phone"
                                                 placeholder="Phone Number (XXX) XXX-XXXX"
                                                 value={phone}
@@ -178,7 +189,7 @@ export default function ContactPage() {
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-pen-to-square"></i>
-                                            <textarea name="form_message" id="message" placeholder="Enter Your Message here"></textarea>
+                                            <textarea name="message" id="message" placeholder="Enter Your Message here" value={formData.message} onChange={handleChange}></textarea>
                                         </div>
                                         {successMessage && (
                                             <div role="alert" className="form-alert form-alert--success">
