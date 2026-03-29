@@ -2,11 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { submitLead } from '@/lib/api/leadsService';
 
 export default function ContactPage() {
     const [phone, setPhone] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const formatPhoneNumber = (value) => {
+    const formatPhoneNumber = (value: string) => {
         if (!value) return value;
         const phoneNumber = value.replace(/[^\d]/g, '');
         const phoneNumberLength = phoneNumber.length;
@@ -17,15 +21,40 @@ export default function ContactPage() {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
     };
 
-    const handlePhoneChange = (e) => {
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formattedValue = formatPhoneNumber(e.target.value);
         setPhone(formattedValue);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Form handling logic would go here
-        alert('Thank you for reaching out! Your message has been sent.');
+        setIsSubmitting(true);
+        setSuccessMessage('');
+        setErrorMessage('');
+
+        const form = e.currentTarget;
+        const name = (form.elements.namedItem('form_name') as HTMLInputElement).value.trim();
+        const email = (form.elements.namedItem('form_email') as HTMLInputElement).value.trim();
+        const company = (form.elements.namedItem('form_company') as HTMLInputElement).value.trim();
+        const message = (form.elements.namedItem('form_message') as HTMLTextAreaElement).value.trim();
+
+        try {
+            await submitLead({
+                contact_person: name,
+                email,
+                phone_number: phone || undefined,
+                company_name: company || undefined,
+                requirements_details: message || undefined,
+            });
+
+            setSuccessMessage('Thank you for reaching out! Your message has been sent.');
+            form.reset();
+            setPhone('');
+        } catch (err: any) {
+            setErrorMessage(err.message || 'Something went wrong. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -111,7 +140,7 @@ export default function ContactPage() {
                                     <div className="google-map">
                                         <iframe
                                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.9026235120837!2d-82.48482817448344!3d28.034468817835467!2m3!1f275.9634941696157!2f44.31251129127868!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88c2c1393912d155%3A0x41d1edef6ef2477b!2s3750%20Gunn%20Hwy%20suite%20306%2C%20Tampa%2C%20FL%2033618%2C%20USA!5e1!3m2!1sen!2sbd!4v1772000051944!5m2!1sen!2sbd"
-                                            width="100%" height="450" style={{ border: 0 }} allowFullScreen="" loading="lazy"
+                                            width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy"
                                             referrerPolicy="no-referrer-when-downgrade"></iframe>
                                     </div>
                                 </div>
@@ -122,6 +151,7 @@ export default function ContactPage() {
                                         <h2 className="title">Fill Up The Form</h2>
                                         <p className="text">Your email address will not be published. Required fields are marked *</p>
                                     </div>
+
                                     <form id="contact_form" onSubmit={handleSubmit}>
                                         <div className="type-feild">
                                             <i className="fa-light fa-user"></i>
@@ -141,17 +171,28 @@ export default function ContactPage() {
                                                 type="tel"
                                                 name="form_phone"
                                                 id="phone"
-                                                placeholder="Phone Number (XXX) XXX-XXXX*"
-                                                required
+                                                placeholder="Phone Number (XXX) XXX-XXXX"
                                                 value={phone}
                                                 onChange={handlePhoneChange}
                                             />
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-pen-to-square"></i>
-                                            <textarea name="form_message" id="message" placeholder="Enter Your Messege here" required></textarea>
+                                            <textarea name="form_message" id="message" placeholder="Enter Your Message here"></textarea>
                                         </div>
-                                        <button type="submit" className="theme-btn btn-style-one">Submit Now</button>
+                                        {successMessage && (
+                                            <div role="alert" className="form-alert form-alert--success">
+                                                {successMessage}
+                                            </div>
+                                        )}
+                                        {errorMessage && (
+                                            <div role="alert" className="form-alert form-alert--error">
+                                                {errorMessage}
+                                            </div>
+                                        )}
+                                        <button type="submit" className="theme-btn btn-style-one" disabled={isSubmitting}>
+                                            {isSubmitting ? 'Sending...' : 'Submit Now'}
+                                        </button>
                                     </form>
                                 </div>
                             </div>

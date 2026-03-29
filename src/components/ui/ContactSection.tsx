@@ -1,9 +1,13 @@
 "use client";
 import React, { useState } from 'react';
+import { submitLead } from '@/lib/api/leadsService';
 
 export default function ContactSection({ data }: any) {
   const { contact } = data;
   const [phone, setPhone] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, '').substring(0, 10);
@@ -16,6 +20,37 @@ export default function ContactSection({ data }: any) {
       formattedNumber = `(${input}`;
     }
     setPhone(formattedNumber);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem('cs_name') as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem('cs_email') as HTMLInputElement).value.trim();
+    const company = (form.elements.namedItem('cs_company') as HTMLInputElement).value.trim();
+    const message = (form.elements.namedItem('cs_message') as HTMLTextAreaElement).value.trim();
+
+    try {
+      await submitLead({
+        contact_person: name,
+        email,
+        phone_number: phone || undefined,
+        company_name: company || undefined,
+        requirements_details: message || undefined,
+      });
+
+      setSuccessMessage('Thank you! Your message has been sent successfully.');
+      form.reset();
+      setPhone('');
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,8 +99,9 @@ export default function ContactSection({ data }: any) {
             <div className="col-xl-6 col-lg-6">
               <div className="contact-box-style-3">
                 <h3 className="wow fadeInUp" data-wow-delay=".2s">Need Help For Project!</h3>
-                <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let’s work together</p>
-                <form action="#0" className="custom-contact-form">
+                <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let's work together</p>
+
+                <form className="custom-contact-form" onSubmit={handleSubmit}>
                   <div className="row g-4 text-start mt-4">
                     <div className="col-12 wow fadeInUp">
                       <div className="contact-input-group">
@@ -74,6 +110,7 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="text"
+                          name="cs_name"
                           className="contact-field"
                           placeholder="Your Name*"
                           required
@@ -87,6 +124,7 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="text"
+                          name="cs_company"
                           className="contact-field"
                           placeholder="Company Name"
                         />
@@ -99,6 +137,7 @@ export default function ContactSection({ data }: any) {
                         </span>
                         <input
                           type="email"
+                          name="cs_email"
                           className="contact-field"
                           placeholder="Email Address*"
                           required
@@ -110,12 +149,11 @@ export default function ContactSection({ data }: any) {
                         <span className="contact-icon-wrap">
                           <i className="lnr-icon-phone-handset"></i>
                         </span>
-
                         <input
                           type="tel"
+                          name="cs_phone"
                           className="contact-field"
-                          placeholder="Phone Number (XXX) XXX-XXXX*"
-                          required
+                          placeholder="Phone Number (XXX) XXX-XXXX"
                           value={phone}
                           onChange={handlePhoneChange}
                         />
@@ -127,16 +165,26 @@ export default function ContactSection({ data }: any) {
                           <i className="lnr-icon-pencil"></i>
                         </span>
                         <textarea
+                          name="cs_message"
                           className="contact-field contact-field--textarea"
-                          placeholder="Enter Your Messege here"
-                          required
+                          placeholder="Enter Your Message here"
                         ></textarea>
                       </div>
                     </div>
                     <div className="col-12 wow fadeInUp" data-wow-delay=".5s">
+                      {successMessage && (
+                        <div role="alert" className="form-alert form-alert--success">
+                          {successMessage}
+                        </div>
+                      )}
+                      {errorMessage && (
+                        <div role="alert" className="form-alert form-alert--error">
+                          {errorMessage}
+                        </div>
+                      )}
                       <div className="form-spacing"></div>
-                      <button type="submit" className="contact-submit-btn">
-                        Submit Now
+                      <button type="submit" className="contact-submit-btn" disabled={isSubmitting}>
+                        {isSubmitting ? 'Sending...' : 'Submit Now'}
                       </button>
                     </div>
                   </div>

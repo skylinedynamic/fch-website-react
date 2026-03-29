@@ -3,18 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { preQualificationSteps } from '@/data/preQualificationData';
+import SearchableSelect from '@/components/ui/SearchableSelect';
+import { fetchLocations, getStateNames, countryCodeToKey } from '@/lib/api/locationsService';
+import { submitPrequalification } from '@/lib/api/prequalificationService';
 
 const PreQualificationPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({});
-    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState<Record<string, any>>({});
+    const [errors, setErrors] = useState<Record<string, boolean>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [locationData, setLocationData] = useState<any | null>(null);
+    const [fetchError, setFetchError] = useState<string | null>(null);
+    const [isCountryOpen, setIsCountryOpen] = useState(false);
 
     const totalSteps = preQualificationSteps.length;
 
     useEffect(() => {
         // Initialize form data with defaults
-        const initialData = {};
+        const initialData: Record<string, any> = { country_code: '+1' };
         preQualificationSteps.forEach(step => {
             step.fields.forEach(field => {
                 if (field.type === 'radio' && field.default) {
@@ -27,55 +33,56 @@ const PreQualificationPage = () => {
             });
         });
         setFormData(initialData);
-    }, []);
 
-    // Re-initialize nice-select after every mount (fixes client-side navigation bug)
-    useEffect(() => {
-        let retryTimer: ReturnType<typeof setTimeout> | null = null;
-
-        const init = () => {
-            const jq = (window as any).$;
-            if (!jq || typeof jq.fn?.niceSelect !== 'function') {
-                retryTimer = setTimeout(init, 300);
-                return;
-            }
-            const $selects = jq('#prequal-section select');
-            if (!$selects.length) {
-                retryTimer = setTimeout(init, 300);
-                return;
-            }
-            // Destroy stale instances first, then re-apply
-            try { $selects.niceSelect('destroy'); } catch (_) { }
-            $selects.niceSelect();
-
-            // Sync nice-select pick-events back to React state
-            $selects.off('change.prequal').on('change.prequal', function (this: HTMLSelectElement) {
-                const name = this.name;
-                const value = jq(this).val() as string;
-                if (name) {
-                    setFormData(prev => ({ ...prev, [name]: value }));
-                    setErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
-                }
+        fetchLocations()
+            .then(data => {
+                console.log('[PrequalPage] API Loaded successfully');
+                setLocationData(data);
+                setFetchError(null);
+            })
+            .catch(err => {
+                console.error('[PrequalPage] API Fetch Error:', err);
+                setFetchError('API Connection failed');
             });
-        };
-
-        init();
-
-        return () => {
-            if (retryTimer) clearTimeout(retryTimer);
-            const jq = (window as any).$;
-            if (jq) {
-                try { jq('#prequal-section select').off('change.prequal').niceSelect('destroy'); } catch (_) { }
-            }
-        };
     }, []);
 
-    // Keep nice-select display in sync whenever step changes
+    // Close country dropdown on outside click
     useEffect(() => {
-        const jq = (window as any).$;
-        if (!jq || typeof jq.fn?.niceSelect !== 'function') return;
-        try { jq('#prequal-section select').niceSelect('update'); } catch (_) { }
+        const handler = (e: MouseEvent) => {
+            if (isCountryOpen) {
+                const target = e.target as HTMLElement;
+                if (!target.closest('.prequal-country-dropdown')) {
+                    setIsCountryOpen(false);
+                }
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [isCountryOpen]);
+
+    // Derive state options based on selected country code (defaults to +1 / USA)
+    const countryVal = formData['country_code'] || '+1';
+    const selectedCountryKey = countryCodeToKey[countryVal] || 'USA';
+    
+    // Compute the list of states. If locationData is still null (loading), show a single "Loading..." option.
+    const fetchedStates = getStateNames(locationData, selectedCountryKey);
+    const stateOptions = locationData 
+        ? ['Select State', ...fetchedStates]
+        : ['Loading States...'];
+
+    // Clear errors when step changes
+    useEffect(() => {
+        setErrors({});
     }, [currentStep]);
+
+    // ADD DEBUG LOGS HERE
+    useEffect(() => {
+        if (locationData) {
+            console.log('[PrequalPage] Current Step:', currentStep);
+            console.log('[PrequalPage] Errors current state:', errors);
+        }
+    }, [currentStep, errors, locationData]);
+
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
@@ -88,12 +95,24 @@ const PreQualificationPage = () => {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
     };
 
+    const handleSelectChange = (name: string, value: string) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
 
         if (name === 'phone') {
             newValue = formatPhoneNumber(value);
+        }
+
+        // When country code changes, reset state selection
+        if (name === 'country_code') {
+            setFormData(prev => ({ ...prev, [name]: newValue, state: '' }));
+            setErrors(prev => { const n = { ...prev }; delete n['state']; return n; });
+            return;
         }
 
         setFormData(prev => ({ ...prev, [name]: newValue }));
@@ -106,49 +125,127 @@ const PreQualificationPage = () => {
         }
     };
 
-    const validateStep = (stepNumber) => {
+    const validateStep = (stepNumber: number) => {
         const step = preQualificationSteps.find(s => s.id === stepNumber);
-        const newErrors = {};
+        if (!step) return true;
+
+        const newErrors: Record<string, boolean> = {};
         let isValid = true;
 
-        step.fields.forEach(field => {
-            // Check if field is conditional and visible
-            const isVisible = !field.condition || formData[field.condition.field] === field.condition.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^(\(\d{3}\) \d{3}-\d{4}|\d{10})$/;
 
-            if (field.required && isVisible) {
-                const val = formData[field.name];
-                if (!val || val === "" || val === "Select State" || val === "Select Industry" || val === "Select Structure" || val === "Select Duration" || val === "Select Urgency" || val === "Select Purpose" || val === "Select Score Range" || val === "Select Score") {
+        step.fields.forEach(field => {
+            const isVisible = !field.condition || formData[field.condition.field] === field.condition.value;
+            if (!isVisible) return;
+
+            const val = formData[field.name];
+            const isEmpty = !val || val === "" || (typeof val === 'string' && val.startsWith('Select '));
+
+            if (field.required && isEmpty) {
+                newErrors[field.name] = true;
+                isValid = false;
+            } else if (!isEmpty) {
+                // Type-specific validation
+                if (field.type === 'email' && !emailRegex.test(val)) {
                     newErrors[field.name] = true;
                     isValid = false;
+                }
+                if (field.isPhone && !phoneRegex.test(val)) {
+                    newErrors[field.name] = true;
+                    isValid = false;
+                }
+                if (field.type === 'number' && (isNaN(Number(val)) || Number(val) <= 0)) {
+                    newErrors[field.name] = true;
+                    isValid = false;
+                }
+                if (field.type === 'url' && val.length > 0) {
+                    try { new URL(val); } catch (_) { 
+                        // Allow if it doesn't have protocol but look like domain? 
+                        // Simplified check for now
+                    }
                 }
             }
         });
 
         setErrors(newErrors);
+        if (!isValid) {
+            // Scroll to the first error
+            const firstError = Object.keys(newErrors)[0];
+            const element = document.getElementsByName(firstError)[0];
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
         return isValid;
     };
 
     const handleNext = () => {
         if (validateStep(currentStep)) {
+            setErrors({}); // Clear errors before moving to next step
             setCurrentStep(prev => prev + 1);
             window.scrollTo({ top: 400, behavior: 'smooth' });
         }
     };
 
     const handlePrev = () => {
+        setErrors({}); // Clear errors when going back
         setCurrentStep(prev => prev - 1);
         window.scrollTo({ top: 400, behavior: 'smooth' });
     };
 
-    const handleSubmit = (e) => {
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitError(null);
+        setSubmitSuccess(false);
+
         if (validateStep(currentStep)) {
             setIsSubmitting(true);
-            // Simulate submission
-            setTimeout(() => {
-                alert('Thank you! Your pre-qualification request has been submitted. Our advisors will contact you shortly.');
-                window.location.href = '/';
-            }, 1500);
+            try {
+                // Map frontend data to backend payload
+                const payload = {
+                    first_name: formData.first_name,
+                    last_name: formData.last_name,
+                    email: formData.email,
+                    phone_number: formData.phone,
+                    business_website: formData.website || null,
+                    state_of_incorporation: formData.state,
+                    business_name: formData.business_name,
+                    industry_type: formData.industry,
+                    business_structure: formData.structure,
+                    years_in_business: formData.time_in_business,
+                    monthly_revenue: Number(formData.monthly_revenue),
+                    annual_revenue: Number(formData.annual_revenue),
+                    funding_requested_amount: Number(formData.funding_amount),
+                    funding_urgency: formData.urgency,
+                    purpose_of_funding: formData.purpose,
+                    personal_credit_score: formData.personal_credit,
+                    estimated_business_credit_score: formData.business_credit,
+                    existing_business_debt: formData.has_debt === 'yes',
+                    debt_balance: formData.has_debt === 'yes' ? Number(formData.debt_balance) : 0,
+                    notes: formData.note || null
+                };
+
+                await submitPrequalification(payload);
+                setSubmitSuccess(true);
+                
+                // Clear state after successful submission
+                setFormData({});
+                window.scrollTo({ top: 400, behavior: 'smooth' });
+                
+                // Optional: Redirect after success
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 3000);
+            } catch (err: any) {
+                console.error('Submission failed:', err);
+                setSubmitError(err.message || 'We encountered an error processing your request. Please try again.');
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -210,7 +307,17 @@ const PreQualificationPage = () => {
                             </div>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="prequal-form">
+                        <form onSubmit={handleSubmit} className="prequal-form" noValidate>
+                            {submitSuccess && (
+                                <div className="form-alert form-alert--success mb-4">
+                                    Thank you! Your pre-qualification request has been submitted successfully.
+                                </div>
+                            )}
+                            {submitError && (
+                                <div className="form-alert form-alert--error mb-4">
+                                    {submitError}
+                                </div>
+                            )}
                             {preQualificationSteps.map((step) => (
                                 <div
                                     key={step.id}
@@ -232,36 +339,54 @@ const PreQualificationPage = () => {
                                                     </label>
 
                                                     {field.type === 'select' ? (
-                                                        <div className="select-wrapper">
-                                                            <select
-                                                                name={field.name}
-                                                                className={`prequal-select ${errors[field.name] ? 'invalid' : ''}`}
-                                                                required={field.required}
-                                                                value={formData[field.name] || ""}
-                                                                onChange={handleInputChange}
-                                                            >
-                                                                {field.options.map(opt => (
-                                                                    <option key={opt} value={opt === field.options[0] ? "" : opt}>{opt}</option>
-                                                                ))}
-                                                            </select>
-                                                        </div>
+                                                        <SearchableSelect
+                                                            key={(field as any).isDynamic ? `${selectedCountryKey}-${locationData ? 'loaded' : 'loading'}` : field.name}
+                                                            name={field.name}
+                                                            options={(field as any).isDynamic ? stateOptions : field.options as string[]}
+                                                            value={formData[field.name] || ''}
+                                                            onChange={handleSelectChange}
+                                                            invalid={!!errors[field.name]}
+                                                        />
                                                     ) : field.isPhone ? (
                                                         <div className="phone-input-group">
-                                                            <select 
-                                                                className="prequal-country-code" 
-                                                                name="country_code"
-                                                                value={formData['country_code'] || "+1"}
-                                                                onChange={handleInputChange}
-                                                            >
-                                                                <option value="+1">USA (+1)</option>
-                                                                <option value="+1-CA">CAN (+1)</option>
-                                                            </select>
+                                                            <div className={`prequal-country-dropdown${isCountryOpen ? ' open' : ''}`}>
+                                                                <div 
+                                                                    className="prequal-country-trigger"
+                                                                    onClick={() => setIsCountryOpen(!isCountryOpen)}
+                                                                >
+                                                                    <span>{countryVal === '+1-CA' ? 'CAN (+1)' : 'USA (+1)'}</span>
+                                                                    <i className={`fas fa-chevron-down ms-2 ${isCountryOpen ? 'rotate-180' : ''}`}></i>
+                                                                </div>
+                                                                {isCountryOpen && (
+                                                                    <div className="prequal-country-list">
+                                                                        <div 
+                                                                            className={`prequal-country-item ${countryVal === '+1' ? 'active' : ''}`}
+                                                                            onClick={() => {
+                                                                                handleSelectChange('country_code', '+1');
+                                                                                handleSelectChange('state', ''); // clear state
+                                                                                setIsCountryOpen(false);
+                                                                            }}
+                                                                        >
+                                                                            USA (+1)
+                                                                        </div>
+                                                                        <div 
+                                                                            className={`prequal-country-item ${countryVal === '+1-CA' ? 'active' : ''}`}
+                                                                            onClick={() => {
+                                                                                handleSelectChange('country_code', '+1-CA');
+                                                                                handleSelectChange('state', ''); // clear state
+                                                                                setIsCountryOpen(false);
+                                                                            }}
+                                                                        >
+                                                                            CAN (+1)
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                             <input
                                                                 type="tel"
                                                                 name={field.name}
-                                                                className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`}
+                                                                className={`prequal-input ${errors[field.name] ? 'prequal-error' : ''}`}
                                                                 placeholder={field.placeholder}
-                                                                required={field.required}
                                                                 value={formData[field.name] || ""}
                                                                 onChange={handleInputChange}
                                                             />
@@ -292,9 +417,8 @@ const PreQualificationPage = () => {
                                                         <input
                                                             type={field.type}
                                                             name={field.name}
-                                                            className={`prequal-input ${errors[field.name] ? 'invalid' : ''}`}
+                                                            className={`prequal-input ${errors[field.name] ? 'prequal-error' : ''}`}
                                                             placeholder={field.placeholder}
-                                                            required={field.required}
                                                             value={formData[field.name] || ""}
                                                             onChange={handleInputChange}
                                                         />

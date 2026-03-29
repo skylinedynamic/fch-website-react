@@ -142,8 +142,7 @@ export default function BlogDetailsPage() {
                       </div>
                     </div>
                     <div className="mb-3">
-                      <textarea name="form_message" className="form-control required" rows="5" placeholder="Enter Message"></textarea>
-                    </div>
+                        <textarea name="form_message" className="form-control required" rows={5} placeholder="Enter Message"></textarea>                    </div>
                     <div className="mb-3">
                       <button type="submit" className="theme-btn btn-two">
                         <span className="theme-btn btn-style-one rounded-0 ">Submit Comment</span>

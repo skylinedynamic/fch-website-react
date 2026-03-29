@@ -16,7 +16,8 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select State", "Florida", "California", "New York", "Texas", "Rhode Island"] 
+                isDynamic: true,
+                options: ["Select State"] 
             },
         ]
     },
@@ -33,7 +34,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Industry", "Accounting & Financial Services", "Construction & Real Estate", "Healthcare & Medical", "Manufacturing", "Retail & E-commerce", "Technology & SaaS", "Other"] 
+                options: ["Select Industry", "Accounting & Financial Services", "Automotive Services & Dealerships", "Beauty, Salon & Spa Services", "Cannabis / CBD Industry", "Childcare & Daycare", "Cleaning & Janitorial Services", "Construction & Contracting", "E-Commerce / Online Retail", "Education & Tutoring Services", "Fitness & Wellness (Gyms, Yoga, Etc.)", "Franchise Businesses", "Government Contractor / Vendor", "Healthcare & Medical Practices", "Home Services (Plumbing, HVAC, Landscaping, etc.)", "Hospitality (Hotels / Lodging)", "IT & Software Development", "Legal & Professional Services", "Manufacturing & Wholesale", "Marketing, Advertising & Media", "Non-Profit Organization", "Real Estate & Property Management", "Restaurants, Bars & Catering", "Retail (Brick & Mortar)", "Transportation & Logistics", "Other"] 
             },
             { 
                 id: "structure", 
@@ -42,7 +43,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Structure", "S-Corporation", "C-Corporation", "LLC", "Sole Proprietorship", "Partnership"] 
+                options: ["Select Structure", "LLC", "S-Corporation", "Corporation", "Sole Proprietorship", "Partnership", "PLLC", "Public Corporation", "Other"] 
             },
             { 
                 id: "time_in_business", 
@@ -51,7 +52,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Duration", "0-6 months", "6-12 months", "1-2 years", "2+ years"] 
+                options: ["Select Duration", "Under 6 months", "6-12 months", "1-2 years", "2-3 years", "3+ years"] 
             },
             { id: "monthly_revenue", name: "monthly_revenue", label: "Monthly Revenue", type: "number", placeholder: "Average last 3 months", required: true, width: "col-md-6" },
             { id: "annual_revenue", name: "annual_revenue", label: "Annual Revenue", type: "number", placeholder: "Last fiscal year", required: true, width: "col-md-6" },
@@ -70,7 +71,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Urgency", "Within 30 days", "1-3 months", "3-6 months", "Just exploring"] 
+                options: ["Select Urgency", "Immediate", "Within 30 days", "1-3 months", "Flexible"] 
             },
             { 
                 id: "purpose", 
@@ -79,7 +80,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Purpose", "Equipment", "Business Acquisition", "Working Capital", "Real Estate", "Debt Refinancing"] 
+                options: ["Select Purpose", "Working Capital", "Equipment", "Inventory", "Marketing", "Expansion", "Other"] 
             },
             { 
                 id: "personal_credit", 
@@ -88,7 +89,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Score Range", "Excellent (720+)", "Good (680-719)", "Fair (580-669)", "Poor (<580)"] 
+                options: ["Select Score Range", "Poor (<580)", "Fair (580-669)", "Good (670-739)", "Very Good (740-799)", "Excellent (800+)"] 
             },
             { 
                 id: "business_credit", 
@@ -97,7 +98,7 @@ export const preQualificationSteps = [
                 type: "select", 
                 required: true, 
                 width: "col-md-6",
-                options: ["Select Score", "High", "Medium", "Low", "Not Sure"] 
+                options: ["Select Score", "No Business Credit", "Low", "Medium", "High"] 
             },
             { 
                 id: "has_debt", 
