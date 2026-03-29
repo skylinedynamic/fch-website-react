@@ -11,7 +11,12 @@ const navLinks = [
   { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Sign In', external: true },
 ];
 
-const Navigation = ({ className, onLinkClick }) => (
+interface NavigationProps {
+  className?: string;
+  onLinkClick?: () => void;
+}
+
+const Navigation = ({ className, onLinkClick }: NavigationProps) => (
   <ul className={`navigation ${className || ''}`}>
     {navLinks.map((link) => (
       <li key={link.label} onClick={onLinkClick}>
