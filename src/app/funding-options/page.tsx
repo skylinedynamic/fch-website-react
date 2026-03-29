@@ -103,7 +103,7 @@ export default function FundingOptionsPage() {
                 </p>
               </div>
               <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
-                <Link href="/contact" className="theme-btn btn-style-one">
+                <Link href="/pre-qualification" className="theme-btn btn-style-one">
                   Get Pre-Qualified
                   <span className="icon">
                     <i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i>
