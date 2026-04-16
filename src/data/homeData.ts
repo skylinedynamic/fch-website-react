@@ -6,7 +6,7 @@ export const homeData: HomeData = {
     title: "Fast, Flexible Business Funding — Powered by Intelligence",
     text: "Get matched with top funding options in minutes. No hard credit pull. No hidden fees.",
     cta: {
-      text: "Get-Pre-Qulified",
+      text: "Get Pre-Qualified",
       link: "/pre-qualification",
     },
     images: {
