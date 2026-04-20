@@ -128,7 +128,7 @@ export default function ContactPage() {
                                     <div className="icon">
                                         <i className="fa-solid fa-envelope"></i>
                                     </div>
-                                    <h4 className="title">Mailing Address</h4>
+                                    <h4 className="title">E-Mail Address</h4>
                                     <p className="text">
                                         <a href="mailto:Info@fourcornerfunding.com" style={{ color: 'inherit' }}>Info@fourcornerfunding.com</a>
                                     </p>
