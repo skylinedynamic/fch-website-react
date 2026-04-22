@@ -11,6 +11,13 @@ export default function sitemap() {
     '/pre-qualification',
     '/sba-programs',
     '/business-acquisition',
+    '/working-capital-and-growth',
+    '/real-estate',
+    '/asset-and-equipment',
+    '/receivables-and-cash-flow',
+    '/bridge-short-term',
+    '/terms',
+    '/disclosure',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

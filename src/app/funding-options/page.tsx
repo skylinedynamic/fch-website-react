@@ -15,6 +15,7 @@ const fundingCards = [
     desc: 'Low rates, long terms — ideal for established businesses and real estate purchases.',
     requirements: ['Min Credit: 650+', 'Docs: 2 years tax returns, P&L, business plan', 'Time: 30–90 days'],
     dark: true,
+    link: '/sba-programs'
   },
   {
     number: '02',
@@ -22,6 +23,7 @@ const fundingCards = [
     title: 'Business Term Loans',
     desc: 'Fast lump-sum funding for inventory, marketing, or expansion.',
     requirements: ['Min Credit: 600+', 'Time in Biz: 1-2 years', 'Time: 3-7 days'],
+    link: '/working-capital-and-growth'
   },
   {
     number: '03',
@@ -29,6 +31,7 @@ const fundingCards = [
     title: 'Business Line of Credit',
     desc: 'Flexible working capital you can draw on as needed.',
     requirements: ['Revolving credit', 'Min Credit: 600+', 'Time: 1-5 days'],
+    link: '/working-capital-and-growth'
   },
   {
     number: '04',
@@ -36,6 +39,7 @@ const fundingCards = [
     title: 'Merchant Cash Advance (MCA)',
     desc: 'Fast funding based on your revenue, not your credit.',
     requirements: ['Credit score: 500+', 'Time in Biz: 3-6 months', 'Time: 24-48 hours'],
+    link: '/bridge-short-term'
   },
   {
     number: '05',
@@ -43,6 +47,7 @@ const fundingCards = [
     title: 'Equipment Financing',
     desc: 'Purchase or lease trucks, tools, tech, or machinery.',
     requirements: ['Min Credit: 600+', 'Equipment quote required', 'Time: 2-5 days'],
+    link: '/asset-and-equipment'
   },
   {
     number: '06',
@@ -50,6 +55,7 @@ const fundingCards = [
     title: 'Invoice Factoring',
     desc: 'Turn unpaid invoices into cash — ideal for B2B companies.',
     requirements: ['No minimum credit score', '3+ months in business', 'Time: 2-3 days'],
+    link: '/receivables-and-cash-flow'
   },
   {
     number: '07',
@@ -215,6 +221,11 @@ export default function FundingOptionsPage() {
                 data-wow-delay={`.${i + 2}s`}
               >
                 <div className={`funding-card${card.dark ? ' dark-bg' : ''}`}>
+                  {card.link && (
+                    <Link href={card.link} className="funding-card-link">
+                      <i className="fas fa-arrow-right"></i>
+                    </Link>
+                  )}
                   <div className="card-number">{card.number}</div>
                   <div className="card-icon">
                     <i className={card.icon}></i>

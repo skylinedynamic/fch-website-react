@@ -4505,6 +4505,19 @@ select.prequal-country-code option {
   color: #dc3545;
 }
 
+.sba-credit-tier--danger {
+  background: rgba(185, 28, 28, 0.08);
+  border-color: #b91c1c;
+}
+
+.sba-credit-tier--danger span {
+  color: #b91c1c;
+}
+
+.sba-credit-tier--danger small {
+  color: #b91c1c;
+}
+
 /* --- Timeline --- */
 .sba-timeline-block {
   background: #fff;
@@ -5370,3 +5383,32 @@ select.prequal-country-code option {
     align-items: center;
 }
 
+
+/* Funding Card Link Styling */
+.funding-card-link {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: 40px;
+    height: 40px;
+    background: #103C3B;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.funding-card.dark-bg .funding-card-link {
+    background: #fff;
+    color: #103C3B;
+}
+
+.funding-card-link:hover {
+    transform: scale(1.1);
+    background: #2D9A96;
+    color: #fff;
+}

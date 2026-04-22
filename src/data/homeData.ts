@@ -140,16 +140,19 @@ export const homeData: HomeData = {
         image: "/images/home-3/working.jpg.jpeg",
         title: "Working Capital & Growth",
         text: "We offer Business Lines of Credit, Term Loans, Revenue-Based Financing, and profile-based unsecured funding.",
+        link: "/working-capital-and-growth",
       },
       {
         image: "/images/home-3/receivables.jpg.jpeg",
         title: "Receivables & Cash Flow",
         text: "We provide A/R Financing, Invoice Factoring, and eligible Purchase Order Financing to support your cash flow.",
+        link: "/receivables-and-cash-flow",
       },
       {
         image: "/images/home-3/asset-and-equipment.jpg.jpeg",
         title: "Asset & Equipment",
         text: "We provide equipment and commercial vehicle financing, including heavy or specialty equipment, based on your profile.",
+        link: "/asset-and-equipment",
       },
       {
         image: "/images/home-3/sba-programs.jpg.jpeg",
@@ -167,6 +170,7 @@ export const homeData: HomeData = {
         image: "/images/home-3/real-estate.jpg.jpeg",
         title: "Real Estate",
         text: "SBA-backed financing for owner-occupied commercial property, refinancing, or expansion.",
+        link: "/real-estate",
       },
       {
         image: "/images/home-3/short-term.jpeg",

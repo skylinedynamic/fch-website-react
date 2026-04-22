@@ -9,9 +9,9 @@ const quickLinks = [
 ];
 
 const legalLinks = [
-  { href: '#', label: 'Terms of Service' },
+  { href: '/terms', label: 'Terms of Service' },
   { href: '#', label: 'Privacy Policy' },
-  { href: '#', label: 'Disclosures' },
+  { href: '/disclosure', label: 'Disclosure' },
 ];
 
 const supportLinks = [
