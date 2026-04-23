@@ -13,6 +13,11 @@ export const getBlogPostBySlug = async (slug) => {
   return blogData.find(post => post.slug === slug);
 };
 
+export const getBlogPosts = async () => {
+  return blogData;
+};
+
+
 export const getBlogCategories = async () => {
   return blogCategories;
 };
@@ -210,7 +215,7 @@ export const getPartnerProgramData = async () => {
       title: "Ready to become a Certified or White-Labeled Partner?",
       cta: [
         { text: "Request a Call", link: "/contact" },
-        { text: "Apply Now", link: "/contact" }
+        { text: "Apply Now", link: "/pre-qualification" }
       ]
     },
     faq: {

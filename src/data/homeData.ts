@@ -327,7 +327,7 @@ export const homeData: HomeData = {
     ],
     image: "/images/home-3/faq-image.jpg",
   },
-  blog: {
+    blog: {
     subtitle: "Our Blog",
     title: "Insights from Latest Blog",
     posts: [
@@ -335,8 +335,8 @@ export const homeData: HomeData = {
         date: "20",
         month: "March",
         author: "Admin",
-        comments: "3 Comments",
-        title: "Errors with financial consequences in tax ?",
+        comments: "02 Comments",
+        title: "Financial Errors in Taxes That Can Cost Your Business Thousands",
         link: "/blog/financial-consequences-tax-errors",
         image: "/images/home-1/news/news-01.jpg",
       },
@@ -344,8 +344,8 @@ export const homeData: HomeData = {
         date: "25",
         month: "March",
         author: "Admin",
-        comments: "3 Comments",
-        title: "Achieving Work Life Balance in a Hectic World",
+        comments: "05 Comments",
+        title: "Achieving Work-Life Balance in a Hectic World",
         link: "/blog/work-life-balance-hectic-world",
         image: "/images/home-1/news/news-02.jpg",
       },
@@ -353,11 +353,12 @@ export const homeData: HomeData = {
         date: "30",
         month: "March",
         author: "Admin",
-        comments: "3 Comments",
-        title: "Mastering Work-Life On Target Business Goal",
+        comments: "01 Comments",
+        title: "Mastering Work-Life Balance While Staying Focused on Business Goals",
         link: "/blog/mastering-work-life-business-goal",
         image: "/images/home-1/news/news-03.jpg",
       },
     ],
   },
+
 };

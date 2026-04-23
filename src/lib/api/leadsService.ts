@@ -5,6 +5,7 @@ export interface LeadPayload {
   email: string;
   phone_number?: string;
   company_name?: string;
+  interest?: string;
   requirements_details?: string;
 }
 

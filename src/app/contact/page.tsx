@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { submitLead } from '@/lib/api/leadsService';
 
@@ -9,11 +9,24 @@ export default function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [interestOpen, setInterestOpen] = useState(false);
+    const interestRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (interestRef.current && !interestRef.current.contains(e.target as Node)) {
+                setInterestOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
 
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         company: '',
+        interest: '',
         message: ''
     });
 
@@ -50,6 +63,7 @@ export default function ContactPage() {
                 email: formData.email,
                 phone_number: phone || undefined,
                 company_name: formData.company || undefined,
+                interest: formData.interest || undefined,
                 requirements_details: formData.message || undefined,
             });
 
@@ -58,6 +72,7 @@ export default function ContactPage() {
                 name: '',
                 email: '',
                 company: '',
+                interest: '',
                 message: ''
             });
             setPhone('');
@@ -128,7 +143,7 @@ export default function ContactPage() {
                                     <div className="icon">
                                         <i className="fa-solid fa-envelope"></i>
                                     </div>
-                                    <h4 className="title">Mailing Address</h4>
+                                    <h4 className="title">Email Address</h4>
                                     <p className="text">
                                         <a href="mailto:Info@fourcornerfunding.com" style={{ color: 'inherit' }}>Info@fourcornerfunding.com</a>
                                     </p>
@@ -186,6 +201,36 @@ export default function ContactPage() {
                                                 value={phone}
                                                 onChange={handlePhoneChange}
                                             />
+                                        </div>
+                                        {/* Custom React Dropdown — bypasses nice-select */}
+                                        <div className={`contact-interest-group${interestOpen ? ' open' : ''}`} ref={interestRef}>
+                                            <div
+                                                className={`contact-interest-trigger${formData.interest ? ' has-value' : ''}`}
+                                                onClick={() => setInterestOpen(prev => !prev)}
+                                            >
+                                                <i className="fa-light fa-circle-question"></i>
+                                                <span className="contact-interest-trigger-text">
+                                                    {formData.interest || 'What brings you here today?*'}
+                                                </span>
+                                                <i className={`fa-light fa-chevron-down contact-interest-chevron${interestOpen ? ' rotated' : ''}`}></i>
+                                            </div>
+                                            {interestOpen && (
+                                                <div className="contact-interest-dropdown">
+                                                    {['Explore becoming a client', 'Explore partnership opportunities'].map(opt => (
+                                                        <div
+                                                            key={opt}
+                                                            className={`contact-interest-dropdown-item${formData.interest === opt ? ' active' : ''}`}
+                                                            onClick={() => {
+                                                                setFormData(prev => ({ ...prev, interest: opt }));
+                                                                setInterestOpen(false);
+                                                            }}
+                                                        >
+                                                            {formData.interest === opt && <i className="fa-solid fa-check"></i>}
+                                                            {opt}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="type-feild">
                                             <i className="fa-light fa-pen-to-square"></i>

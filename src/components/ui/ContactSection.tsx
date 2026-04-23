@@ -82,8 +82,7 @@ export default function ContactSection({ data }: any) {
                   </h2>
                 </div>
                 <p className="contact-text wow fadeInUp" data-wow-delay=".5s">
-                  We denounce with righteous indignation and like men
-                  beguiled and demoralized by the charms
+                  We help startups, growing businesses, and partners nationwide — reach out today to get started.
                 </p>
                 <ul className="contact-list wow fadeInUp" data-wow-delay=".7s">
                   <li>

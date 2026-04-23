@@ -4,10 +4,10 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
   return (
     <div className="sidebar">
       <div className="sidebar__single sidebar__search">
-        <form action="#" className="sidebar__search-form">
-          <input type="search" placeholder="Search here" />
-          <button type="submit"><i className="far fa-search"></i></button>
-        </form>
+        <div className="sidebar__search-form">
+          <input type="search" placeholder="Search here" readOnly />
+          <button type="button" style={{ cursor: 'default' }}><i className="far fa-search"></i></button>
+        </div>
       </div>
 
       {latestPosts && latestPosts.length > 0 && (
@@ -21,10 +21,7 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
                 </div>
                 <div className="sidebar__post-content">
                   <h3>
-                    <span className="sidebar__post-content-meta">
-                      <i className="fas fa-user-circle"></i> Admin
-                    </span>
-                    <Link href={post.link}>{post.title}</Link>
+                    <span className="sidebar__post-title-span">{post.title}</span>
                   </h3>
                 </div>
               </li>
@@ -39,10 +36,10 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
           <ul className="sidebar__category-list list-unstyled">
             {categories.map((cat, index) => (
               <li key={index} className={cat.active ? 'active' : ''}>
-                <Link href={`/blog/category/${cat.id}`}>
+                <span className="sidebar__link-span">
                   {cat.label}
                   <span className="icon-right-arrow"></span>
-                </Link>
+                </span>
               </li>
             ))}
           </ul>
@@ -54,7 +51,7 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
           <h3 className="sidebar__title">Tags</h3>
           <div className="sidebar__tags-list">
             {tags.map((tag, index) => (
-              <Link key={index} href={`/blog/tag/${tag.toLowerCase()}`}>{tag}</Link>
+              <span key={index} className="sidebar__tag-span">{tag}</span>
             ))}
           </div>
         </div>

@@ -26,10 +26,10 @@ export default function BlogSection({ data }) {
                   </span>
                 </div>
                 <div className="news-content">
-                  <ul className="comments-list">
+                  {/* <ul className="comments-list">
                     <li><i className="lnr-icon-user1"></i> {post.author}</li>
                     <li><i className="lnr-icon-comment"></i> {post.comments}</li>
-                  </ul>
+                  </ul> */}
                   <h3>
                     <Link href={post.link}>{post.title}</Link>
                   </h3>

@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
-import { 
-  getBlogPostBySlug, 
-  getBlogCategories, 
-  getBlogTags 
+import {
+  getBlogPostBySlug,
+  getBlogPosts,
+  getBlogCategories,
+  getBlogTags
 } from '@/lib/api/cmsService';
 
 export default function BlogDetailsPage() {
@@ -16,6 +17,8 @@ export default function BlogDetailsPage() {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [prevPost, setPrevPost] = useState(null);
+  const [nextPost, setNextPost] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +27,14 @@ export default function BlogDetailsPage() {
         notFound();
       }
       setPost(p);
+
+      const allPosts = await getBlogPosts();
+      const currentIndex = allPosts.findIndex(item => item.slug === slug);
+      if (currentIndex > 0) setPrevPost(allPosts[currentIndex - 1]);
+      else setPrevPost(null);
+      if (currentIndex < allPosts.length - 1 && currentIndex !== -1) setNextPost(allPosts[currentIndex + 1]);
+      else setNextPost(null);
+
       const cats = await getBlogCategories();
       setCategories(cats);
       const t = await getBlogTags();
@@ -79,8 +90,8 @@ export default function BlogDetailsPage() {
                 </div>
                 <div className="blog-details__content">
                   <ul className="list-unstyled blog-details__meta">
-                    <li><Link href="#"><i className="fas fa-user-circle"></i> {post.author}</Link></li>
-                    <li><Link href="#"><i className="fas fa-comments"></i> {post.comments < 10 ? `0${post.comments}` : post.comments} Comments</Link></li>
+                    <li><span><i className="fas fa-user-circle"></i> {post.author}</span></li>
+                    {/* <li><span><i className="fas fa-comments"></i> {post.comments < 10 ? `0${post.comments}` : post.comments} Comments</span></li> */}
                   </ul>
                   <h3 className="blog-details__title">{post.title}</h3>
                   <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -90,29 +101,35 @@ export default function BlogDetailsPage() {
                   <p className="blog-details__tags">
                     <span>Tags</span>
                     {post.tags.map((tag, i) => (
-                      <Link key={i} href="#">{tag}</Link>
+                      <span key={i}>{tag}</span>
                     ))}
                   </p>
                   <div className="blog-details__social-list">
-                    <Link href="#"><i className="fa fa-x"></i></Link>
-                    <Link href="#"><i className="fab fa-facebook"></i></Link>
-                    <Link href="#"><i className="fab fa-pinterest-p"></i></Link>
-                    <Link href="#"><i className="fab fa-instagram"></i></Link>
+                    <span><i className="fa fa-x"></i></span>
+                    <span><i className="fab fa-facebook"></i></span>
+                    <span><i className="fab fa-pinterest-p"></i></span>
+                    <span><i className="fab fa-instagram"></i></span>
                   </div>
                 </div>
 
-                {/* Nav Links */}
-                <div className="nav-links">
-                  <div className="prev">
-                    <Link href="/blog/scenarios-established-businesses" rel="prev">Established Businesses Scenario</Link>
+                {/* Dynamic Nav Links */}
+                {(prevPost || nextPost) && (
+                  <div className="nav-links">
+                    {prevPost ? (
+                      <div className="prev">
+                        <Link href={`/blog/${prevPost.slug}`} rel="prev">{prevPost.title}</Link>
+                      </div>
+                    ) : <div></div>}
+                    {nextPost ? (
+                      <div className="next">
+                        <Link href={`/blog/${nextPost.slug}`} rel="next">{nextPost.title}</Link>
+                      </div>
+                    ) : <div></div>}
                   </div>
-                  <div className="next">
-                    <Link href="/blog/new-early-stage-businesses" rel="next">New / Early-Stage Businesses</Link>
-                  </div>
-                </div>
+                )}
 
                 {/* Comment Section (Simplified for Demo) */}
-                <div className="comment-one">
+                {/* <div className="comment-one">
                   <h3 className="comment-one__title">{post.comments} Comments</h3>
                   <div className="comment-one__single">
                     <div className="comment-one__image"> <img src="/images/inner/news-details/testi-2.jpg" alt="" /> </div>
@@ -122,11 +139,10 @@ export default function BlogDetailsPage() {
                       <button className="theme-btn btn-style-two comment-one__btn"><span className="btn-title">Reply</span></button>
                     </div>
                   </div>
-                  {/* ... duplicate if needed ... */}
-                </div>
+                </div> */}
 
                 {/* Comment Form */}
-                <div className="comment-form">
+                {/* <div className="comment-form">
                   <h3 className="comment-form__title mb-30">Leave a Comment</h3>
                   <form id="contact_form" name="contact_form" action="#" method="post">
                     <div className="row">
@@ -142,23 +158,23 @@ export default function BlogDetailsPage() {
                       </div>
                     </div>
                     <div className="mb-3">
-                        <textarea name="form_message" className="form-control required" rows={5} placeholder="Enter Message"></textarea>                    </div>
+                      <textarea name="form_message" className="form-control required" rows={5} placeholder="Enter Message"></textarea>                    </div>
                     <div className="mb-3">
                       <button type="submit" className="theme-btn btn-two">
                         <span className="theme-btn btn-style-one rounded-0 ">Submit Comment</span>
                       </button>
                     </div>
                   </form>
-                </div>
+                </div> */}
               </div>
             </div>
 
             {/* Sidebar */}
             <div className="col-xl-4 col-lg-5">
-              <BlogSidebar 
-                categories={categories} 
-                tags={tags} 
-                latestPosts={post.latestPosts} 
+              <BlogSidebar
+                categories={categories}
+                tags={tags}
+                latestPosts={post.latestPosts}
               />
             </div>
           </div>
