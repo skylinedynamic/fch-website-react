@@ -4,8 +4,8 @@ import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
 export const metadata = {
-  title: 'Credit Builder',
-  description: 'Build Business Credit the Right Way — With or Without a Personal Guarantee',
+  title: 'Credit Builder | Four Corner Funding',
+  description: 'Structured, underwriting-aligned business credit infrastructure built for real funding eligibility.',
 };
 
 export default async function CreditBuilderPage() {
@@ -22,11 +22,14 @@ export default async function CreditBuilderPage() {
                 <li><Link href="/">Home</Link></li>
                 <li>Credit Builder</li>
               </ul>
-              <h1 className="wow fadeInUp credit-builder-h1" data-wow-delay=".2s">{data.hero.title}</h1>
-              <div className="text-item wow fadeInUp" data-wow-delay=".4s">
+              <h1 className="wow fadeInUp animated" data-wow-delay=".2s">
+                {data.hero.title}
+              </h1>
+              <div className="text-item wow fadeInUp animated" data-wow-delay=".4s">
                 <p>{data.hero.text}</p>
               </div>
-              <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
+
+              <div className="hero-button wow fadeInUp animated mt-4" data-wow-delay=".6s">
                 <Link href={data.hero.cta.link} className="theme-btn btn-style-one">
                   {data.hero.cta.text}
                   <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
@@ -37,7 +40,33 @@ export default async function CreditBuilderPage() {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Important Funding Notice */}
+      <section className="funding-notice-section section-padding pb-0">
+        <div className="auto-container">
+          <div className="info-alert-box wow fadeInUp animated" data-wow-delay=".2s">
+            <div className="row g-4 align-items-center">
+              <div className="col-lg-8">
+                <h3>{data.fundingNotice.title}</h3>
+                <p>{data.fundingNotice.text}</p>
+              </div>
+              <div className="col-lg-4">
+                <div className="points-box">
+                  <ul className="tier-points mb-0">
+                    {data.fundingNotice.points.map((p, i) => (
+                      <li key={i} style={{ color: '#fff' }}>{p}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-3" style={{ color: '#2D9A96', fontWeight: '600', fontStyle: 'italic' }}>
+                    {data.fundingNotice.footer}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Structure Matters Section */}
       <section className="about-section-three fix pb-120 section-padding">
         <div className="auto-container">
           <div className="row g-4 align-items-center">
@@ -53,15 +82,12 @@ export default async function CreditBuilderPage() {
                     <h2 className="wow fadeInUp animated" data-wow-delay=".2s">{data.about.title}</h2>
                     <div className="text">{data.about.text}</div>
                   </div>
-                  <div className="feature-box">
-                    <div className="shape-image">
-                      <Image src="/images/home-5/about/about-shape-image.png" alt="shape" width={100} height={100} />
-                    </div>
-                    <div className="feature-title">We help you:</div>
-                    <ul className="feature-list">
+                  <div className="mistake-card wow fadeInUp animated" data-wow-delay=".4s">
+                    <div className="benefit-pill">COMMON DENIAL TRIGGERS</div>
+                    <ul className="mistake-list">
                       {data.about.features.map((f, i) => (
                         <li key={i}>
-                          <span className="icon"><i className="fa-solid fa-check"></i></span>
+                          <i className="fa-solid fa-triangle-exclamation"></i>
                           {f}
                         </li>
                       ))}
@@ -74,12 +100,12 @@ export default async function CreditBuilderPage() {
               <div className="image-colmun">
                 <div className="image-box">
                   <div className="about-image">
-                    <Image src="/images/home-5/about/about-image.jpg" alt="img" width={600} height={400} />
+                    <Image src="/images/home-5/about/about-image.jpg" alt="img" width={600} height={400} className="rounded-4" />
                   </div>
                   <div className="count-box counted">
-                    <div className="counter"><span className="count-text" data-speed="3000" data-stop="40">40</span>+</div>
-                    <div className="counter-title">Expert Team Members</div>
-                    <div className="counter-btn color-white"><Link href="/contact">Contact Us</Link></div>
+                    <div className="counter"><span className="count-text">PRO</span></div>
+                    <div className="counter-title">Institutional Alignment</div>
+                    <div className="counter-btn color-white"><Link href="/pre-qualification">Get Started</Link></div>
                   </div>
                 </div>
               </div>
@@ -88,7 +114,7 @@ export default async function CreditBuilderPage() {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Tiers Section */}
       <section className="how-it-work-section fix section-padding gray-bg pt-120">
         <div className="auto-container">
           <div className="sec-title text-center mb-60">
@@ -99,49 +125,23 @@ export default async function CreditBuilderPage() {
             </h6>
             <h2 className="title wow fadeInUp animated" data-wow-delay=".2s">{data.process.title}</h2>
           </div>
-          <div className="how-it-work-wrapper border-none">
-            <div className="row">
-              {data.process.steps.map((s, i) => (
-                <div key={i} className="col-xl-4 col-lg-4 col-md-6 col-sm-6 wow fadeInUp animated" data-wow-delay={`${(i + 1) * 2}00ms`}>
-                  <div className="how-it-work-items-style-3 style-2">
-                    <h3 className="number">{s.number}</h3>
-                    <h4 className="title">{s.title}</h4>
-                    <p className="text">{s.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <h5 className="how-sec-text mt-20 wow fadeInUp animated" data-wow-delay=".3s">
-            <Link href="/pre-qualification">Get-Pre-Qualified</Link>
-          </h5>
-        </div>
-      </section>
-
-      {/* Strategy Section */}
-      <section className="pg-strategy-section section-padding bg-cover parallaxie" style={{ backgroundImage: "url('/images/home-2/choose-us/choose-us-bg.jpg')" }}>
-        <div className="auto-container">
-          <div className="sec-title text-center mb-60">
-            <h6 className="sub-title text-white wow fadeInUp animated">
-              <span className="triangle triangle1"></span>
-              <span className="triangle triangle2"></span>
-              {data.strategy.subtitle}
-            </h6>
-            <h2 className="title text-white wow fadeInUp animated" data-wow-delay=".2s">{data.strategy.title}</h2>
-          </div>
           <div className="row g-4">
-            {data.strategy.cards.map((c, i) => (
-              <div key={i} className={`col-lg-6 wow ${i === 0 ? 'fadeInLeft' : 'fadeInRight'} animated`} data-wow-delay={i === 0 ? ".3s" : ".4s"}>
-                <div className="strategy-card">
-                  <h3>{c.title}</h3>
-                  <ul className="feature-list style-two">
-                    {c.list.map((li, idx) => (
-                      <li key={idx}>
-                        <span className="icon"><i className="fa-solid fa-check"></i></span>
-                        {li}
-                      </li>
+            {data.process.steps.map((tier, i) => (
+              <div key={i} className="col-xl-3 col-lg-6 col-md-6 wow fadeInUp animated" data-wow-delay={`${i * 100}ms`}>
+                <div className="tier-card">
+                  <span className="tier-number">{tier.number}</span>
+                  <h4 className="tier-title">{tier.title}</h4>
+                  <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#666' }}>{tier.text}</p>
+                  <ul className="tier-points">
+                    {(tier.points || []).map((point, idx) => (
+                      <li key={idx}>{point}</li>
                     ))}
                   </ul>
+                  {tier.footer && (
+                    <div className="tier-footer">
+                      {tier.footer}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -150,7 +150,7 @@ export default async function CreditBuilderPage() {
       </section>
 
       {/* What's Included Section */}
-      <section className="whats-included-section fix">
+      <section className="whats-included-section section-padding">
         <div className="auto-container">
           <div className="sec-title text-center mb-60">
             <h6 className="sub-title wow fadeInUp animated">
@@ -161,56 +161,61 @@ export default async function CreditBuilderPage() {
             <h2 className="title wow fadeInUp animated" data-wow-delay=".2s">{data.whatsIncluded.title}</h2>
           </div>
           <div className="row g-4 justify-content-center">
-            {data.whatsIncluded.features.map((feature, i) => (
-              <div key={i} className="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-delay={`${(i % 3 + 1) * 1}00ms`}>
-                <div className="platform-card">
-                  <h3>{feature}</h3>
+            {data.whatsIncluded.sections.map((section, i) => (
+              <div key={i} className="col-lg-4 col-md-6 wow fadeInUp animated" data-wow-delay={`${i * 100}ms`}>
+                <div className="tier-card" style={{ padding: '30px', background: '#f8fafc' }}>
+                  <h4 style={{ fontSize: '18px', marginBottom: '15px', color: '#062928' }}>{section.title}</h4>
+                  <ul className="tier-points mb-0">
+                    {section.list.map((item, idx) => (
+                      <li key={idx} style={{ fontSize: '14px' }}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-5">
+            <p className="fw-bold text-muted italic">{data.whatsIncluded.footer}</p>
           </div>
         </div>
       </section>
 
       {/* Ideal Users Section */}
-      <section className="why-choose-section fix section-bg-2">
-        <div className="shape-1 bounce-y"><img src="/images/home-5/shape/shape-image-1.png" alt="shape" /></div>
+      <section className="why-choose-section who-for-section fix section-padding">
         <div className="auto-container">
-          <div className="why-choose-us-wrapper">
-            <div className="row g-4 align-items-center">
-              <div className="col-xl-5">
-                <div className="why-choose-us-image-1">
-                  <img src="/images/home-3/123703.jpg" alt="img" className="wow img-custom-anim-left animated animated" />
-                </div>
+          <div className="sec-title text-center mb-60">
+            <h6 className="sub-title wow fadeInUp animated">
+              <span className="triangle triangle1"></span>
+              <span className="triangle triangle2"></span>
+              {data.idealUsers.subtitle}
+            </h6>
+            <h2 className="title wow fadeInUp animated" data-wow-delay=".2s">{data.idealUsers.title}</h2>
+          </div>
+          <div className="row g-4">
+            <div className="col-lg-6">
+              <div className="designed-for-box wow fadeInLeft animated">
+                <h4 className="mb-4" style={{ color: '#062928' }}>Designed For:</h4>
+                <ul className="why-list p-0">
+                  {data.idealUsers.list.map((item, i) => (
+                    <li key={i} className="d-flex align-items-center gap-3 mb-3">
+                      <img src="/images/home-3/list-icon.png" alt="icon" width={20} />
+                      <span style={{ fontSize: '16px', fontWeight: '500' }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="col-xl-7">
-                <div className="why-choose-us-content-1">
-                  <div className="sec-title mb-0">
-                    <h6 className="sub-title light">
-                      <span className="triangle triangle1"></span>
-                      <span className="triangle triangle2"></span>
-                      {data.idealUsers.subtitle}
-                    </h6>
-                    <h2 className="title light wow fadeInUp animated animated" data-wow-delay=".2s">{data.idealUsers.title}</h2>
-                  </div>
-                  <div className="tab-content light">
-                    <div id="Mission" className="tab-pane fade show active">
-                      <div className="why-choose-list wow fadeInUp animated animated" data-wow-delay=".3s">
-                        <p>{data.idealUsers.text}</p>
-                      </div>
-                      <div className="why-choose-list-items">
-                        <ul className="why-list wow fadeInUp animated animated" data-wow-delay=".5s">
-                          {data.idealUsers.list.map((item, i) => (
-                            <li key={i}>
-                              <img src="/images/home-3/list-icon.png" alt="icon" />{' '}
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="not-designed-box wow fadeInRight animated">
+                <h4 className="mb-4" style={{ color: '#991b1b' }}>Not Designed For:</h4>
+                <ul className="mistake-list p-0">
+                  {data.idealUsers.notFor.map((item, i) => (
+                    <li key={i} className="d-flex align-items-center gap-3 mb-3" style={{ color: '#991b1b' }}>
+                      <i className="fa-solid fa-circle-xmark"></i>
+                      <span style={{ fontSize: '16px', fontWeight: '500' }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
@@ -218,7 +223,7 @@ export default async function CreditBuilderPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="pricing-section fix">
+      <section className="pricing-section fix section-padding">
         <div className="auto-container">
           <div className="sec-title text-center mb-60">
             <h6 className="sub-title wow fadeInUp animated">
@@ -232,8 +237,8 @@ export default async function CreditBuilderPage() {
             <div className="pricing-badge">{data.pricing.badge}</div>
             <div className="price-amount">{data.pricing.amount}</div>
             <div className="price-sub">{data.pricing.sub}</div>
-            <p className="price-note" dangerouslySetInnerHTML={{ __html: data.pricing.note }} />
-            <div className="pricing-btns">
+            <div className="price-note text-start border-top pt-4 mt-2" dangerouslySetInnerHTML={{ __html: data.pricing.note }} />
+            <div className="pricing-btns mt-4">
               <Link href="/contact" className="pricing-btn primary">
                 Enroll Now
                 <span className="icon-circle"><i className="fa-solid fa-arrow-up-right-from-square"></i></span>
@@ -244,24 +249,76 @@ export default async function CreditBuilderPage() {
               </Link>
             </div>
           </div>
+          <div className="pricing-footer wow fadeInUp animated" data-wow-delay=".6s">
+            {data.pricing.footer}
+          </div>
         </div>
       </section>
 
-      {/* Growth CTA Section */}
-      <section className="growth-section section-padding bg-cover parallaxie" style={{ backgroundImage: "url('/images/home-2/choose-us/choose-us-bg.jpg')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
-        <div className="sec-shape">
-          <Image className="sway_Y__animation" src="/images/growth-shape.png" alt="Image" width={100} height={100} />
+      {/* System Integrity & Standards Section */}
+      <section className="integrity-section section-padding gray-bg">
+        <div className="auto-container">
+          <div className="sec-title text-center mb-60">
+            <h6 className="sub-title wow fadeInUp animated">
+              <span className="triangle triangle1"></span>
+              <span className="triangle triangle2"></span>
+              System Standards
+            </h6>
+            <h2 className="title wow fadeInUp animated" data-wow-delay=".2s">Built for Compliance — Not Just Marketing</h2>
+          </div>
+          <div className="row g-4 justify-content-center">
+            <div className="col-lg-10">
+              <div className="row g-4">
+                {data.hero.notices.map((notice, i) => (
+                  <div key={i} className="col-lg-6 col-md-6 wow fadeInUp animated" data-wow-delay={`${i * 100}ms`}>
+                    <div className="not-item" style={{ background: '#fff', border: '1px solid #e5e7eb', padding: '15px 25px', borderRadius: '12px', color: '#111827' }}>
+                      <span className="icon" style={{ color: '#ef4444', marginRight: '10px' }}><i className="fa-solid fa-circle-xmark"></i></span>
+                      {notice}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="not-item compliance wow fadeInUp animated mt-5" data-wow-delay=".5s" style={{ background: '#062928', borderColor: '#2D9A96', color: '#fff', padding: '25px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                <span className="icon" style={{ color: '#2D9A96', fontSize: '24px', marginRight: '15px' }}><i className="fa-solid fa-circle-check"></i></span>
+                <span style={{ fontSize: '18px', fontWeight: '500' }}>
+                  Every stage is eligibility-gated. Every advancement is validated. Every funding pathway is reviewed — not guessed.
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      {/* Final Growth Section */}
+      <section className="growth-section section-padding bg-cover parallaxie" style={{ backgroundImage: "url('/images/home-2/choose-us/choose-us-bg.jpg')", backgroundSize: 'cover' }}>
         <div className="auto-container">
           <div className="sec-title text-center">
-            <h2 className="text-white wow fadeInUp animated" data-wow-delay=".2s">{data.growth.title}</h2>
-            <div className="cta-action-btns mt-4 wow fadeInUp animated" data-wow-delay=".4s">
-              {data.growth.cta.map((btn, i) => (
-                <Link key={i} href={btn.link} className={`cta-action-btn ${i === 0 ? 'enroll' : 'specialist'}`}>
-                  {btn.text}
-                  <span className="icon-circle"><i className={`fa-solid fa-arrow-up-right${i === 1 ? '' : ''}`}></i></span>
-                </Link>
+            <h2 className="text-white wow fadeInUp animated" data-wow-delay=".2s" style={{ fontSize: '42px' }}>{data.growth.title}</h2>
+            <p className="text-white opacity-75 mt-3 mb-5 mx-auto" style={{ maxWidth: '800px', fontSize: '18px' }}>
+              {data.growth.description}
+            </p>
+
+            <div className="row g-4 justify-content-center mb-5">
+              {data.growth.points.map((p, i) => (
+                <div key={i} className="col-auto">
+                  <div className="not-item" style={{ background: 'rgba(255,255,255,0.1)', border: 'none' }}>
+                    <i className="fa-solid fa-check text-success"></i> {p}
+                  </div>
+                </div>
               ))}
+            </div>
+
+            <div className="ready-box mt-5">
+              <h3 className="text-white mb-3">{data.growth.readyTitle}</h3>
+              <p className="text-white opacity-75 mb-4">{data.growth.readyText}</p>
+              <Link href={data.growth.cta[0].link} className="theme-btn btn-style-one">
+                {data.growth.cta[0].text}
+                <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
+              </Link>
+            </div>
+
+            <div className="growth-footer-disclaimer">
+              {data.growth.disclaimer}
             </div>
           </div>
         </div>
@@ -272,4 +329,3 @@ export default async function CreditBuilderPage() {
     </main>
   );
 }
-
