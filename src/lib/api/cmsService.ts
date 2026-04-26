@@ -31,7 +31,7 @@ export const getCreditBuilderData = async () => {
     hero: {
       title: "Institutional Business Credit Infrastructure — Built for Real Funding Eligibility",
       text: "Four Corner Funding’s Credit Builder is a structured, underwriting-aligned system designed to build, validate, and position your business for real capital access.",
-      cta: { text: "Get Prequalified", link: "/pre-qualification" },
+      cta: { text: "Get Pre-Qualified", link: "/pre-qualification" },
       notices: [
         "This is not credit repair.",
         "This is not a vendor list.",
@@ -190,7 +190,7 @@ export const getCreditBuilderData = async () => {
       readyTitle: "READY TO BEGIN?",
       readyText: "Start with a structured eligibility review. No hard credit inquiry. Underwriting evaluation required.",
       cta: [
-        { text: "GET PREQUALIFIED", link: "/pre-qualification" }
+        { text: "Get Pre-Qualified", link: "/pre-qualification" }
       ],
       disclaimer: "Prequalification required. Credit approval, vendor reporting, and funding eligibility are subject to underwriting standards and bureau verification. Results vary based on financial profile and compliance status."
     },
@@ -303,7 +303,7 @@ export const getPartnerProgramData = async () => {
       title: "Ready to become a Certified or White-Labeled Partner?",
       cta: [
         { text: "Request a Call", link: "/contact" },
-        { text: "Apply Now", link: "/pre-qualification" }
+        { text: "Get Pre-Qualified", link: "/pre-qualification" }
       ]
     },
     faq: {

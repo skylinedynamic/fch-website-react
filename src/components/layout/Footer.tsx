@@ -10,7 +10,7 @@ const quickLinks = [
 
 const legalLinks = [
   { href: '/terms', label: 'Terms of Service' },
-  { href: '#', label: 'Privacy Policy' },
+  { href: '/privacy-policy', label: 'Privacy Policy' },
   { href: '/disclosure', label: 'Disclosure' },
 ];
 
@@ -69,7 +69,7 @@ export default function Footer() {
                   </ul>
                   <div className="footer-btn">
                     <Link href="/pre-qualification" className="footer-cta-btn">
-                      Get-Pre-Qualified <span className="arrow"><i
+                      Get Pre-Qualified <span className="arrow"><i
                         className="fa-regular fa-arrow-right"></i></span>
                     </Link>
                   </div>
