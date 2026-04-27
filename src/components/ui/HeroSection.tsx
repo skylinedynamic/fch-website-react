@@ -16,7 +16,7 @@ export default function HeroSection({ data }: { data: HomeData }) {
             </h1>
             <div className="text-item wow fadeInUp" data-wow-delay=".4s">
               <p>{hero.text}</p>
-              <img src={hero.images.small} alt="img" />
+              <img src={hero.images.small} alt="Checkmark icon indicating verified funding success" />
             </div>
             <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
               <Link href={hero.cta.link} className="theme-btn btn-style-one">
@@ -30,9 +30,9 @@ export default function HeroSection({ data }: { data: HomeData }) {
         </div>
         <div className="col-xl-5 col-lg-6 wow fadeInUp" data-wow-delay=".3s">
           <div className="hero-image ed_top_img">
-            <img src={hero.images.main} alt="img" />
+            <img src={hero.images.main} alt="Entrepreneur analyzing business growth charts and funding trajectories" />
             <div className="ellipse-shape">
-              <img src={hero.images.ellipse} alt="img" />
+              <img src={hero.images.ellipse} alt="Decorative ellipse background for hero image" />
             </div>
             <div className="text-circle">
               <svg className="circle-svg-text animation__rotate" viewBox="0 0 200 200"
@@ -47,13 +47,13 @@ export default function HeroSection({ data }: { data: HomeData }) {
                   </textPath>
                 </text>
               </svg>
-              <img src={hero.images.star} alt="img" className="star" />
+              <img src={hero.images.star} alt="Success star icon - Symbolizing approval and quality" className="star" />
             </div>
           </div>
         </div>
       </div>
       <div className="paper-shape">
-        <img src={hero.images.paperShape} alt="img" />
+        <img src={hero.images.paperShape} alt="Decorative paper texture background element" />
       </div>
     </section>
   );

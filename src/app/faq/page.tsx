@@ -2,16 +2,38 @@ import { getFaqData } from '@/lib/api/cmsService';
 import Link from 'next/link';
 import FaqSection from '@/components/faq/FaqSection';
 
-export const metadata = {
-  title: 'FAQ | Four Corner Funding',
+import { Metadata } from 'next';
+import { seoConfig } from '@/config/seo';
+
+export const metadata: Metadata = {
+  title: 'FAQ',
   description: 'Frequently Asked Questions about Business Funding and Credit Building',
+  alternates: {
+    canonical: `${seoConfig.siteUrl}/faq`,
+  },
 };
+
+import JsonLd from '@/components/seo/JsonLd';
 
 export default async function FaqPage() {
   const data = await getFaqData();
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: data.items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <main>
+      <JsonLd data={faqSchema} />
       {/* Hero section remains static and separate from the dynamic FAQ logic */}
       <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
         <div className="row g-4 align-items-center">

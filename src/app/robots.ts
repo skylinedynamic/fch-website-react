@@ -3,7 +3,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/private/',
+      disallow: ['/private/', '/terms', '/privacy-policy', '/disclosure'],
     },
     sitemap: 'https://fourcornerfunding.com/sitemap.xml',
   };

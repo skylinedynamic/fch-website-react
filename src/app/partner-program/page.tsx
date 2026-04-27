@@ -3,9 +3,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
-export const metadata = {
-    title: 'Partner Program | Four Corner Funding',
+import { Metadata } from 'next';
+import { seoConfig } from '@/config/seo';
+
+export const metadata: Metadata = {
+    title: 'Partner Program',
     description: 'Build Your Own Business Funding Empire. Offer business credit building and funding services.',
+    alternates: {
+        canonical: `${seoConfig.siteUrl}/partner-program`,
+    },
 };
 
 export default async function PartnerProgramPage() {

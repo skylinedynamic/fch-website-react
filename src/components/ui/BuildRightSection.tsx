@@ -5,7 +5,7 @@ export default function BuildRightSection({ data }) {
   return (
     <section className="why-choose-section fix section-bg-2">
       <div className="shape-1 bounce-y">
-        <img src={buildRight.shape} alt="" />
+        <img src={buildRight.shape} alt="Floating decorative shape background" />
       </div>
       <div className="auto-container">
         <div className="why-choose-us-wrapper">
@@ -14,7 +14,7 @@ export default function BuildRightSection({ data }) {
               <div className="why-choose-us-image-1">
                 <img
                   src={buildRight.image}
-                  alt="img"
+                  alt="Strategic business roadmap for achieving funding readiness"
                   className="wow img-custom-anim-left animated"
                 />
                 <div className="icon-box-items">
@@ -51,7 +51,7 @@ export default function BuildRightSection({ data }) {
                       <ul className="why-list wow fadeInUp animated" data-wow-delay=".5s">
                         {buildRight.list.map((item, i) => (
                           <li key={i}>
-                            <img src="/images/home-3/list-icon.png" alt="" />
+                            <img src="/images/home-3/list-icon.png" alt="Checkmark list icon" />
                             {item}
                           </li>
                         ))}

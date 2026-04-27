@@ -86,8 +86,8 @@ export default function Header() {
                 <Link href="/">
                   <img
                     src="/images/black-logo.png"
-                    alt=""
-                    title="finclix"
+                    alt="Four Corner Funding logo - Black"
+                    title="Four Corner Funding"
                     style={{ maxHeight: '76px', width: 'auto' }}
                   />
                 </Link>
@@ -121,7 +121,7 @@ export default function Header() {
           <div className="upper-box">
             <div className="nav-logo">
               <Link href="/">
-                <img src="/images/logo-white.png" alt="" style={{ maxHeight: '54px', width: 'auto' }} />
+                <img src="/images/logo-white.png" alt="Four Corner Funding logo - White" style={{ maxHeight: '54px', width: 'auto' }} />
               </Link>
             </div>
             <div className="close-btn" onClick={closeMenu}><i className="icon fa fa-times"></i></div>
@@ -174,7 +174,7 @@ export default function Header() {
               <Link href="/">
                 <img
                   src="/images/black-logo.png"
-                  alt="img"
+                  alt="Four Corner Funding logo"
                   style={{ maxHeight: '76px', width: 'auto' }}
                 />
               </Link>

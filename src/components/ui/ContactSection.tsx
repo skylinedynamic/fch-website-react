@@ -213,7 +213,7 @@ export default function ContactSection({ data }: any) {
         </div>
       </div>
       <div className="contact-image">
-        <img className="wow bounceInRight" data-wow-delay="200ms" data-wow-duration="1500ms" src={contact.image} alt="Image" />
+        <img className="wow bounceInRight" data-wow-delay="200ms" data-wow-duration="1500ms" src={contact.image} alt="Consultation meeting between a financial specialist and a client" />
       </div>
     </section>
   );

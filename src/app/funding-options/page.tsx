@@ -1,10 +1,16 @@
 import Link from 'next/link';
 import FundingFaq from './FundingFaq';
 
-export const metadata = {
-  title: 'Funding Options | Four Corner Funding',
+import { Metadata } from 'next';
+import { seoConfig } from '@/config/seo';
+
+export const metadata: Metadata = {
+  title: 'Funding Options',
   description:
     'From SBA loans to fast working capital, our AI-powered platform matches your business with the best-fit programs. No guesswork, no hard credit pulls.',
+  alternates: {
+    canonical: `${seoConfig.siteUrl}/funding-options`,
+  },
 };
 
 const fundingCards = [
@@ -84,9 +90,56 @@ const faqs = [
   },
 ];
 
+import JsonLd from '@/components/seo/JsonLd';
+
 export default function FundingOptionsPage() {
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Business Funding Options',
+    provider: {
+      '@type': 'FinancialService',
+      name: seoConfig.siteName,
+    },
+    description: 'A wide range of business funding solutions including SBA loans, Term loans, and MCAs.',
+    areaServed: 'US',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Business Loans',
+      itemListElement: fundingCards.map((card) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: card.title,
+          description: card.desc,
+        },
+      })),
+    },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: seoConfig.siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Funding Options',
+        item: `${seoConfig.siteUrl}/funding-options`,
+      },
+    ],
+  };
+
   return (
     <main>
+      <JsonLd data={serviceSchema} />
+      <JsonLd data={breadcrumbSchema} />
       {/* ── Hero ── */}
       <section
         className="hero-section hero-3"

@@ -18,8 +18,8 @@ export default function BlogSection({ data }) {
             <div key={idx} className="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay={`${(idx * 2) + 3}00ms`}>
               <div className="news-box-items">
                 <div className="news-image">
-                  <img src={post.image} alt="img" />
-                  <img src={post.image} alt="img" />
+                  <img src={post.image} alt={post.title} />
+                  <img src={post.image} alt={post.title} />
                   <span className="post-box">
                     <span className="date">{post.date}</span>
                     <span className="month">{post.month}</span>

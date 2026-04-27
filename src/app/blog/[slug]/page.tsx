@@ -1,185 +1,115 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useParams, notFound } from 'next/navigation';
-import Link from 'next/link';
-import BlogSidebar from '@/components/ui/BlogSidebar';
-import {
-  getBlogPostBySlug,
-  getBlogPosts,
-  getBlogCategories,
-  getBlogTags
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { 
+  getBlogPostBySlug, 
+  getBlogPosts, 
+  getBlogCategories, 
+  getBlogTags 
 } from '@/lib/api/cmsService';
+import BlogDetailsClient from './BlogDetailsClient';
+import { seoConfig } from '@/config/seo';
 
-export default function BlogDetailsPage() {
-  const { slug } = useParams();
-  const [post, setPost] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [prevPost, setPrevPost] = useState(null);
-  const [nextPost, setNextPost] = useState(null);
+interface Props {
+  params: { slug: string };
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      const p = await getBlogPostBySlug(slug);
-      if (!p) {
-        notFound();
-      }
-      setPost(p);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getBlogPostBySlug(params.slug);
 
-      const allPosts = await getBlogPosts();
-      const currentIndex = allPosts.findIndex(item => item.slug === slug);
-      if (currentIndex > 0) setPrevPost(allPosts[currentIndex - 1]);
-      else setPrevPost(null);
-      if (currentIndex < allPosts.length - 1 && currentIndex !== -1) setNextPost(allPosts[currentIndex + 1]);
-      else setNextPost(null);
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    };
+  }
 
-      const cats = await getBlogCategories();
-      setCategories(cats);
-      const t = await getBlogTags();
-      setTags(t);
-      setLoading(false);
-    }
-    fetchData();
-  }, [slug]);
+  const title = post.title;
+  const description = post.content.replace(/<[^>]*>/g, '').substring(0, 160);
+  const url = `${seoConfig.siteUrl}/blog/${params.slug}`;
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.WOW && !loading) {
-      new window.WOW().init();
-    }
-  }, [loading]);
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'article',
+      publishedTime: `${post.month} ${post.date}, 2024`, // Adjust year if needed
+      authors: [post.author],
+      images: [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [post.image],
+    },
+  };
+}
 
-  if (loading) return null;
+import JsonLd from '@/components/seo/JsonLd';
+
+export default async function BlogDetailsPage({ params }: Props) {
+  const post = await getBlogPostBySlug(params.slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    image: `${seoConfig.siteUrl}${post.image}`,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: seoConfig.siteName,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${seoConfig.siteUrl}/images/favicon.png`,
+      },
+    },
+    datePublished: `${post.month} ${post.date}, 2024`, // Adjust as needed
+    description: post.content.replace(/<[^>]*>/g, '').substring(0, 160),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${seoConfig.siteUrl}/blog/${params.slug}`,
+    },
+  };
+
+  const allPosts = await getBlogPosts();
+  const currentIndex = allPosts.findIndex(item => item.slug === params.slug);
+  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  const nextPost = currentIndex < allPosts.length - 1 && currentIndex !== -1 ? allPosts[currentIndex + 1] : null;
+
+  const categories = await getBlogCategories();
+  const tags = await getBlogTags();
 
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
-        <div className="row g-4 align-items-center">
-          <div className="col-xl-7 col-lg-6">
-            <div className="hero-content">
-              <ul className="page-breadcrumb wow fadeInUp animated pb-2" data-wow-delay=".3s">
-                <li><Link href="/">Home</Link></li>
-                <li>Blog Details</li>
-              </ul>
-              <h1 className="wow fadeInUp" data-wow-delay=".2s">{post.title}</h1>
-              <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
-                <Link href="/contact" className="theme-btn btn-style-one">
-                  Contact Us
-                  <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Details Section */}
-      <section className="blog-details section-padding">
-        <div className="auto-container">
-          <div className="row">
-            <div className="col-xl-8 col-lg-7">
-              <div className="blog-details__left">
-                <div className="blog-details__img wow fadeInUp">
-                  <img src={post.image} alt={post.title} />
-                  <div className="blog-details__date">
-                    <span className="day">{post.date}</span>
-                    <span className="month">{post.month}</span>
-                  </div>
-                </div>
-                <div className="blog-details__content">
-                  <ul className="list-unstyled blog-details__meta">
-                    <li><span><i className="fas fa-user-circle"></i> {post.author}</span></li>
-                    {/* <li><span><i className="fas fa-comments"></i> {post.comments < 10 ? `0${post.comments}` : post.comments} Comments</span></li> */}
-                  </ul>
-                  <h3 className="blog-details__title">{post.title}</h3>
-                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                </div>
-
-                <div className="blog-details__bottom">
-                  <p className="blog-details__tags">
-                    <span>Tags</span>
-                    {post.tags.map((tag, i) => (
-                      <span key={i}>{tag}</span>
-                    ))}
-                  </p>
-                  <div className="blog-details__social-list">
-                    <span><i className="fa fa-x"></i></span>
-                    <span><i className="fab fa-facebook"></i></span>
-                    <span><i className="fab fa-pinterest-p"></i></span>
-                    <span><i className="fab fa-instagram"></i></span>
-                  </div>
-                </div>
-
-                {/* Dynamic Nav Links */}
-                {(prevPost || nextPost) && (
-                  <div className="nav-links">
-                    {prevPost ? (
-                      <div className="prev">
-                        <Link href={`/blog/${prevPost.slug}`} rel="prev">{prevPost.title}</Link>
-                      </div>
-                    ) : <div></div>}
-                    {nextPost ? (
-                      <div className="next">
-                        <Link href={`/blog/${nextPost.slug}`} rel="next">{nextPost.title}</Link>
-                      </div>
-                    ) : <div></div>}
-                  </div>
-                )}
-
-                {/* Comment Section (Simplified for Demo) */}
-                {/* <div className="comment-one">
-                  <h3 className="comment-one__title">{post.comments} Comments</h3>
-                  <div className="comment-one__single">
-                    <div className="comment-one__image"> <img src="/images/inner/news-details/testi-2.jpg" alt="" /> </div>
-                    <div className="comment-one__content">
-                      <h3>Kevin Martin</h3>
-                      <p>Mauris non dignissim purus, ac commodo diam. Donec sit amet lacinia nulla. Aliquam quis purus in justo pulvinar tempor. Aliquam tellus nulla, sollicitudin at euismod.</p>
-                      <button className="theme-btn btn-style-two comment-one__btn"><span className="btn-title">Reply</span></button>
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* Comment Form */}
-                {/* <div className="comment-form">
-                  <h3 className="comment-form__title mb-30">Leave a Comment</h3>
-                  <form id="contact_form" name="contact_form" action="#" method="post">
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <div className="mb-3">
-                          <input name="form_name" className="form-control required" type="text" placeholder="Enter Name" />
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="mb-3">
-                          <input name="form_email" className="form-control required email" type="email" placeholder="Enter Email" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <textarea name="form_message" className="form-control required" rows={5} placeholder="Enter Message"></textarea>                    </div>
-                    <div className="mb-3">
-                      <button type="submit" className="theme-btn btn-two">
-                        <span className="theme-btn btn-style-one rounded-0 ">Submit Comment</span>
-                      </button>
-                    </div>
-                  </form>
-                </div> */}
-              </div>
-            </div>
-
-            {/* Sidebar */}
-            <div className="col-xl-4 col-lg-5">
-              <BlogSidebar
-                categories={categories}
-                tags={tags}
-                latestPosts={post.latestPosts}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+    <>
+      <JsonLd data={blogSchema} />
+      <BlogDetailsClient 
+        initialPost={post}
+        initialCategories={categories}
+        initialTags={tags}
+        initialPrevPost={prevPost}
+        initialNextPost={nextPost}
+        slug={params.slug}
+      />
+    </>
   );
 }

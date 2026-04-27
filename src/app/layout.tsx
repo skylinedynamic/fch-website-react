@@ -8,59 +8,115 @@ import Script from 'next/script';
 import type { Metadata } from 'next';
 import React from 'react';
 
+import { seoConfig } from '@/config/seo';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(seoConfig.siteUrl),
   title: {
-    default: 'Four Corner Funding | Fast, Flexible Business Funding',
-    template: '%s | Four Corner Funding',
+    default: seoConfig.defaultTitle,
+    template: seoConfig.titleTemplate,
   },
-  description:
-    'Four Corner Holdings, LLC is a Florida-based financial services firm empowering entrepreneurs with strategic access to capital, credit-building systems, and customized lending solutions.',
-  keywords: [
-    'business funding',
-    'business credit',
-    'SBA loans',
-    'working capital',
-    'equipment financing',
-    'Four Corner Funding',
-  ],
+  description: seoConfig.description,
+  keywords: seoConfig.keywords,
+  authors: [{ name: 'Four Corner Holdings, LLC' }],
+  creator: 'Four Corner Holdings, LLC',
+  publisher: 'Four Corner Holdings, LLC',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fourcornerfunding.com',
-    siteName: 'Four Corner Funding',
-    title: 'Four Corner Funding | Fast, Flexible Business Funding',
-    description:
-      'Get matched with top funding options in minutes. No hard credit pull. No hidden fees.',
+    url: seoConfig.siteUrl,
+    siteName: seoConfig.siteName,
+    title: seoConfig.defaultTitle,
+    description: seoConfig.description,
     images: [
       {
-        url: '/images/home-3/hero/hero-image.png',
+        url: seoConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Four Corner Funding',
+        alt: seoConfig.siteName,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Four Corner Funding | Fast, Flexible Business Funding',
-    description:
-      'Get matched with top funding options in minutes. No hard credit pull. No hidden fees.',
+    title: seoConfig.defaultTitle,
+    description: seoConfig.description,
+    images: [seoConfig.ogImage],
+    creator: seoConfig.twitterHandle,
   },
   icons: {
     icon: '/images/favicon.png',
     shortcut: '/images/favicon.png',
+    apple: '/images/favicon.png',
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
+
+import JsonLd from '@/components/seo/JsonLd';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialService',
+    name: seoConfig.siteName,
+    url: seoConfig.siteUrl,
+    logo: `${seoConfig.siteUrl}/images/favicon.png`,
+    description: seoConfig.description,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '3750 Gunn Highway, Suite 306',
+      addressLocality: 'Tampa',
+      addressRegion: 'FL',
+      postalCode: '33618',
+      addressCountry: 'US',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+1-813-391-3333',
+      contactType: 'customer service',
+      email: 'Info@fourcornerfunding.com',
+    },
+    sameAs: [
+      // Add social media links here if available
+    ],
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: seoConfig.siteName,
+    url: seoConfig.siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${seoConfig.siteUrl}/search?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
 
   return (
     <html lang="en">
@@ -77,6 +133,8 @@ export default function RootLayout({
         <link rel="stylesheet" href="/css/fontawesome.css" />
       </head>
       <body className="body-bg">
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
         <Preloader />
         <WowInit />
         <div className="page-wrapper body-bg">

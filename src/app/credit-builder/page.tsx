@@ -3,16 +3,57 @@ import Image from 'next/image';
 import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
-export const metadata = {
-  title: 'Credit Builder | Four Corner Funding',
+import { Metadata } from 'next';
+import { seoConfig } from '@/config/seo';
+
+export const metadata: Metadata = {
+  title: 'Credit Builder',
   description: 'Structured, underwriting-aligned business credit infrastructure built for real funding eligibility.',
+  alternates: {
+    canonical: `${seoConfig.siteUrl}/credit-builder`,
+  },
 };
+
+import JsonLd from '@/components/seo/JsonLd';
 
 export default async function CreditBuilderPage() {
   const data = await getCreditBuilderData();
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Institutional Business Credit Infrastructure',
+    provider: {
+      '@type': 'FinancialService',
+      name: seoConfig.siteName,
+    },
+    description: data.hero.text,
+    areaServed: 'US',
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: seoConfig.siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Credit Builder',
+        item: `${seoConfig.siteUrl}/credit-builder`,
+      },
+    ],
+  };
+
   return (
     <main>
+      <JsonLd data={serviceSchema} />
+      <JsonLd data={breadcrumbSchema} />
       {/* Hero Section */}
       <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
         <div className="row g-4 align-items-center">
@@ -198,7 +239,7 @@ export default async function CreditBuilderPage() {
                 <ul className="why-list p-0">
                   {data.idealUsers.list.map((item, i) => (
                     <li key={i} className="d-flex align-items-center gap-3 mb-3">
-                      <img src="/images/home-3/list-icon.png" alt="icon" width={20} />
+                      <img src="/images/home-3/list-icon.png" alt="Checkmark icon indicating ideal user profile" width={20} />
                       <span style={{ fontSize: '16px', fontWeight: '500' }}>{item}</span>
                     </li>
                   ))}

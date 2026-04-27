@@ -26,16 +26,16 @@ export default function TestimonialSection({ data }) {
               <div key={idx} className="swiper-slide">
                 <div className="testimonial-wrapper-3">
                   <div className="mask-shape-style-3">
-                    <img src="/images/home-3/testimonial/mask-shape.png" alt="img" />
+                    <img src="/images/home-3/testimonial/mask-shape.png" alt="Decorative mask shape for testimonial image frame" />
                   </div>
                   <div className="image-box-style-3">
                     <div className="quate">
                       <i className="flaticon-finance-Quote"></i>
                     </div>
                     <div className="image">
-                      <img src={t.image} alt="Image" />
+                      <img src={t.image} alt={`Client testimonial from ${t.name}`} />
                       <div className="planet-shape">
-                        <img src="/images/home-3/testimonial/planet.png" alt="img" />
+                        <img src="/images/home-3/testimonial/planet.png" alt="Planetary decorative shape accompanying client photo" />
                       </div>
                     </div>
                     <div className="star">

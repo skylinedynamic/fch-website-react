@@ -26,15 +26,15 @@ export default function Footer() {
   return (
     <footer className="footer-section-2 fix footer-bg">
       <div className="bg-color">
-        <img src="/images/home-2/footer-bg-color.png" alt="img" />
+        <img src="/images/home-2/footer-bg-color.png" alt="Footer background color gradient" />
       </div>
       <div className="footer-shape">
-        <img src="/images/home-2/footer-shape.png" alt="img" />
+        <img src="/images/home-2/footer-shape.png" alt="Footer decorative background shape" />
       </div>
       <div className="auto-container">
         <div className="footer-top-wrapper">
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
-            <img style={{ width: '191px' }} src="/images/logo-white.png" alt="img" />
+            <img style={{ width: '191px' }} src="/images/logo-white.png" alt="Four Corner Funding white logo" />
           </Link>
           <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
             <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
