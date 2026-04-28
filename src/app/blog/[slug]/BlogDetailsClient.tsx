@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'react-router-dom'; // Note: The original used next/link but I should check if it's next/link or next/navigation
 import { useParams, notFound } from 'next/navigation';
-import LinkNext from 'next/link';
+import Link from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 
 export default function BlogDetailsClient({ 
@@ -37,15 +36,15 @@ export default function BlogDetailsClient({
           <div className="col-xl-7 col-lg-6">
             <div className="hero-content">
               <ul className="page-breadcrumb wow fadeInUp animated pb-2" data-wow-delay=".3s">
-                <li><LinkNext href="/">Home</LinkNext></li>
+                <li><Link href="/">Home</Link></li>
                 <li>Blog Details</li>
               </ul>
               <h1 className="wow fadeInUp" data-wow-delay=".2s">{post.title}</h1>
               <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
-                <LinkNext href="/contact" className="theme-btn btn-style-one">
+                <Link href="/contact" className="theme-btn btn-style-one">
                   Contact Us
                   <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
-                </LinkNext>
+                </Link>
               </div>
             </div>
           </div>
@@ -93,12 +92,12 @@ export default function BlogDetailsClient({
                   <div className="nav-links">
                     {prevPost ? (
                       <div className="prev">
-                        <LinkNext href={`/blog/${prevPost.slug}`} rel="prev">{prevPost.title}</LinkNext>
+                        <Link href={`/blog/${prevPost.slug}`} rel="prev">{prevPost.title}</Link>
                       </div>
                     ) : <div></div>}
                     {nextPost ? (
                       <div className="next">
-                        <LinkNext href={`/blog/${nextPost.slug}`} rel="next">{nextPost.title}</LinkNext>
+                        <Link href={`/blog/${nextPost.slug}`} rel="next">{nextPost.title}</Link>
                       </div>
                     ) : <div></div>}
                   </div>
