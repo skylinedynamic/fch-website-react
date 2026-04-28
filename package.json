@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "smoke-test": "curl -s -o /dev/null -w '%{http_code}' https://fourcornerfunding.com/ | grep -q '200'"
   },
   "dependencies": {
     "next": "16.1.6",

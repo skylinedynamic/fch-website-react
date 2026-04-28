@@ -1,0 +1,49 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Adjust based on your server's Node version
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: SSH and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html/fourcornerfunding
+            git fetch origin release
+            git reset --hard origin/release
+            npm install
+            npm run build
+            pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
+            sudo systemctl restart nginx
+
+      - name: Smoke Test
+        run: |
+          echo "Starting smoke test..."
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://fourcornerfunding.com/)
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "Smoke test passed! Site is up."
+          else
+            echo "Smoke test failed! Site returned status code $RESPONSE."
+            exit 1
+          fi
