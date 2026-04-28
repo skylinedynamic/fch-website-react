@@ -6,44 +6,55 @@ on:
       - release
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Adjust based on your server's Node version
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: SSH and Deploy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          script: |
+      - name: Build Application
+        run: npm run build
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
+          SOURCE: "dist/" # Change to "build/" if you use Create React App
+          TARGET: "/var/www/html/fourcornerfunding/dist"
+          SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
+          SCRIPT_BEFORE: |
+            echo "Preparing target directory..."
+            sudo mkdir -p /var/www/html/fourcornerfunding/dist
+            sudo chown -R $USER:$USER /var/www/html/fourcornerfunding
+          SCRIPT_AFTER: |
+            echo "Finalizing deployment..."
             cd /var/www/html/fourcornerfunding
-            git fetch origin release
-            git reset --hard origin/release
-            npm install
-            npm run build
+            # If this is a static site, Nginx restart is enough. 
+            # If it's a Node app, we restart PM2:
             pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
+            
             sudo systemctl restart nginx
+            echo "Deployment successful!"
 
       - name: Smoke Test
         run: |
-          echo "Starting smoke test..."
+          echo "Checking site availability..."
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://fourcornerfunding.com/)
           if [ "$RESPONSE" -eq 200 ]; then
-            echo "Smoke test passed! Site is up."
+            echo "✅ Site is LIVE (HTTP 200)"
           else
-            echo "Smoke test failed! Site returned status code $RESPONSE."
+            echo "❌ Site returned HTTP $RESPONSE"
             exit 1
           fi
