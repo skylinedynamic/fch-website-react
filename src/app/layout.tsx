@@ -4,6 +4,8 @@ import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
 import WowInit from '@/components/common/WowInit';
 import Script from 'next/script';
+import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
+
 
 import type { Metadata } from 'next';
 import React from 'react';
@@ -155,7 +157,9 @@ export default function RootLayout({
         <WowInit />
         <div className="page-wrapper body-bg">
           <Header />
-          {children}
+          <ReCaptchaProvider>
+            {children}
+          </ReCaptchaProvider>
           <Footer />
         </div>
 
