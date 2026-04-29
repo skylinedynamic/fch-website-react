@@ -25,18 +25,19 @@ jobs:
       - name: Build Application (Verification)
         run: npm run build
 
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+      - name: Create Empty Directory for Sync Bypassing
+        run: mkdir -p empty_deploy_dir
 
       - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
         env:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
           REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
-        run: |
-          # Connect and execute deployment commands
-          ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
+          SOURCE: "empty_deploy_dir/"
+          TARGET: "/tmp/empty_deploy_bypass"
+          SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
+          SCRIPT_AFTER: |
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
             
@@ -57,7 +58,6 @@ jobs:
             sudo systemctl restart nginx
             
             echo "Deployment successful!"
-          EOF
 
       - name: Smoke Test
         run: |
