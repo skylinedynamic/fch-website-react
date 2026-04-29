@@ -28,9 +28,9 @@ jobs:
       - name: Deploy & Build on Server
         uses: easingthemes/ssh-deploy@main
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.PROD_EC2_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_EC2_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
           SOURCE: "empty_deploy_dir/"
           TARGET: "/tmp/empty_deploy_bypass"
           SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
@@ -68,14 +68,14 @@ jobs:
             echo "❌ Smoke test failed! Expected HTTP 200 but received $HTTP_STATUS."
 
             echo "--- Fetching server debug info ---"
-            echo "${{ secrets.PROD_EC2_SSH_KEY }}" > deploy_key
+            echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > deploy_key
             chmod 600 deploy_key
 
             echo "--- PM2 Status ---"
-            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_EC2_USER }}@${{ secrets.PROD_EC2_HOST }} "pm2 list"
+            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "pm2 list"
 
             echo "--- Nginx Error Logs ---"
-            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_EC2_USER }}@${{ secrets.PROD_EC2_HOST }} "sudo tail -n 20 /var/log/nginx/error.log" || echo "Failed to fetch Nginx logs."
+            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "sudo tail -n 20 /var/log/nginx/error.log" || echo "Failed to fetch Nginx logs."
 
             rm deploy_key
             exit 1
