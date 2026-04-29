@@ -27,7 +27,7 @@ jobs:
         with:
           host: ${{ secrets.PROD_SSH_HOST }}
           username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.PROD_SSH_KEY }}
           port: 22
           script: |
             echo "Starting deployment on server..."
