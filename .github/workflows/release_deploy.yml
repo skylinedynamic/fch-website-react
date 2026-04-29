@@ -20,54 +20,63 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci || npm install
 
-      - name: Build Application (Verification)
-        run: npm run build
-
-      - name: Create Empty Directory for Sync Bypassing
+      - name: Create Empty Directory for SSH Trigger
         run: mkdir -p empty_deploy_dir
 
-      - name: Deploy to Server
+      - name: Deploy & Build on Server
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_EC2_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_EC2_USER }}
           SOURCE: "empty_deploy_dir/"
           TARGET: "/tmp/empty_deploy_bypass"
           SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
           SCRIPT_AFTER: |
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
-            
+
             echo "Pulling latest code..."
             git fetch origin
             git reset --hard origin/release
-            
+
             echo "Installing dependencies..."
             npm ci
-            
+
             echo "Building Next.js app..."
             npm run build
-            
+
             echo "Restarting application..."
             pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
-            
+
             echo "Restarting Nginx..."
             sudo systemctl restart nginx
-            
+
             echo "Deployment successful!"
 
-      - name: Smoke Test
+      - name: Post-Deployment Smoke Test
         run: |
-          echo "Checking site availability..."
-          # Give the application a few seconds to boot up completely
+          echo "Waiting for server to boot..."
           sleep 5
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://fourcornerfunding.com/)
-          if [ "$RESPONSE" -eq 200 ]; then
-            echo "✅ Site is LIVE (HTTP 200)"
+          PROD_URL="https://fourcornerfunding.com/"
+          HTTP_STATUS=$(curl -s -L -o /dev/null -w "%{http_code}" --max-time 15 "$PROD_URL" || echo "000")
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Smoke test passed! Production responded with HTTP $HTTP_STATUS."
           else
-            echo "❌ Site returned HTTP $RESPONSE"
+            echo "❌ Smoke test failed! Expected HTTP 200 but received $HTTP_STATUS."
+
+            echo "--- Fetching server debug info ---"
+            echo "${{ secrets.PROD_EC2_SSH_KEY }}" > deploy_key
+            chmod 600 deploy_key
+
+            echo "--- PM2 Status ---"
+            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_EC2_USER }}@${{ secrets.PROD_EC2_HOST }} "pm2 list"
+
+            echo "--- Nginx Error Logs ---"
+            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_EC2_USER }}@${{ secrets.PROD_EC2_HOST }} "sudo tail -n 20 /var/log/nginx/error.log" || echo "Failed to fetch Nginx logs."
+
+            rm deploy_key
             exit 1
           fi
