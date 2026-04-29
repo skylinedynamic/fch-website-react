@@ -98,7 +98,7 @@ export default function ContactPage() {
                             <div className="text-item wow fadeInUp" data-wow-delay=".4s">
                                 <p>
                                     Explore funding, build business credit, or become a partner, our team is here to help.
-                                    Send us a message or contact us directly to get started.
+                                    Send us a message or contact us directly to get started..
                                 </p>
                             </div>
                         </div>
