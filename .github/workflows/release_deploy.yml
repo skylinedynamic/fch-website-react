@@ -26,12 +26,18 @@ jobs:
         run: npm run build
 
       - name: Deploy to Server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          script: |
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
+        run: |
+          # Set up the SSH key using the standard Linux OpenSSH client
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          # Connect and execute deployment commands
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST << 'EOF'
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
             
@@ -52,6 +58,7 @@ jobs:
             sudo systemctl restart nginx
             
             echo "Deployment successful!"
+          EOF
 
       - name: Smoke Test
         run: |
