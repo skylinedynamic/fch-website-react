@@ -25,46 +25,37 @@ jobs:
       - name: Create Empty Directory for SSH Trigger
         run: mkdir -p empty_deploy_dir
 
-      - name: Normalize SSH Key
-        run: |
-          # This ensures the key has proper newlines even if GitHub stripped them
-          echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" | sed 's/-----BEGIN RSA PRIVATE KEY-----/&\n/;s/-----END RSA PRIVATE KEY-----/\n&/;s/\([^\n]\) \([^\n]\)/\1\n\2/g' > formatted_key
-          # If it's an OpenSSH key instead of RSA
-          if ! grep -q "BEGIN RSA" formatted_key; then
-            echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > formatted_key
-          fi
-          # Export to a variable the action can use if needed, but we'll try fixing the secret first.
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+          if_key_exists: replace
 
       - name: Deploy & Build on Server
-        uses: easingthemes/ssh-deploy@main
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
-          SOURCE: "empty_deploy_dir/"
-          TARGET: "/tmp/empty_deploy_bypass"
-          SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
-          SCRIPT_AFTER: |
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
-
+            
             echo "Pulling latest code..."
             git fetch origin
             git reset --hard origin/release
-
+            
             echo "Installing dependencies..."
             npm ci
-
+            
             echo "Building Next.js app..."
             npm run build
-
+            
             echo "Restarting application..."
             pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
-
+            
             echo "Restarting Nginx..."
             sudo systemctl restart nginx
-
+            
             echo "Deployment successful!"
+          EOF
 
       - name: Post-Deployment Smoke Test
         run: |
