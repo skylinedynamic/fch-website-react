@@ -27,7 +27,7 @@ jobs:
 
       - name: Deploy & Build on Server
         uses: easingthemes/ssh-deploy@main
-        env:
+        with:
           SSH_PRIVATE_KEY: ${{ secrets.PROD_EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.PROD_EC2_HOST }}
           REMOTE_USER: ${{ secrets.PROD_EC2_USER }}
