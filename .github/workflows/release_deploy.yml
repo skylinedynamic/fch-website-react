@@ -25,19 +25,18 @@ jobs:
       - name: Build Application (Verification)
         run: npm run build
 
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+
       - name: Deploy to Server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
           REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
         run: |
-          # Set up the SSH key using the standard Linux OpenSSH client
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          
           # Connect and execute deployment commands
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
             
