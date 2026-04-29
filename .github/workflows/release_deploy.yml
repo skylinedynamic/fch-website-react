@@ -22,19 +22,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci || npm install
 
-      - name: Create Empty Directory for SSH Trigger
-        run: mkdir -p empty_deploy_dir
-
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          known_hosts: unnecessary
-          if_key_exists: replace
-
       - name: Deploy & Build on Server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
             echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
             
@@ -55,7 +50,6 @@ jobs:
             sudo systemctl restart nginx
             
             echo "Deployment successful!"
-          EOF
 
       - name: Post-Deployment Smoke Test
         run: |
@@ -67,17 +61,5 @@ jobs:
             echo "✅ Smoke test passed! Production responded with HTTP $HTTP_STATUS."
           else
             echo "❌ Smoke test failed! Expected HTTP 200 but received $HTTP_STATUS."
-
-            echo "--- Fetching server debug info ---"
-            echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > deploy_key
-            chmod 600 deploy_key
-
-            echo "--- PM2 Status ---"
-            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "pm2 list"
-
-            echo "--- Nginx Error Logs ---"
-            ssh -i deploy_key -o StrictHostKeyChecking=no ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "sudo tail -n 20 /var/log/nginx/error.log" || echo "Failed to fetch Nginx logs."
-
-            rm deploy_key
             exit 1
           fi
