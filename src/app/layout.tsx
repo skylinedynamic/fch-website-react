@@ -135,6 +135,22 @@ export default function RootLayout({
       <body className="body-bg">
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-6HM2YGCB2B"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-6HM2YGCB2B');
+          `}
+        </Script>
+
         <Preloader />
         <WowInit />
         <div className="page-wrapper body-bg">
