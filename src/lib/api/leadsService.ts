@@ -7,6 +7,7 @@ export interface LeadPayload {
   company_name?: string;
   interest?: string;
   requirements_details?: string;
+  recaptcha_token?: string;
 }
 
 export interface LeadResponse {
