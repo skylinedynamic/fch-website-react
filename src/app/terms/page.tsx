@@ -203,17 +203,17 @@ export default function TermsOfServicePage() {
                                 <div className="term-block mb-4">
                                     <h4>14. CONTACT INFORMATION</h4>
                                     <p>Four Corner Holdings, LLC<br />
-                                    3750 Gunn Highway, Suite 306<br />
-                                    Tampa, FL 33618<br />
-                                    <a href="mailto:support@fourcornerfunding.com">support@fourcornerfunding.com</a><br />
-                                    <a href="tel:8133913333">813-391-3333</a><br />
-                                    <a href="https://www.fourcornerfunding.com">www.fourcornerfunding.com</a></p>
+                                        3750 Gunn Highway, Suite 306<br />
+                                        Tampa, FL 33618<br />
+                                        <a href="mailto:support@fourcornerfunding.com">support@fourcornerfunding.com</a><br />
+                                        <a href="tel:8133913333">813-391-3333</a><br />
+                                        <a href="https://www.fourcornerfunding.com">www.fourcornerfunding.com</a></p>
                                 </div>
 
                                 <div className="final-notice mt-5 pt-4 border-top">
                                     <p><strong>FINAL NOTICE</strong></p>
                                     <p>Four Corner Funding™ is a product of Four Corner Holdings, LLC.<br />
-                                    All rights reserved.</p>
+                                        All rights reserved.</p>
                                 </div>
                             </div>
                         </div>
