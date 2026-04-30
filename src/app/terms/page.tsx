@@ -45,6 +45,7 @@ export default function TermsOfServicePage() {
                                     <p><strong>Effective Date:</strong> {effectiveDate}</p>
                                     <p><strong>URL:</strong> <a href="https://www.fourcornerfunding.com/terms">www.fourcornerfunding.com/terms</a></p>
                                 </div>
+
                                 <div className="term-block mb-3">
                                     <h4>1. INTRODUCTION</h4>
                                     <p>These Terms of Service (“Terms”) govern your access to and use of the website, software platform, and services provided by Four Corner Funding™ (a product of Four Corner Holdings, LLC) (“Company,” “we,” “our,” or “us”).</p>
