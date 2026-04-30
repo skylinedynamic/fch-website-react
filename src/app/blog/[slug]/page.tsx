@@ -23,13 +23,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = post.title;
-  const description = post.content.replace(/<[^>]*>/g, '').substring(0, 160);
+  const title = post.meta_title || post.title;
+  const description = post.meta_description || post.content.replace(/<[^>]*>/g, '').substring(0, 160);
+  const keywords = post.keywords || '';
   const url = `${seoConfig.siteUrl}/blog/${slug}`;
 
   return {
     title,
     description,
+    keywords,
     alternates: {
       canonical: url,
     },
@@ -71,7 +73,7 @@ export default async function BlogDetailsPage({ params }: Props) {
   const blogSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.title,
+    headline: post.meta_title || post.title,
     image: `${seoConfig.siteUrl}${post.image}`,
     author: {
       '@type': 'Person',
@@ -86,7 +88,7 @@ export default async function BlogDetailsPage({ params }: Props) {
       },
     },
     datePublished: `${post.month} ${post.date}, 2024`, // Adjust as needed
-    description: post.content.replace(/<[^>]*>/g, '').substring(0, 160),
+    description: post.meta_description || post.content.replace(/<[^>]*>/g, '').substring(0, 160),
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${seoConfig.siteUrl}/blog/${slug}`,
