@@ -39,7 +39,8 @@ export default function BlogDetailsClient({
             <div className="hero-content">
               <ul className="page-breadcrumb wow fadeInUp animated pb-2" data-wow-delay=".3s">
                 <li><Link href="/">Home</Link></li>
-                <li>Blog Details</li>
+                <li><Link href="/blog">Blog</Link></li>
+                <li>{post.title}</li>
               </ul>
               <h1 className="wow fadeInUp" data-wow-delay=".2s">{post.title}</h1>
               <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
