@@ -18,11 +18,9 @@ const legalLinks = [
 ];
 
 const supportLinks = [
-  { href: '#', label: 'About Us' },
   { href: '/credit-builder', label: 'Credit Builder' },
   { href: 'https://app.fourcornerfunding.com/', label: 'Borrower Portal', external: true },
   { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Portal', external: true },
-  { href: '#', label: 'Career' },
 ];
 
 export default function Footer() {
@@ -42,21 +40,42 @@ export default function Footer() {
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
             <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
-          <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
-            {settings?.social_links?.twitter && <a href={settings.social_links.twitter} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-x-twitter"></i></a>}
-            {settings?.social_links?.facebook && <a href={settings.social_links.facebook} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a>}
-            {settings?.social_links?.linkedin && <a href={settings.social_links.linkedin} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-linkedin-in"></i></a>}
-            {settings?.social_links?.pinterest && <a href={settings.social_links.pinterest} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-pinterest-p"></i></a>}
-            {settings?.social_links?.instagram && <a href={settings.social_links.instagram} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a>}
-            {settings?.social_links?.youtube && <a href={settings.social_links.youtube} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube"></i></a>}
-            {!settings?.social_links && (
-              <>
-                <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
-                <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
-                <a href="#"><i className="fa-brands fa-pinterest-p"></i></a>
-              </>
-            )}
+        <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
+            {Array.isArray(settings?.social_links) &&
+              settings.social_links
+                .filter((social) => social?.url) // ignore empty rows
+                .map((social, index) => {
+                  const platform = (social?.platform || '')
+                    .toString()
+                    .trim()
+                    .toLowerCase();
+
+                  const iconMap = {
+                    facebook: 'fa-facebook-f',
+                    linkedin: 'fa-linkedin-in',
+                    youtube: 'fa-youtube',
+                    instagram: 'fa-instagram',
+                    pinterest: 'fa-pinterest-p',
+                    twitter: 'fa-x-twitter',
+                    'twitter (x)': 'fa-x-twitter',
+                    x: 'fa-x-twitter',
+                  };
+
+                  const iconClass = iconMap[platform];
+
+                  if (!iconClass) return null;
+
+                  return (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className={`fa-brands ${iconClass}`}></i>
+                    </a>
+                  );
+                })}
           </div>
         </div>
 

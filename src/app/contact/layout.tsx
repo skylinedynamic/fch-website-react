@@ -1,15 +1,13 @@
 import { Metadata } from 'next';
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/contact');
+}
+
 import { seoConfig } from '@/config/seo';
-
-export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with Four Corner Funding. Explore funding, build business credit, or become a partner.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/contact`,
-  },
-};
-
 import JsonLd from '@/components/seo/JsonLd';
+
 
 export default function ContactLayout({
   children,

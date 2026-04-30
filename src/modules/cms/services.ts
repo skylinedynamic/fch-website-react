@@ -23,5 +23,28 @@ export const cmsService = {
       console.error('Error fetching site settings:', error);
       return { data: null } as any;
     }
+  },
+
+  fetchSeoSettings: async (path: string): Promise<any> => {
+    try {
+      // Normalize path (ensure leading slash, no trailing slash unless it's just '/')
+      const normalizedPath = path === '/' ? '/' : `/${path.replace(/^\/+|\/+$/g, '')}`;
+      
+      const response = await fetch(`${API_BASE_URL}/website/seo?path=${encodeURIComponent(normalizedPath)}`, {
+        next: { revalidate: 60 },
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        return { data: null };
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching SEO settings:', error);
+      return { data: null };
+    }
   }
 };

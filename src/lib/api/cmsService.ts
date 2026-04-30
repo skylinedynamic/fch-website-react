@@ -55,17 +55,20 @@ const transformPost = (post: any) => {
     author: post.author?.name || 'Admin',
     image: post.featured_image ? 
       (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`) 
-      : '/images/home-1/news/news-01.jpg',
+      : '/images/placeholder.png',
     tags: Array.isArray(post.tag_names) ? post.tag_names : (Array.isArray(post.blog_tag_id) ? post.blog_tag_id : []),
     content: post.content || '',
+    summary: post.summary || '',
     title: post.title || '',
     slug: post.slug || '',
     link: `/blog/${post.slug}`,
+    meta_title: post.meta_title || post.title || '',
+    meta_description: post.meta_description || post.summary || (post.content ? post.content.replace(/<[^>]*>/g, '').substring(0, 160) : ''),
   };
 };
 
 export const getHomeData = async (): Promise<HomeData> => {
-  const latestBlogs = await getBlogPosts();
+  const latestBlogs = await getBlogPosts({ is_featured: 1 });
   return {
     ...homeData,
     blog: {
@@ -85,6 +88,7 @@ export const getBlogPosts = async (filters: any = {}) => {
   if (filters.category) query.append('category', filters.category);
   if (filters.tag) query.append('tag', filters.tag);
   if (filters.search) query.append('search', filters.search);
+  if (filters.is_featured) query.append('is_featured', filters.is_featured);
   
   const data = await fetchFromApi(`/website/blogs?${query.toString()}`);
   if (!data) return [];

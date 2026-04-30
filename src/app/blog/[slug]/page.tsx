@@ -13,6 +13,8 @@ interface Props {
   params: { slug: string };
 }
 
+import { getBlogPostMetadata } from '@/lib/metadata';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
@@ -23,41 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = post.meta_title || post.title;
-  const description = post.meta_description || post.content.replace(/<[^>]*>/g, '').substring(0, 160);
-  const keywords = post.keywords || '';
-  const url = `${seoConfig.siteUrl}/blog/${slug}`;
-
-  return {
-    title,
-    description,
-    keywords,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: 'article',
-      publishedTime: `${post.month} ${post.date}, 2024`, // Adjust year if needed
-      authors: [post.author],
-      images: [
-        {
-          url: post.image,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [post.image],
-    },
-  };
+  return getBlogPostMetadata(slug, post);
 }
 
 import JsonLd from '@/components/seo/JsonLd';
@@ -73,7 +41,7 @@ export default async function BlogDetailsPage({ params }: Props) {
   const blogSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.meta_title || post.title,
+    headline: post.meta_title,
     image: `${seoConfig.siteUrl}${post.image}`,
     author: {
       '@type': 'Person',
@@ -88,14 +56,14 @@ export default async function BlogDetailsPage({ params }: Props) {
       },
     },
     datePublished: `${post.month} ${post.date}, 2024`, // Adjust as needed
-    description: post.meta_description || post.content.replace(/<[^>]*>/g, '').substring(0, 160),
+    description: post.meta_description,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${seoConfig.siteUrl}/blog/${slug}`,
     },
   };
 
-  const allPosts = await getBlogPosts();
+  const allPosts = await getBlogPosts({ is_featured: 1 });
   const currentIndex = allPosts.findIndex(item => item.slug === slug);
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < allPosts.length - 1 && currentIndex !== -1 ? allPosts[currentIndex + 1] : null;

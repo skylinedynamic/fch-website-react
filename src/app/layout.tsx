@@ -15,21 +15,31 @@ import { cmsService } from '@/modules/cms/services';
 import QueryProvider from '@/lib/providers/QueryProvider';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settingsRes = await cmsService.fetchSiteSettings();
+  const [settingsRes, seoRes] = await Promise.all([
+    cmsService.fetchSiteSettings(),
+    cmsService.fetchSeoSettings('/')
+  ]);
+
   const settings = settingsRes?.data;
+  const seo = seoRes?.data;
   
   const siteName = settings?.site_name || seoConfig.siteName;
-  const description = settings?.site_slogan || seoConfig.description;
   const favicon = settings?.favicon || '/images/favicon.png';
+
+  // Use dynamic SEO from table if available, else fallback to site settings or config
+  const title = seo?.meta_title || siteName;
+  const description = seo?.meta_description || settings?.site_slogan || seoConfig.description;
+  const keywords = seo?.keywords || seoConfig.keywords;
+  const ogImage = seo?.og_image || seoConfig.ogImage;
 
   return {
     metadataBase: new URL(seoConfig.siteUrl),
     title: {
-      default: siteName,
+      default: title,
       template: `%s | ${siteName}`,
     },
     description: description,
-    keywords: seoConfig.keywords,
+    keywords: keywords,
     authors: [{ name: siteName }],
     creator: siteName,
     publisher: siteName,
@@ -46,22 +56,22 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: 'en_US',
       url: seoConfig.siteUrl,
       siteName: siteName,
-      title: siteName,
+      title: title,
       description: description,
       images: [
         {
-          url: seoConfig.ogImage,
+          url: ogImage,
           width: 1200,
           height: 630,
-          alt: siteName,
+          alt: title,
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: siteName,
+      title: title,
       description: description,
-      images: [seoConfig.ogImage],
+      images: [ogImage],
       creator: seoConfig.twitterHandle,
     },
     icons: {

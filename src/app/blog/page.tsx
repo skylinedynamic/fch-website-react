@@ -2,13 +2,15 @@ import Link from 'next/link';
 import { getBlogPosts } from '@/lib/api/cmsService';
 import BlogListingClient from './BlogListingClient';
 
-export const metadata = {
-  title: 'Blog | Four Corner Funding',
-  description: 'Latest news, insights, and strategies for business funding and credit building.',
-};
+import { Metadata } from 'next';
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/blog');
+}
 
 export default async function BlogIndexPage() {
-  const posts = await getBlogPosts();
+  const posts = await getBlogPosts({ is_featured: 1 });
 
   return (
     <main>

@@ -1,19 +1,11 @@
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { getDynamicMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Legal Disclosure',
-  description: 'Important legal disclosures regarding our business funding and credit building services.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/disclosure`,
-  },
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/disclosure');
+}
 
-export default function DisclosureLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
