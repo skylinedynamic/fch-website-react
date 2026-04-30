@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'react-router-dom'; // Note: The original used next/link but I should check if it's next/link or next/navigation
+
 import { useParams, notFound } from 'next/navigation';
 import LinkNext from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
