@@ -1,17 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 
-export default function BlogDetailsClient({ 
-  initialPost, 
-  initialCategories, 
+export default function BlogDetailsClient({
+  initialPost,
+  initialCategories,
   initialTags,
   initialPrevPost,
   initialNextPost,
-  slug 
+  slug
 }) {
   const [post, setPost] = useState(initialPost);
   const [categories, setCategories] = useState(initialCategories);
