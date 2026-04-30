@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { 
-  getBlogPostBySlug, 
-  getBlogPosts, 
-  getBlogCategories, 
-  getBlogTags 
+import {
+  getBlogPostBySlug,
+  getBlogPosts,
+  getBlogCategories,
+  getBlogTags
 } from '@/lib/api/cmsService';
 import BlogDetailsClient from './BlogDetailsClient';
 import { seoConfig } from '@/config/seo';
@@ -14,7 +14,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = post.title;
   const description = post.content.replace(/<[^>]*>/g, '').substring(0, 160);
-  const url = `${seoConfig.siteUrl}/blog/${params.slug}`;
+  const url = `${seoConfig.siteUrl}/blog/${slug}`;
 
   return {
     title,
@@ -60,7 +61,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 import JsonLd from '@/components/seo/JsonLd';
 
 export default async function BlogDetailsPage({ params }: Props) {
-  const post = await getBlogPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -87,12 +89,12 @@ export default async function BlogDetailsPage({ params }: Props) {
     description: post.content.replace(/<[^>]*>/g, '').substring(0, 160),
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${seoConfig.siteUrl}/blog/${params.slug}`,
+      '@id': `${seoConfig.siteUrl}/blog/${slug}`,
     },
   };
 
   const allPosts = await getBlogPosts();
-  const currentIndex = allPosts.findIndex(item => item.slug === params.slug);
+  const currentIndex = allPosts.findIndex(item => item.slug === slug);
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < allPosts.length - 1 && currentIndex !== -1 ? allPosts[currentIndex + 1] : null;
 
@@ -102,13 +104,13 @@ export default async function BlogDetailsPage({ params }: Props) {
   return (
     <>
       <JsonLd data={blogSchema} />
-      <BlogDetailsClient 
+      <BlogDetailsClient
         initialPost={post}
         initialCategories={categories}
         initialTags={tags}
         initialPrevPost={prevPost}
         initialNextPost={nextPost}
-        slug={params.slug}
+        slug={slug}
       />
     </>
   );
