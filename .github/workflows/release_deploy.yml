@@ -20,41 +20,46 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci || npm install
 
-      - name: Build Application
-        run: npm run build
-
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.PROD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
-          SOURCE: "dist/" # Change to "build/" if you use Create React App
-          TARGET: "/var/www/html/fourcornerfunding/dist"
-          SSH_CMD_ARGS: "-o StrictHostKeyChecking=no"
-          SCRIPT_BEFORE: |
-            echo "Preparing target directory..."
-            sudo mkdir -p /var/www/html/fourcornerfunding/dist
-            sudo chown -R $USER:$USER /var/www/html/fourcornerfunding
-          SCRIPT_AFTER: |
-            echo "Finalizing deployment..."
+      - name: Deploy & Build on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          port: 22
+          script: |
+            echo "Starting deployment on server..."
             cd /var/www/html/fourcornerfunding
-            # If this is a static site, Nginx restart is enough. 
-            # If it's a Node app, we restart PM2:
+            
+            echo "Pulling latest code..."
+            git fetch origin
+            git reset --hard origin/release
+            
+            echo "Installing dependencies..."
+            npm ci
+            
+            echo "Building Next.js app..."
+            npm run build
+            
+            echo "Restarting application..."
             pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
             
+            echo "Restarting Nginx..."
             sudo systemctl restart nginx
+            
             echo "Deployment successful!"
 
-      - name: Smoke Test
+      - name: Post-Deployment Smoke Test
         run: |
-          echo "Checking site availability..."
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://fourcornerfunding.com/)
-          if [ "$RESPONSE" -eq 200 ]; then
-            echo "✅ Site is LIVE (HTTP 200)"
+          echo "Waiting for server to boot..."
+          sleep 5
+          PROD_URL="https://fourcornerfunding.com/"
+          HTTP_STATUS=$(curl -s -L -o /dev/null -w "%{http_code}" --max-time 15 "$PROD_URL" || echo "000")
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Smoke test passed! Production responded with HTTP $HTTP_STATUS."
           else
-            echo "❌ Site returned HTTP $RESPONSE"
+            echo "❌ Smoke test failed! Expected HTTP 200 but received $HTTP_STATUS."
             exit 1
           fi

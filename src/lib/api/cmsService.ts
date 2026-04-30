@@ -1,5 +1,5 @@
 import { homeData } from '@/data/homeData';
-import { blogData, blogCategories, blogTags } from '@/data/blogData';
+import { blogCategories, blogTags } from '@/data/blogData'; // Keep only these as final safety fallbacks if desired, or remove entirely
 import { HomeData } from '@/types/cms';
 
 // Use the environment variable for the base URL, ensuring no trailing slash and no duplicate /v1
@@ -56,7 +56,7 @@ const transformPost = (post: any) => {
     image: post.featured_image ? 
       (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`) 
       : '/images/home-1/news/news-01.jpg',
-    tags: Array.isArray(post.blog_tag_id) ? post.blog_tag_id : [],
+    tags: Array.isArray(post.tag_names) ? post.tag_names : (Array.isArray(post.blog_tag_id) ? post.blog_tag_id : []),
     content: post.content || '',
     title: post.title || '',
     slug: post.slug || '',

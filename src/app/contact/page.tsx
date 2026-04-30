@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { submitLead } from '@/lib/api/leadsService';
 import { useSiteSettings } from '@/modules/cms/queries';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function ContactPage() {
     const [phone, setPhone] = useState('');
@@ -14,6 +15,7 @@ export default function ContactPage() {
     const interestRef = useRef<HTMLDivElement>(null);
     const { data: response } = useSiteSettings();
     const settings = response?.data;
+    const { executeRecaptcha } = useGoogleReCaptcha();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -60,7 +62,15 @@ export default function ContactPage() {
         setSuccessMessage('');
         setErrorMessage('');
 
+        if (!executeRecaptcha) {
+            setErrorMessage('ReCaptcha not ready. Please try again.');
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
+            const token = await executeRecaptcha('contact_form');
+
             await submitLead({
                 contact_person: formData.name,
                 email: formData.email,
@@ -68,6 +78,7 @@ export default function ContactPage() {
                 company_name: formData.company || undefined,
                 interest: formData.interest || undefined,
                 requirements_details: formData.message || undefined,
+                recaptcha_token: token,
             });
 
             setSuccessMessage('Thank you for reaching out! Your message has been sent.');
@@ -101,7 +112,7 @@ export default function ContactPage() {
                             <div className="text-item wow fadeInUp" data-wow-delay=".4s">
                                 <p>
                                     Explore funding, build business credit, or become a partner, our team is here to help.
-                                    Send us a message or contact us directly to get started..
+                                    Send us a message or contact us directly to get started.
                                 </p>
                             </div>
                         </div>

@@ -4,6 +4,8 @@ import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
 import WowInit from '@/components/common/WowInit';
 import Script from 'next/script';
+import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
+
 
 import type { Metadata } from 'next';
 import React from 'react';
@@ -149,14 +151,32 @@ export default async function RootLayout({
       <body className="body-bg">
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-6HM2YGCB2B"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-6HM2YGCB2B');
+          `}
+        </Script>
+
         <Preloader />
         <WowInit />
         <QueryProvider>
           <div className="page-wrapper body-bg">
-            <Header />
+          <Header />
+          <ReCaptchaProvider>
             {children}
-            <Footer />
-          </div>
+          </ReCaptchaProvider>
+          <Footer />
+        </div>
         </QueryProvider>
 
         {/* ── JS Scripts ─────────────────────────────────────────────────── */}

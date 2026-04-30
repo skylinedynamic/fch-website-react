@@ -1,17 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 
-export default function BlogDetailsClient({ 
-  initialPost, 
-  initialCategories, 
+export default function BlogDetailsClient({
+  initialPost,
+  initialCategories,
   initialTags,
   initialPrevPost,
   initialNextPost,
-  slug 
+  latestPosts,
+  slug
 }) {
   const [post, setPost] = useState(initialPost);
   const [categories, setCategories] = useState(initialCategories);
@@ -110,7 +112,7 @@ export default function BlogDetailsClient({
               <BlogSidebar
                 categories={categories}
                 tags={tags}
-                latestPosts={post.latestPosts}
+                latestPosts={latestPosts}
               />
             </div>
           </div>
