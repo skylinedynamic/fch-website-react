@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSiteSettings } from '@/modules/cms/queries';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -34,6 +35,8 @@ const Navigation = ({ className, onLinkClick }: NavigationProps) => (
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: response } = useSiteSettings();
+  const settings = response?.data;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -85,9 +88,9 @@ export default function Header() {
               <div className="logo">
                 <Link href="/">
                   <img
-                    src="/images/black-logo.png"
-                    alt="Four Corner Funding logo - Black"
-                    title="Four Corner Funding"
+                    src={settings?.header_logo || "/images/black-logo.png"}
+                    alt={`${settings?.site_name || "Four Corner Funding"} logo - Black`}
+                    title={settings?.site_name || "Four Corner Funding"}
                     style={{ maxHeight: '76px', width: 'auto' }}
                   />
                 </Link>
@@ -121,7 +124,7 @@ export default function Header() {
           <div className="upper-box">
             <div className="nav-logo">
               <Link href="/">
-                <img src="/images/logo-white.png" alt="Four Corner Funding logo - White" style={{ maxHeight: '54px', width: 'auto' }} />
+                <img src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} logo - White`} style={{ maxHeight: '54px', width: 'auto' }} />
               </Link>
             </div>
             <div className="close-btn" onClick={closeMenu}><i className="icon fa fa-times"></i></div>
@@ -145,23 +148,33 @@ export default function Header() {
               <div className="contact-info-box">
                 <i className="icon lnr-icon-phone-handset"></i>
                 <span className="title">Call Now</span>
-                <a href="tel:8133913333">813-391-3333</a>
+                <a href={`tel:${settings?.phone_number || "8133913333"}`}>{settings?.phone_number || "813-391-3333"}</a>
               </div>
             </li>
             <li>
               <div className="contact-info-box">
                 <span className="icon lnr-icon-envelope1"></span>
                 <span className="title">Send Email</span>
-                <a href="mailto:Info@fourcornerfunding.com">Info@fourcornerfunding.com</a>
+                <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`}>{settings?.email || "Info@fourcornerfunding.com"}</a>
               </div>
             </li>
           </ul>
 
           <ul className="social-links">
-            <li><a href="#"><i className="fab fa-twitter"></i></a></li>
-            <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
-            <li><a href="#"><i className="fab fa-pinterest"></i></a></li>
-            <li><a href="#"><i className="fab fa-instagram"></i></a></li>
+            {settings?.social_links?.twitter && <li><a href={settings.social_links.twitter} target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a></li>}
+            {settings?.social_links?.facebook && <li><a href={settings.social_links.facebook} target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a></li>}
+            {settings?.social_links?.linkedin && <li><a href={settings.social_links.linkedin} target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin-in"></i></a></li>}
+            {settings?.social_links?.pinterest && <li><a href={settings.social_links.pinterest} target="_blank" rel="noopener noreferrer"><i className="fab fa-pinterest-p"></i></a></li>}
+            {settings?.social_links?.instagram && <li><a href={settings.social_links.instagram} target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a></li>}
+            {settings?.social_links?.youtube && <li><a href={settings.social_links.youtube} target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube"></i></a></li>}
+            {!settings?.social_links && (
+              <>
+                <li><a href="#"><i className="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
+                <li><a href="#"><i className="fab fa-pinterest"></i></a></li>
+                <li><a href="#"><i className="fab fa-instagram"></i></a></li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
@@ -173,8 +186,8 @@ export default function Header() {
             <div className="logo" style={{ width: '176px' }}>
               <Link href="/">
                 <img
-                  src="/images/black-logo.png"
-                  alt="Four Corner Funding logo"
+                  src={settings?.header_logo || "/images/black-logo.png"}
+                  alt={`${settings?.site_name || "Four Corner Funding"} logo`}
                   style={{ maxHeight: '76px', width: 'auto' }}
                 />
               </Link>

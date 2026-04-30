@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useSiteSettings } from '@/modules/cms/queries';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -23,6 +26,9 @@ const supportLinks = [
 ];
 
 export default function Footer() {
+  const { data: response } = useSiteSettings();
+  const settings = response?.data;
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="footer-section-2 fix footer-bg">
       <div className="bg-color">
@@ -34,13 +40,23 @@ export default function Footer() {
       <div className="auto-container">
         <div className="footer-top-wrapper">
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
-            <img style={{ width: '191px' }} src="/images/logo-white.png" alt="Four Corner Funding white logo" />
+            <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
           <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
-            <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
-            <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
-            <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
-            <a href="#"><i className="fa-brands fa-pinterest-p"></i></a>
+            {settings?.social_links?.twitter && <a href={settings.social_links.twitter} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-x-twitter"></i></a>}
+            {settings?.social_links?.facebook && <a href={settings.social_links.facebook} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook-f"></i></a>}
+            {settings?.social_links?.linkedin && <a href={settings.social_links.linkedin} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-linkedin-in"></i></a>}
+            {settings?.social_links?.pinterest && <a href={settings.social_links.pinterest} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-pinterest-p"></i></a>}
+            {settings?.social_links?.instagram && <a href={settings.social_links.instagram} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram"></i></a>}
+            {settings?.social_links?.youtube && <a href={settings.social_links.youtube} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube"></i></a>}
+            {!settings?.social_links && (
+              <>
+                <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
+                <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
+                <a href="#"><i className="fa-brands fa-pinterest-p"></i></a>
+              </>
+            )}
           </div>
         </div>
 
@@ -53,18 +69,25 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white">Four Corner Holdings, LLC <br /> 3750 Gunn Highway, Suite 306
-                    <br /> Tampa, FL. 33618
+                  <p className="text-white">
+                    {settings?.site_name || "Four Corner Holdings, LLC"} <br />
+                    {settings?.address ? (
+                      settings.address.split('\n').map((line, idx) => (
+                        <span key={idx}>{line}<br /></span>
+                      ))
+                    ) : (
+                      <>3750 Gunn Highway, Suite 306<br /> Tampa, FL. 33618</>
+                    )}
                   </p>
                   <ul className="contact-list-2 mb-4">
                     <li>
-                      <a href="tel:813-391-3333"><i className="fa-solid fa-phone me-2"></i>
-                        813-391-3333</a>
+                      <a href={`tel:${settings?.phone_number || "813-391-3333"}`}><i className="fa-solid fa-phone me-2"></i>
+                        {settings?.phone_number || "813-391-3333"}</a>
                     </li>
                     <li>
-                      <a href="mailto:Info@fourcornerfunding.com"><i
+                      <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`}><i
                         className="fa-solid fa-envelope me-2"></i>
-                        Info@fourcornerfunding.com</a>
+                        {settings?.email || "Info@fourcornerfunding.com"}</a>
                     </li>
                   </ul>
                   <div className="footer-btn">
@@ -118,7 +141,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <p className="footer-text wow fadeInUp" data-wow-delay=".3s">Copyright © 2026 Four Corner Funding. All
+        <p className="footer-text wow fadeInUp" data-wow-delay=".3s">Copyright © {currentYear} {settings?.site_name || "Four Corner Funding"}. All
           Rights Reserved.
         </p>
       </div>

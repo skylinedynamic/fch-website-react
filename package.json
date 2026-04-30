@@ -10,6 +10,7 @@
     "smoke-test": "curl -s -o /dev/null -w '%{http_code}' https://fourcornerfunding.com/ | grep -q '200'"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.100.6",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
