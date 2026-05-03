@@ -111,8 +111,11 @@ export default function BlogDetailsClient({
             {/* Sidebar */}
             <div className="col-xl-4 col-lg-5">
               <BlogSidebar
-                categories={categories}
-                tags={tags}
+                categories={categories.filter((c: any) => post.category && c.id === post.category.slug).map((c: any) => ({
+                  ...c,
+                  active: true
+                }))}
+                tags={post.tags}
                 latestPosts={latestPosts}
               />
             </div>
