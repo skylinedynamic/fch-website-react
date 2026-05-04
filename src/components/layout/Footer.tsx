@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSiteSettings } from '@/modules/cms/queries';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -105,9 +106,11 @@ export default function Footer() {
                         {settings?.phone_number || "813-391-3333"}</a>
                     </li>
                     <li>
-                      <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`}><i
-                        className="fa-solid fa-envelope me-2"></i>
-                        {settings?.email || "Info@fourcornerfunding.com"}</a>
+                      <EmailObfuscator
+                        email={settings?.email || "Info@fourcornerfunding.com"}
+                        showIcon={true}
+                        className="text-white"
+                      />
                     </li>
                   </ul>
                   <div className="footer-btn">

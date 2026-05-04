@@ -16,7 +16,13 @@ export default function HeroSection({ data }: { data: HomeData }) {
             </h1>
             <div className="text-item wow fadeInUp" data-wow-delay=".4s">
               <p>{hero.text}</p>
-              <img src={hero.images.small} alt="Checkmark icon indicating verified funding success" />
+              <img 
+                src={hero.images.small} 
+                alt="Checkmark icon indicating verified funding success" 
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
+              />
             </div>
             <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
               <Link href={hero.cta.link} className="theme-btn btn-style-one">
@@ -30,9 +36,20 @@ export default function HeroSection({ data }: { data: HomeData }) {
         </div>
         <div className="col-xl-5 col-lg-6 wow fadeInUp" data-wow-delay=".3s">
           <div className="hero-image ed_top_img">
-            <img src={hero.images.main} alt="Entrepreneur analyzing business growth charts and funding trajectories" />
+            <img 
+              src={hero.images.main} 
+              alt="Entrepreneur analyzing business growth charts and funding trajectories" 
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+            />
             <div className="ellipse-shape">
-              <img src={hero.images.ellipse} alt="Decorative ellipse background for hero image" />
+              <img 
+                src={hero.images.ellipse} 
+                alt="Decorative ellipse background for hero image" 
+                loading="lazy" 
+                decoding="async"
+              />
             </div>
             <div className="text-circle">
               <svg className="circle-svg-text animation__rotate" viewBox="0 0 200 200"

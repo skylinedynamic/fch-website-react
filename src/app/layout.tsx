@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       telephone: false,
     },
     alternates: {
-      canonical: '/',
+      canonical: seoConfig.siteUrl,
     },
     openGraph: {
       type: 'website',
