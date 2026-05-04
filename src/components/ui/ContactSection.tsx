@@ -77,9 +77,9 @@ export default function ContactSection({ data }: any) {
                     <span className="triangle triangle2"></span>
                     {contact.subtitle}
                   </h6>
-                  <h2 className="wow fadeInUp" data-wow-delay=".3s">
+                  <h3 className="title wow fadeInUp" data-wow-delay=".3s">
                     let's work together
-                  </h2>
+                  </h3>
                 </div>
                 <p className="contact-text wow fadeInUp" data-wow-delay=".5s">
                   We help startups, growing businesses, and partners nationwide — reach out today to get started.

@@ -164,7 +164,7 @@ export default async function RootLayout({
 
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-6HM2YGCB2B"
+          src="https://www.googletagmanager.com/gtag/js?id=G-JNZ52ZKJ2W"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">

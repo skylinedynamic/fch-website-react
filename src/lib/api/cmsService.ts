@@ -9,15 +9,15 @@ const fetchFromApi = async (endpoint: string, options: RequestInit = {}) => {
   try {
     // Ensure the endpoint starts with a slash
     const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    
+
     // The .env.local already includes /v1, and website.php routes use /v1/website
     // BUT! website.php defines routes relative to the prefix.
     // Let's check the route again: Route::prefix('v1/website')->group(...)
     // So the full URL is BASE_URL (which has /v1) + /website + ...
     // Wait, if BASE_URL is .../api/v1, and we need .../api/v1/website, then endpoint should just be /website/...
-    
+
     const url = `${API_BASE_URL}${path.replace('/v1', '')}`;
-    
+
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -25,7 +25,7 @@ const fetchFromApi = async (endpoint: string, options: RequestInit = {}) => {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      next: { revalidate: 0 } // No cache during testing
+      next: { revalidate: 60 } // Cache for 60 seconds
     });
 
     if (!response.ok) {
@@ -43,18 +43,18 @@ const fetchFromApi = async (endpoint: string, options: RequestInit = {}) => {
 
 const transformPost = (post: any) => {
   if (!post) return null;
-  
+
   const publishedAt = post.published_at ? new Date(post.published_at) : new Date(post.created_at);
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  
+
   return {
     ...post,
     date: publishedAt.getDate().toString(),
     month: months[publishedAt.getMonth()],
     year: publishedAt.getFullYear(),
     author: post.author?.name || 'Admin',
-    image: post.featured_image ? 
-      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`) 
+    image: post.featured_image ?
+      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`)
       : '/images/placeholder.png',
     tags: Array.isArray(post.tag_names) ? post.tag_names : (Array.isArray(post.blog_tag_id) ? post.blog_tag_id : []),
     content: post.content || '',
@@ -69,11 +69,17 @@ const transformPost = (post: any) => {
 
 export const getHomeData = async (): Promise<HomeData> => {
   const latestBlogs = await getBlogPosts({ is_featured: 1 });
+  
+  // Only override if we actually got blogs back from the API
+  const blogPosts = (latestBlogs && latestBlogs.length > 0) 
+    ? latestBlogs.slice(0, 3) 
+    : homeData.blog.posts;
+
   return {
     ...homeData,
     blog: {
       ...homeData.blog,
-      posts: latestBlogs.slice(0, 3) // Use the first 3 dynamic blogs
+      posts: blogPosts
     }
   };
 };
@@ -89,10 +95,10 @@ export const getBlogPosts = async (filters: any = {}) => {
   if (filters.tag) query.append('tag', filters.tag);
   if (filters.search) query.append('search', filters.search);
   if (filters.is_featured) query.append('is_featured', filters.is_featured);
-  
+
   const data = await fetchFromApi(`/website/blogs?${query.toString()}`);
   if (!data) return [];
-  
+
   const posts = data.data || data;
   return Array.isArray(posts) ? posts.map(transformPost) : [];
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSiteSettings } from '@/modules/cms/queries';
 
 const quickLinks = [
@@ -30,17 +31,17 @@ export default function Footer() {
   return (
     <footer className="footer-section-2 fix footer-bg">
       <div className="bg-color">
-        <img src="/images/home-2/footer-bg-color.png" alt="Footer background color gradient" />
+        <Image src="/images/home-2/footer-bg-color.png" alt="Footer background color gradient" width={1000} height={1000} style={{ width: '100%', height: 'auto' }} />
       </div>
       <div className="footer-shape">
-        <img src="/images/home-2/footer-shape.png" alt="Footer decorative background shape" />
+        <Image src="/images/home-2/footer-shape.png" alt="Footer decorative background shape" width={1920} height={500} style={{ width: '100%', height: 'auto' }} />
       </div>
       <div className="auto-container">
         <div className="footer-top-wrapper">
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
-            <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
+            <Image width={191} height={60} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} style={{ width: '191px', height: 'auto' }} />
           </Link>
-        <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
+          <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
             {Array.isArray(settings?.social_links) &&
               settings.social_links
                 .filter((social) => social?.url) // ignore empty rows

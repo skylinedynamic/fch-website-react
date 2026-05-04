@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import { cmsService } from '@/modules/cms/services';
 
 const fallbackSeo = {
-  title: 'Four Corner Funding',
-  description: 'Fast and reliable business funding solutions.',
+  title: 'Four Corner Funding | Business Credit, Financing & Funding Partner',
+  description: 'Four Corner Funding is your trusted business funding partner, providing expert credit building and flexible financing solutions.',
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fourcornerfunding.com',
 };
 

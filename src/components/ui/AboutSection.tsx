@@ -33,7 +33,7 @@ export default function AboutSection({ data }) {
                   {about.subtitle}
                 </h6>
                 <h2 className="wow fadeInUp" data-wow-delay=".2s">
-                    {about.title}
+                  {about.title}
                 </h2>
               </div>
               <p className="about-text wow fadeInUp" data-wow-delay=".4s">

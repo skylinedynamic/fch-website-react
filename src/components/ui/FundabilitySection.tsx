@@ -8,7 +8,7 @@ export default function FundabilitySection({ data }) {
 
   return (
     <section className="why-choose-section-2 parallaxie pb-0 section-padding fix bg-cover"
-      style={{ 
+      style={{
         backgroundImage: `url('${fundability.bgImage}')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -56,7 +56,7 @@ export default function FundabilitySection({ data }) {
                         </ul>
                       </div>
                     </div>
-                    
+
                     {/* Scenarios Tab Section */}
                     <div className="scenarios-tab-section mt-5 wow fadeInUp animated" data-wow-delay=".5s">
                       <h5 className="scenarios-title">{fundability.scenarios.title}</h5>

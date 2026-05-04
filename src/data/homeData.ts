@@ -3,8 +3,8 @@ import { HomeData } from '@/types/cms';
 export const homeData: HomeData = {
 
   hero: {
-    title: "Fast, Flexible Business Funding — Powered by Intelligence",
-    text: "Get matched with top funding options in minutes. No hard credit pull. No hidden fees.",
+    title: "Fast, Flexible Business Funding & Financing — Powered by Intelligence",
+    text: "Get matched with top funding and financing options in minutes. No hard credit pull. No hidden fees.",
     cta: {
       text: "Get Pre-Qualified",
       link: "/pre-qualification",
@@ -76,7 +76,7 @@ export const homeData: HomeData = {
   },
   howItWorks: {
     subtitle: "How It Works",
-    title: "Unlock Capital Without<br/>the Guesswork.",
+    title: "Unlock Capital Without <br/>the Guesswork.",
     steps: [
       {
         number: "01",
@@ -104,7 +104,7 @@ export const homeData: HomeData = {
   },
   fundability: {
     subtitle: "What Is Fundability?",
-    title: "Business Credit & Fundability",
+    title: "Business Credit, Financing & Fundability",
     text: "Starting a business is one of the best times to do it correctly — before mistakes cost months.",
     list: [
       "Documentation readiness",
@@ -134,7 +134,7 @@ export const homeData: HomeData = {
   },
   businessFunding: {
     subtitle: "Funding Outcomes",
-    title: "Business Funding For<br/>Every Business",
+    title: "Business Funding & Financing For<br/>Every Business",
     slides: [
       {
         image: "/images/home-3/working.jpg.jpeg",
