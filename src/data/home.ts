@@ -1,7 +1,6 @@
-import { HomeData } from '@/types/cms';
+import { HomeData } from '@/types/config.types';
 
-export const homeData: HomeData = {
-
+export const homeConfig: HomeData = {
   hero: {
     title: "Fast, Flexible Business Funding — Powered by Intelligence",
     text: "Get matched with top funding options in minutes. No hard credit pull. No hidden fees.",
@@ -330,35 +329,6 @@ export const homeData: HomeData = {
     blog: {
     subtitle: "Our Blog",
     title: "Insights from Latest Blog",
-    posts: [
-      {
-        date: "20",
-        month: "March",
-        author: "Admin",
-        comments: "02 Comments",
-        title: "Financial Errors in Taxes That Can Cost Your Business Thousands",
-        link: "/blog/financial-consequences-tax-errors",
-        image: "/images/home-1/news/news-01.jpg",
-      },
-      {
-        date: "25",
-        month: "March",
-        author: "Admin",
-        comments: "05 Comments",
-        title: "Achieving Work-Life Balance in a Hectic World",
-        link: "/blog/work-life-balance-hectic-world",
-        image: "/images/home-1/news/news-02.jpg",
-      },
-      {
-        date: "30",
-        month: "March",
-        author: "Admin",
-        comments: "01 Comments",
-        title: "Mastering Work-Life Balance While Staying Focused on Business Goals",
-        link: "/blog/mastering-work-life-business-goal",
-        image: "/images/home-1/news/news-03.jpg",
-      },
-    ],
+    posts: [], // This will be filled dynamically
   },
-
 };

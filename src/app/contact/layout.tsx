@@ -5,7 +5,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return getDynamicMetadata('/contact');
 }
 
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 import JsonLd from '@/components/seo/JsonLd';
 
 

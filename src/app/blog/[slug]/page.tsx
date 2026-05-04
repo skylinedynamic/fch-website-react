@@ -1,13 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-  getBlogPostBySlug,
-  getBlogPosts,
-  getBlogCategories,
-  getBlogTags
-} from '@/lib/api/cmsService';
+import { cmsService } from '@/services/cms.service';
 import BlogDetailsClient from './BlogDetailsClient';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
 interface Props {
   params: { slug: string };
@@ -17,7 +12,7 @@ import { getBlogPostMetadata } from '@/lib/metadata';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const post = await cmsService.fetchBlogPostBySlug(slug);
 
   if (!post) {
     return {
@@ -32,7 +27,7 @@ import JsonLd from '@/components/seo/JsonLd';
 
 export default async function BlogDetailsPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const post = await cmsService.fetchBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -63,13 +58,13 @@ export default async function BlogDetailsPage({ params }: Props) {
     },
   };
 
-  const allPosts = await getBlogPosts({ is_featured: 1 });
+  const allPosts = await cmsService.fetchBlogPosts({ per_page: 10 });
   const currentIndex = allPosts.findIndex(item => item.slug === slug);
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < allPosts.length - 1 && currentIndex !== -1 ? allPosts[currentIndex + 1] : null;
 
-  const categories = await getBlogCategories();
-  const tags = await getBlogTags();
+  const categories = await cmsService.fetchBlogCategories();
+  const tags = await cmsService.fetchBlogTags();
 
   return (
     <>

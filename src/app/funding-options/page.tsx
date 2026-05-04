@@ -2,7 +2,7 @@ import Link from 'next/link';
 import FundingFaq from './FundingFaq';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
 import { getDynamicMetadata } from '@/lib/metadata';
 

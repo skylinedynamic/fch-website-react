@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useSiteSettings } from '@/modules/cms/queries';
+import { useSiteSettings } from '@/hooks/useCMS';
+import { formatAddress } from '@/utils/address';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -88,25 +89,19 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white">
-                    {settings?.site_name || "Four Corner Holdings, LLC"} <br />
-                    {settings?.address ? (
-                      settings.address.split('\n').map((line, idx) => (
-                        <span key={idx}>{line}<br /></span>
-                      ))
-                    ) : (
-                      <>3750 Gunn Highway, Suite 306<br /> Tampa, FL. 33618</>
-                    )}
+                  <p className="text-white" style={{ whiteSpace: 'pre-line' }}>
+                    {settings?.site_name || ""} <br />
+                    {formatAddress(settings?.address)}
                   </p>
                   <ul className="contact-list-2 mb-4">
                     <li>
-                      <a href={`tel:${settings?.phone_number || "813-391-3333"}`}><i className="fa-solid fa-phone me-2"></i>
-                        {settings?.phone_number || "813-391-3333"}</a>
+                      <a href={`tel:${settings?.phone_number || ""}`}><i className="fa-solid fa-phone me-2"></i>
+                        {settings?.phone_number || ""}</a>
                     </li>
                     <li>
-                      <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`}><i
+                      <a href={`mailto:${settings?.email || ""}`}><i
                         className="fa-solid fa-envelope me-2"></i>
-                        {settings?.email || "Info@fourcornerfunding.com"}</a>
+                        {settings?.email || ""}</a>
                     </li>
                   </ul>
                   <div className="footer-btn">

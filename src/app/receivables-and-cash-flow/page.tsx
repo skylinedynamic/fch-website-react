@@ -16,7 +16,7 @@ import {
     receivablesChecklistData,
     receivablesFaqData,
     receivablesSidebarData
-} from '@/data/receivablesCashFlowData';
+} from '@/data/receivablesCashFlow';
 
 export default function ReceivablesCashFlowPage() {
     useEffect(() => {

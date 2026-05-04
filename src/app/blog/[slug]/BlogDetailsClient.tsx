@@ -82,12 +82,12 @@ export default function BlogDetailsClient({
                       <span key={i}>{tag}</span>
                     ))}
                   </p>
-                  <div className="blog-details__social-list">
+                  {/* <div className="blog-details__social-list">
                     <span><i className="fa fa-x"></i></span>
                     <span><i className="fab fa-facebook"></i></span>
                     <span><i className="fab fa-pinterest-p"></i></span>
                     <span><i className="fab fa-instagram"></i></span>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Dynamic Nav Links */}
