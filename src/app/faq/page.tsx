@@ -5,13 +5,11 @@ import FaqSection from '@/components/faq/FaqSection';
 import { Metadata } from 'next';
 import { seoConfig } from '@/config/seo';
 
-export const metadata: Metadata = {
-  title: 'FAQ',
-  description: 'Frequently Asked Questions about Business Funding and Credit Building',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/faq`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/faq');
+}
 
 import JsonLd from '@/components/seo/JsonLd';
 

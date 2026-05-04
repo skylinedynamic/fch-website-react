@@ -6,13 +6,11 @@ import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 import { Metadata } from 'next';
 import { seoConfig } from '@/config/seo';
 
-export const metadata: Metadata = {
-  title: 'Credit Builder',
-  description: 'Structured, underwriting-aligned business credit infrastructure built for real funding eligibility.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/credit-builder`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/credit-builder');
+}
 
 import JsonLd from '@/components/seo/JsonLd';
 

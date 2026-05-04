@@ -4,14 +4,11 @@ import FundingFaq from './FundingFaq';
 import { Metadata } from 'next';
 import { seoConfig } from '@/config/seo';
 
-export const metadata: Metadata = {
-  title: 'Funding Options',
-  description:
-    'From SBA loans to fast working capital, our AI-powered platform matches your business with the best-fit programs. No guesswork, no hard credit pulls.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/funding-options`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/funding-options');
+}
 
 const fundingCards = [
   {

@@ -1,15 +1,16 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { blogData } from '@/data/blogData';
+import { getBlogPosts } from '@/lib/api/cmsService';
+import BlogListingClient from './BlogListingClient';
 
-export default function BlogIndexPage() {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.WOW) {
-      new window.WOW().init();
-    }
-  }, []);
+import { Metadata } from 'next';
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/blog');
+}
+
+export default async function BlogIndexPage() {
+  const posts = await getBlogPosts({ is_featured: 1 });
 
   return (
     <main>
@@ -18,12 +19,12 @@ export default function BlogIndexPage() {
         <div className="row g-4 align-items-center">
           <div className="col-xl-7 col-lg-6">
             <div className="hero-content">
-              <ul className="page-breadcrumb wow fadeInUp animated pb-2" data-wow-delay=".3s">
+              <ul className="page-breadcrumb pb-2">
                 <li><Link href="/">Home</Link></li>
                 <li>Blog</li>
               </ul>
-              <h1 className="wow fadeInUp" data-wow-delay=".2s">Latest News & Insights</h1>
-              <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
+              <h1>Latest News & Insights</h1>
+              <div className="hero-button">
                 <Link href="/contact" className="theme-btn btn-style-one">
                   Contact Us
                   <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
@@ -38,12 +39,12 @@ export default function BlogIndexPage() {
       <section className="news-secton section-padding fix">
         <div className="auto-container">
           <div className="row">
-            {blogData.map((post, idx) => (
-              <div key={idx} className="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay={`${(idx * 2) + 3}00ms`}>
+            {posts.map((post, idx) => (
+              <div key={idx} className="col-xl-4 col-lg-4 col-md-6">
                 <div className="news-box-items">
                   <div className="news-image">
-                    <img src={post.image} alt="img" />
-                    <img src={post.image} alt="img" />
+                    <img src={post.image} alt={post.title} />
+                    <img src={post.image} alt={post.title} />
                     <span className="post-box">
                       <span className="date">{post.date}</span>
                       <span className="month">{post.month}</span>
@@ -52,7 +53,6 @@ export default function BlogIndexPage() {
                   <div className="news-content">
                     <ul className="comments-list">
                       <li><i className="lnr-icon-user1"></i> {post.author}</li>
-                      <li><i className="lnr-icon-comment"></i> {post.comments} Comments</li>
                     </ul>
                     <h3>
                       <Link href={`/blog/${post.slug}`}>{post.title}</Link>
@@ -68,6 +68,7 @@ export default function BlogIndexPage() {
           </div>
         </div>
       </section>
+      <BlogListingClient />
     </main>
   );
 }

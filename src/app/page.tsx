@@ -13,6 +13,13 @@ import ContactSection from '@/components/ui/ContactSection';
 import FaqSection from '@/components/ui/FaqSection';
 import BlogSection from '@/components/ui/BlogSection';
 
+import { Metadata } from 'next';
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/');
+}
+
 export default async function Home() {
   const homeData = await getHomeData();
   return (

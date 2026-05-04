@@ -1,19 +1,11 @@
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { getDynamicMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  description: 'How Four Corner Holdings, LLC handles and protects your business and personal data.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/privacy-policy`,
-  },
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/privacy-policy');
+}
 
-export default function PrivacyLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

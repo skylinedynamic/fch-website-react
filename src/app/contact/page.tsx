@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { submitLead } from '@/lib/api/leadsService';
+import { useSiteSettings } from '@/modules/cms/queries';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function ContactPage() {
@@ -12,6 +13,8 @@ export default function ContactPage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [interestOpen, setInterestOpen] = useState(false);
     const interestRef = useRef<HTMLDivElement>(null);
+    const { data: response } = useSiteSettings();
+    const settings = response?.data;
     const { executeRecaptcha } = useGoogleReCaptcha();
 
     useEffect(() => {
@@ -129,7 +132,15 @@ export default function ContactPage() {
                                         <i className="fa-solid fa-location-dot"></i>
                                     </div>
                                     <h4 className="title">Address</h4>
-                                    <p className="text">3750 Gunn Highway, Suite 306 Tampa, FL. 33618</p>
+                                    <p className="text">
+                                        {settings?.address ? (
+                                            settings.address.split('\n').map((line, idx) => (
+                                                <span key={idx}>{line}<br /></span>
+                                            ))
+                                        ) : (
+                                            "3750 Gunn Highway, Suite 306 Tampa, FL. 33618"
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +153,7 @@ export default function ContactPage() {
                                     </div>
                                     <h4 className="title">Phone Number</h4>
                                     <p className="text">
-                                        <a href="tel:813-391-3333" style={{ color: 'inherit' }}>813-391-3333</a>
+                                        <a href={`tel:${settings?.phone_number || "813-391-3333"}`} style={{ color: 'inherit' }}>{settings?.phone_number || "813-391-3333"}</a>
                                     </p>
                                 </div>
                             </div>
@@ -154,9 +165,9 @@ export default function ContactPage() {
                                     <div className="icon">
                                         <i className="fa-solid fa-envelope"></i>
                                     </div>
-                                    <h4 className="title">Email Address</h4>
+                                    <h4 className="title">E-Mail Address</h4>
                                     <p className="text">
-                                        <a href="mailto:Info@fourcornerfunding.com" style={{ color: 'inherit' }}>Info@fourcornerfunding.com</a>
+                                        <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`} style={{ color: 'inherit' }}>{settings?.email || "Info@fourcornerfunding.com"}</a>
                                     </p>
                                 </div>
                             </div>
@@ -175,10 +186,14 @@ export default function ContactPage() {
                                         </p>
                                     </div>
                                     <div className="google-map">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.9026235120837!2d-82.48482817448344!3d28.034468817835467!2m3!1f275.9634941696157!2f44.31251129127868!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88c2c1393912d155%3A0x41d1edef6ef2477b!2s3750%20Gunn%20Hwy%20suite%20306%2C%20Tampa%2C%20FL%2033618%2C%20USA!5e1!3m2!1sen!2sbd!4v1772000051944!5m2!1sen!2sbd"
-                                            width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                        {settings?.map_iframe ? (
+                                            <div dangerouslySetInnerHTML={{ __html: settings.map_iframe }} />
+                                        ) : (
+                                            <iframe
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.9026235120837!2d-82.48482817448344!3d28.034468817835467!2m3!1f275.9634941696157!2f44.31251129127868!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88c2c1393912d155%3A0x41d1edef6ef2477b!2s3750%20Gunn%20Hwy%20suite%20306%2C%20Tampa%2C%20FL%2033618%2C%20USA!5e1!3m2!1sen!2sbd!4v1772000051944!5m2!1sen!2sbd"
+                                                width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                        )}
                                     </div>
                                 </div>
                             </div>

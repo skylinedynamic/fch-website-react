@@ -11,84 +11,110 @@ import type { Metadata } from 'next';
 import React from 'react';
 
 import { seoConfig } from '@/config/seo';
+import { cmsService } from '@/modules/cms/services';
+import QueryProvider from '@/lib/providers/QueryProvider';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(seoConfig.siteUrl),
-  title: {
-    default: seoConfig.defaultTitle,
-    template: seoConfig.titleTemplate,
-  },
-  description: seoConfig.description,
-  keywords: seoConfig.keywords,
-  authors: [{ name: 'Four Corner Holdings, LLC' }],
-  creator: 'Four Corner Holdings, LLC',
-  publisher: 'Four Corner Holdings, LLC',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: seoConfig.siteUrl,
-    siteName: seoConfig.siteName,
-    title: seoConfig.defaultTitle,
-    description: seoConfig.description,
-    images: [
-      {
-        url: seoConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: seoConfig.siteName,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: seoConfig.defaultTitle,
-    description: seoConfig.description,
-    images: [seoConfig.ogImage],
-    creator: seoConfig.twitterHandle,
-  },
-  icons: {
-    icon: '/images/favicon.png',
-    shortcut: '/images/favicon.png',
-    apple: '/images/favicon.png',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const [settingsRes, seoRes] = await Promise.all([
+    cmsService.fetchSiteSettings(),
+    cmsService.fetchSeoSettings('/')
+  ]);
+
+  const settings = settingsRes?.data;
+  const seo = seoRes?.data;
+
+  const siteName = settings?.site_name || seoConfig.siteName;
+  const favicon = settings?.favicon || '/images/favicon.png';
+
+  // Use dynamic SEO from table if available, else fallback to site settings or config
+  const title = seo?.meta_title || siteName;
+  const description = seo?.meta_description || settings?.site_slogan || seoConfig.description;
+  const keywords = seo?.keywords || seoConfig.keywords;
+  const ogImage = seo?.og_image || seoConfig.ogImage;
+
+  return {
+    metadataBase: new URL(seoConfig.siteUrl),
+    title: {
+      default: title,
+      template: `%s | ${siteName}`,
+    },
+    description: description,
+    keywords: keywords,
+    authors: [{ name: siteName }],
+    creator: siteName,
+    publisher: siteName,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: '/',
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: seoConfig.siteUrl,
+      siteName: siteName,
+      title: title,
+      description: description,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: title,
+      description: description,
+      images: [ogImage],
+      creator: seoConfig.twitterHandle,
+    },
+    icons: {
+      icon: favicon,
+      shortcut: favicon,
+      apple: favicon,
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-};
+  };
+}
 
 import JsonLd from '@/components/seo/JsonLd';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const settingsRes = await cmsService.fetchSiteSettings();
+  const settings = settingsRes?.data || null;
+  const siteName = settings?.site_name || seoConfig.siteName;
+  const description = settings?.site_slogan || seoConfig.description;
+  const favicon = settings?.favicon || `${seoConfig.siteUrl}/images/favicon.png`;
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'FinancialService',
-    name: seoConfig.siteName,
+    name: siteName,
     url: seoConfig.siteUrl,
-    logo: `${seoConfig.siteUrl}${seoConfig.logo}`,
-    description: seoConfig.description,
+    logo: favicon,
+    description: description,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '3750 Gunn Highway, Suite 306',
+      streetAddress: settings?.address || '3750 Gunn Highway, Suite 306',
       addressLocality: 'Tampa',
       addressRegion: 'FL',
       postalCode: '33618',
@@ -96,19 +122,17 @@ export default function RootLayout({
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+1-813-391-3333',
+      telephone: settings?.phone_number || '+1-813-391-3333',
       contactType: 'customer service',
-      email: 'Info@fourcornerfunding.com',
+      email: settings?.email || 'Info@fourcornerfunding.com',
     },
-    sameAs: [
-      // Add social media links here if available
-    ],
+    sameAs: settings?.social_links ? Object.values(settings.social_links).filter(Boolean) : [],
   };
 
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: seoConfig.siteName,
+    name: siteName,
     url: seoConfig.siteUrl,
     potentialAction: {
       '@type': 'SearchAction',
@@ -155,13 +179,15 @@ export default function RootLayout({
 
         <Preloader />
         <WowInit />
-        <div className="page-wrapper body-bg">
-          <Header />
-          <ReCaptchaProvider>
-            {children}
-          </ReCaptchaProvider>
-          <Footer />
-        </div>
+        <QueryProvider>
+          <div className="page-wrapper body-bg">
+            <Header />
+            <ReCaptchaProvider>
+              {children}
+            </ReCaptchaProvider>
+            <Footer />
+          </div>
+        </QueryProvider>
 
         {/* ── JS Scripts ─────────────────────────────────────────────────── */}
         {/* jQuery + Bootstrap: synchronous, needed everywhere */}
