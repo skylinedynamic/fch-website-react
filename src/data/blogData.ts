@@ -4,7 +4,5 @@
  */
 
 export const blogData = [];
-
 export const blogCategories = [];
-
 export const blogTags = [];
