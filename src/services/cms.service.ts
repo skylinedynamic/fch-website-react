@@ -4,18 +4,18 @@ import { API_ENDPOINTS } from '@/lib/api/endpoints';
 
 const transformPost = (post: any) => {
   if (!post) return null;
-  
+
   const publishedAt = post.published_at ? new Date(post.published_at) : new Date(post.created_at);
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  
+
   return {
     ...post,
     date: publishedAt.getDate().toString(),
     month: months[publishedAt.getMonth()],
     year: publishedAt.getFullYear(),
     author: post.author?.name || 'Admin',
-    image: post.featured_image ? 
-      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`) 
+    image: post.featured_image ?
+      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'}/${post.featured_image}`)
       : '/images/placeholder.png',
     tags: Array.isArray(post.tag_names) ? post.tag_names : (Array.isArray(post.blog_tag_id) ? post.blog_tag_id : []),
     content: post.content || '',
@@ -33,8 +33,8 @@ export const cmsService = {
     return fetchFromApi(API_ENDPOINTS.WEBSITE.SITE_SETTINGS);
   },
 
-  fetchSeoSettings: async (slug: string) => {
-    return fetchFromApi(API_ENDPOINTS.WEBSITE.SEO_SETTINGS(slug));
+  fetchSeoSettings: async (path: string) => {
+    return fetchFromApi(API_ENDPOINTS.WEBSITE.SEO_SETTINGS(path));
   },
 
   fetchBlogPosts: async (filters: any = {}) => {
@@ -44,10 +44,10 @@ export const cmsService = {
     if (filters.search) query.append('search', filters.search);
     if (filters.is_featured) query.append('is_featured', filters.is_featured);
     if (filters.per_page) query.append('per_page', filters.per_page);
-    
+
     const response = await fetchFromApi(`${API_ENDPOINTS.WEBSITE.BLOGS}?${query.toString()}`);
     if (!response || !response.status) return [];
-    
+
     // Laravel pagination returns the array in response.data.data
     const posts = response.data?.data || response.data || [];
     return Array.isArray(posts) ? posts.map(transformPost) : [];
