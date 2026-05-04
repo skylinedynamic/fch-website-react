@@ -327,7 +327,7 @@ export const homeData: HomeData = {
     ],
     image: "/images/home-3/faq-image.jpg",
   },
-    blog: {
+  blog: {
     subtitle: "Our Blog",
     title: "Insights from Latest Blog",
     posts: [

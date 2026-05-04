@@ -4,7 +4,7 @@ export const seoConfig = {
   defaultTitle: 'Four Corner Funding | Fast, Flexible Business Funding',
   titleTemplate: '%s | Four Corner Funding',
   description:
-    'Four Corner Holdings, LLC is a Florida-based financial services firm empowering entrepreneurs with strategic access to capital, credit-building systems, and customized lending solutions.',
+    'Four Corner Holdings, LLC is a Florida-based firm helping entrepreneurs access capital, build credit, and secure tailored lending solutions for growth.',
   keywords: [
     'business funding',
     'business credit',
@@ -16,7 +16,8 @@ export const seoConfig = {
     'entrepreneur funding',
     'Florida business loans',
   ],
-  ogImage: '/images/home-3/hero/hero-image.png',
+  logo: '/images/black-logo.png',
+  ogImage: '/images/black-logo.png',
   twitterHandle: '@FourCornerFund', // Replace with real handle if available
   themeColor: '#0A1128', // Example dark blue from the theme
 };

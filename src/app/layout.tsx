@@ -84,7 +84,7 @@ export default function RootLayout({
     '@type': 'FinancialService',
     name: seoConfig.siteName,
     url: seoConfig.siteUrl,
-    logo: `${seoConfig.siteUrl}/images/favicon.png`,
+    logo: `${seoConfig.siteUrl}${seoConfig.logo}`,
     description: seoConfig.description,
     address: {
       '@type': 'PostalAddress',
@@ -149,7 +149,7 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-6HM2YGCB2B');
+            gtag('config', 'G-JNZ52ZKJ2W');
           `}
         </Script>
 

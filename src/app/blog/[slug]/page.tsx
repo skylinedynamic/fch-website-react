@@ -82,7 +82,7 @@ export default async function BlogDetailsPage({ params }: Props) {
       name: seoConfig.siteName,
       logo: {
         '@type': 'ImageObject',
-        url: `${seoConfig.siteUrl}/images/favicon.png`,
+        url: `${seoConfig.siteUrl}${seoConfig.logo}`,
       },
     },
     datePublished: `${post.month} ${post.date}, 2024`, // Adjust as needed
