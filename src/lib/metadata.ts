@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { cmsService } from '@/modules/cms/services';
+import { cmsService } from '@/services/cms.service';
 
 const fallbackSeo = {
   title: 'Four Corner Funding | Business Credit, Financing & Funding Partner',

@@ -11,21 +11,20 @@ export interface SiteSettings {
   partner_logo: string;
   favicon: string;
   map_iframe: string;
-  social_links: {
-    facebook?: string;
-    twitter?: string;
-    linkedin?: string;
-    instagram?: string;
-    youtube?: string;
-    pinterest?: string;
-    [key: string]: string | undefined;
-  };
+  agreement_signing_enabled: string | number;
+  social_links: Array<{
+    platform: string;
+    url: string;
+  }>;
+  google_measurement_id?: string;
+  recaptcha_site_key?: string;
+  recaptcha_secret_key?: string;
   created_at: string;
   updated_at: string;
 }
-
 export interface SettingsResponse {
   success: boolean;
   message: string;
   data: SiteSettings | null;
 }
+

@@ -14,7 +14,7 @@ import {
     acqFaqData,
     acqCtaData,
     acqSidebarData
-} from '@/data/businessAcquisitionData';
+} from '@/data/businessAcquisition';
 
 export default function BusinessAcquisitionPage() {
     useEffect(() => {

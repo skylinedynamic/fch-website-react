@@ -15,7 +15,7 @@ import {
     realEstatePositioningData,
     realEstateFaqData,
     realEstateSidebarData
-} from '@/data/realEstateData';
+} from '@/data/realEstate';
 
 export default function RealEstatePage() {
     useEffect(() => {

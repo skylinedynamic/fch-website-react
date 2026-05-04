@@ -10,8 +10,8 @@ import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
 import type { Metadata } from 'next';
 import React from 'react';
 
-import { seoConfig } from '@/config/seo';
-import { cmsService } from '@/modules/cms/services';
+import { seoConfig } from '@/data/seo';
+import { cmsService } from '@/services/cms.service';
 import QueryProvider from '@/lib/providers/QueryProvider';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -159,52 +159,22 @@ export default async function RootLayout({
         <link rel="stylesheet" href="/css/fontawesome.css" />
       </head>
       <body className="body-bg">
-        <JsonLd data={organizationSchema} />
-        <JsonLd data={websiteSchema} />
-
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-JNZ52ZKJ2W"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-JNZ52ZKJ2W');
-          `}
-        </Script>
-
-        <Preloader />
-        <WowInit />
-        <QueryProvider>
-          <div className="page-wrapper body-bg">
-            <Header />
-            <ReCaptchaProvider>
-              {children}
-            </ReCaptchaProvider>
-            <Footer />
-          </div>
-        </QueryProvider>
-
-        {/* ── JS Scripts ─────────────────────────────────────────────────── */}
+        {/* ── JS Scripts (Critical) ───────────────────────────────────────── */}
         {/* jQuery + Bootstrap: synchronous, needed everywhere */}
-        <Script src="/js/jquery.js" strategy="beforeInteractive" />
-        <Script src="/js/popper.min.js" strategy="beforeInteractive" />
-        <Script src="/js/bootstrap.min.js" strategy="beforeInteractive" />
-        <Script src="/js/jquery-ui.js" strategy="beforeInteractive" />
+        <Script src="/js/jquery.js" strategy="afterInteractive" />
+        <Script src="/js/popper.min.js" strategy="afterInteractive" />
+        <Script src="/js/bootstrap.min.js" strategy="afterInteractive" />
+        <Script src="/js/jquery-ui.js" strategy="afterInteractive" />
 
         {/* GSAP core + ALL plugins: must load synchronously in order */}
-        <Script src="/js/gsap.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-trigger.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-smoother.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-to-plugin.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-split-text.js" strategy="beforeInteractive" />
+        <Script src="/js/gsap.js" strategy="afterInteractive" />
+        <Script src="/js/gsap-scroll-trigger.js" strategy="afterInteractive" />
+        <Script src="/js/gsap-scroll-smoother.js" strategy="afterInteractive" />
+        <Script src="/js/gsap-scroll-to-plugin.js" strategy="afterInteractive" />
+        <Script src="/js/gsap-split-text.js" strategy="afterInteractive" />
 
         {/* Register GSAP plugins immediately after they are available */}
-        <Script id="gsap-register" strategy="beforeInteractive" dangerouslySetInnerHTML={{
+        <Script id="gsap-register" strategy="afterInteractive" dangerouslySetInnerHTML={{
           __html: `
           (function () {
             if (typeof gsap !== 'undefined') {
@@ -216,6 +186,41 @@ export default async function RootLayout({
           })();
         `}} />
 
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
+
+        {/* Google Analytics */}
+        {settings?.google_measurement_id && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_measurement_id}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive" dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${settings.google_measurement_id}');
+              `
+            }} />
+          </>
+        )}
+
+        <Preloader />
+        <WowInit />
+        <QueryProvider>
+          <div className="page-wrapper body-bg">
+            <Header />
+            <ReCaptchaProvider siteKey={settings?.recaptcha_site_key}>
+              {children}
+            </ReCaptchaProvider>
+            <Footer />
+          </div>
+        </QueryProvider>
+
+        {/* ── JS Scripts ─────────────────────────────────────────────────── */}
         {/* WOW, Swiper, and other enhancement libs: can defer */}
         <Script src="/js/swiper.min.js" strategy="afterInteractive" />
         <Script src="/js/split-type.min.js" strategy="afterInteractive" />

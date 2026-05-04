@@ -17,7 +17,7 @@ import {
     assetEquipmentChecklistData,
     assetEquipmentFaqData,
     assetEquipmentSidebarData
-} from '@/data/assetEquipmentData';
+} from '@/data/assetEquipment';
 
 export default function AssetEquipmentPage() {
     useEffect(() => {

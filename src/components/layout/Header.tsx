@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSiteSettings } from '@/modules/cms/queries';
+import { useSiteSettings } from '@/hooks/useCMS';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -161,20 +161,30 @@ export default function Header() {
           </ul>
 
           <ul className="social-links">
-            {settings?.social_links?.twitter && <li><a href={settings.social_links.twitter} target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a></li>}
-            {settings?.social_links?.facebook && <li><a href={settings.social_links.facebook} target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a></li>}
-            {settings?.social_links?.linkedin && <li><a href={settings.social_links.linkedin} target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin-in"></i></a></li>}
-            {settings?.social_links?.pinterest && <li><a href={settings.social_links.pinterest} target="_blank" rel="noopener noreferrer"><i className="fab fa-pinterest-p"></i></a></li>}
-            {settings?.social_links?.instagram && <li><a href={settings.social_links.instagram} target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a></li>}
-            {settings?.social_links?.youtube && <li><a href={settings.social_links.youtube} target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube"></i></a></li>}
-            {!settings?.social_links && (
-              <>
-                <li><a href="#"><i className="fab fa-twitter"></i></a></li>
-                <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
-                <li><a href="#"><i className="fab fa-pinterest"></i></a></li>
-                <li><a href="#"><i className="fab fa-instagram"></i></a></li>
-              </>
-            )}
+            {Array.isArray(settings?.social_links) &&
+              settings.social_links
+                .filter((social) => social?.url)
+                .map((social, index) => {
+                  const platform = (social?.platform || '').toString().trim().toLowerCase();
+                  const iconMap: Record<string, string> = {
+                    facebook: 'fa-facebook-f',
+                    linkedin: 'fa-linkedin-in',
+                    youtube: 'fa-youtube',
+                    instagram: 'fa-instagram',
+                    pinterest: 'fa-pinterest-p',
+                    twitter: 'fa-x-twitter',
+                    x: 'fa-x-twitter',
+                  };
+                  const iconClass = iconMap[platform];
+                  if (!iconClass) return null;
+                  return (
+                    <li key={index}>
+                      <a href={social.url} target="_blank" rel="noopener noreferrer">
+                        <i className={`fab ${iconClass}`}></i>
+                      </a>
+                    </li>
+                  );
+                })}
           </ul>
         </nav>
       </div>

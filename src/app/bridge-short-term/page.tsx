@@ -14,7 +14,7 @@ import {
     bridgeChecklistData,
     bridgeFaqData,
     bridgeSidebarData
-} from '@/data/bridgeShortTermData';
+} from '@/data/bridgeShortTerm';
 
 export default function BridgeShortTermPage() {
     useEffect(() => {

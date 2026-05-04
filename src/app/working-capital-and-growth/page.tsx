@@ -15,7 +15,7 @@ import {
     workingCapitalPositioningData,
     workingCapitalFaqData,
     workingCapitalSidebarData
-} from '@/data/workingCapitalData';
+} from '@/data/workingCapital';
 
 export default function WorkingCapitalGrowthPage() {
     useEffect(() => {

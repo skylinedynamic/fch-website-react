@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getBlogPosts } from '@/lib/api/cmsService';
+import { cmsService } from '@/services/cms.service';
 import BlogListingClient from './BlogListingClient';
 
 import { Metadata } from 'next';
@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogIndexPage() {
-  const posts = await getBlogPosts({ is_featured: 1 });
+  const posts = await cmsService.fetchBlogPosts({ is_featured: 1 });
 
   return (
     <main>
