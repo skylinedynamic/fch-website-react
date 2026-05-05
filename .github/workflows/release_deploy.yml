@@ -33,6 +33,10 @@ jobs:
             set -e
             echo "--- Current User: $(whoami) ---"
             echo "--- Starting deployment on server ---"
+            
+            # Fix: Git security check fails when repo is owned by root but run as ubuntu
+            git config --global --add safe.directory /var/www/html/fourcornerfunding
+            
             cd /var/www/html/fourcornerfunding
             
             echo "--- Verifying Git Remote ---"
