@@ -1,4 +1,4 @@
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api/v1').replace(/\/+$/, '');
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'https://fourcornerfunding.com/api/v1').replace(/\/+$/, '');
 
 export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) => {
   try {

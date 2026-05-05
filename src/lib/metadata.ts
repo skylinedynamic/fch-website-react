@@ -4,7 +4,7 @@ import { cmsService } from '@/services/cms.service';
 const fallbackSeo = {
   title: 'Four Corner Funding | Business Credit, Financing & Funding Partner',
   description: 'Four Corner Funding is your trusted business funding partner, providing expert credit building and flexible financing solutions.',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fourcornerfunding.com',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://fourcornerfunding.com',
 };
 
 /**
@@ -69,7 +69,7 @@ export async function getBlogPostMetadata(slug: string, blogData: any): Promise<
   const title = blogData?.meta_title || blogData?.title || siteName;
   const description = blogData?.meta_description || blogData?.summary || site?.site_slogan || fallbackSeo.description;
   const keywords = blogData?.keywords || '';
-  
+
   const imageUrl = blogData?.featured_image || blogData?.image;
   const ogImage = imageUrl ? [{ url: imageUrl }] : undefined;
 
