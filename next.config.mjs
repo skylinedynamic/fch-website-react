@@ -4,13 +4,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'fourcornerfunding.com',
-        pathname: '/storage/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'fourcornerfunding.com',
-        pathname: '/uploads/**',
+        hostname: 'api.fourcornerfunding.com',
+        pathname: '/**',
       },
     ],
   },

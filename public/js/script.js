@@ -272,6 +272,8 @@ var THEMEMASCOT = {};
 				nextEl: ".array-prev",
 				prevEl: ".array-next",
 			},
+			observer: true,
+			observeParents: true,
 
 			breakpoints: {
 				1199: {
@@ -306,6 +308,8 @@ var THEMEMASCOT = {};
 				el: ".dot",
 				clickable: true,
 			},
+			observer: true,
+			observeParents: true,
 
 			breakpoints: {
 				1199: {
@@ -341,6 +345,8 @@ var THEMEMASCOT = {};
 				el: ".dot",
 				clickable: true,
 			},
+			observer: true,
+			observeParents: true,
 			breakpoints: {
 				1399: {
 					slidesPerView: 5,
@@ -389,6 +395,8 @@ var THEMEMASCOT = {};
 				nextEl: ".array-prev",
 				prevEl: ".array-next",
 			},
+			observer: true,
+			observeParents: true,
 			breakpoints: {
 				1199: {
 					slidesPerView: 4,
@@ -441,6 +449,8 @@ var THEMEMASCOT = {};
 				slidesPerView: 5,
 			},
 		},
+		observer: true,
+		observeParents: true,
 	});
 	// Swiper marqee area end here ***
 
@@ -484,6 +494,8 @@ var THEMEMASCOT = {};
 				el: ".dot2",
 				clickable: true,
 			},
+			observer: true,
+			observeParents: true,
 
 			breakpoints: {
 				1199: {
@@ -534,6 +546,8 @@ var THEMEMASCOT = {};
 				el: ".dot2",
 				clickable: true,
 			},
+			observer: true,
+			observeParents: true,
 			breakpoints: {
 				1499: {
 					slidesPerView: 4,
@@ -569,6 +583,8 @@ var THEMEMASCOT = {};
 				nextEl: ".array-prev",
 				prevEl: ".array-next",
 			},
+			observer: true,
+			observeParents: true,
 		});
 	}
 

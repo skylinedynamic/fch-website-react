@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+/* Font @import removed - handled by next/font in layout.tsx */
 
 /* Smooth scrolling for anchor navigation */
 html {
@@ -25,7 +25,7 @@ html {
 }
 
 .signature-text {
-  font-family: 'Great Vibes', cursive;
+  font-family: var(--font-great-vibes), cursive;
   font-size: 24px;
   color: #0b3130;
   display: block;
@@ -35,7 +35,7 @@ html {
 }
 
 .hero-3 .hero-content h1 {
-  font-size: 70px;
+  font-size: 52px;
 }
 
 .btn-style-one {

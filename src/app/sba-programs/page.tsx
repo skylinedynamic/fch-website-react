@@ -68,7 +68,7 @@ export default function SbaProgramsPage() {
                 <div className="auto-container">
                     <div className="row">
                         <div className="col-xl-8 col-lg-7">
-                            
+
                             {/* Intro Card */}
                             <div className="sba-intro-block wow fadeInUp" data-wow-delay=".2s">
                                 <div className="sba-intro-label"><i className={sbaIntroData.icon}></i> {sbaIntroData.label}</div>
@@ -118,7 +118,7 @@ export default function SbaProgramsPage() {
                                     <div className="sba-metric-body">
                                         <h4>{metric.title}</h4>
                                         <p dangerouslySetInnerHTML={{ __html: metric.desc }}></p>
-                                        
+
                                         {metric.hasProgressBar && (
                                             <div className="sba-dscr-bar">
                                                 <div className="sba-dscr-fill">
