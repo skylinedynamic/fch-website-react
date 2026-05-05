@@ -7,6 +7,7 @@ export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) 
     // Ensure we don't duplicate /v1 if it's already in the base URL
     const url = `${API_BASE_URL}${path.replace('/v1', '')}`;
 
+
     const isGetOrHead = !options.method || ['GET', 'HEAD'].includes(options.method.toUpperCase());
 
     const headers: Record<string, string> = {
