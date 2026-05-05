@@ -43,6 +43,12 @@ jobs:
             git fetch --all
             git reset --hard origin/release
             
+            echo "--- Creating Environment File ---"
+            # Creating .env.production with production URLs
+            echo "NEXT_PUBLIC_API_BASE_URL=https://fourcornerfunding.com/api/v1" > .env.production
+            echo "NEXT_PUBLIC_SITE_URL=https://fourcornerfunding.com" >> .env.production
+            echo "NEXT_PUBLIC_STORAGE_URL=https://fourcornerfunding.com/storage" >> .env.production
+            
             echo "--- Checking file update status ---"
             ls -l middleware.ts
             
