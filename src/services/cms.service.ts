@@ -15,7 +15,7 @@ const transformPost = (post: any) => {
     year: publishedAt.getFullYear(),
     author: post.author?.name || 'Admin',
     image: post.featured_image ?
-      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_PUBLIC_STORAGE_URL || 'https://fourcornerfunding.com/storage'}/${post.featured_image}`)
+      (post.featured_image.startsWith('http') ? post.featured_image : `${process.env.NEXT_BACKEND_BASE_URL + '/storage'}/${post.featured_image}`)
       : '/images/placeholder.png',
     tags: Array.isArray(post.tag_names) ? post.tag_names : (Array.isArray(post.blog_tag_id) ? post.blog_tag_id : []),
     content: post.content || '',

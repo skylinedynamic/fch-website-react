@@ -32,7 +32,7 @@ jobs:
           script: |
             set -e
             echo "--- Current User: $(whoami) ---"
-            echo "--- Starting deployment on server ---"
+            echo "--- Starting deployment on server ---"11
             
             # Fix: Git security check fails when repo is owned by root but run as ubuntu
             git config --global --add safe.directory /var/www/html/fourcornerfunding
@@ -49,9 +49,9 @@ jobs:
             
             echo "--- Creating Environment File ---"
             # Creating .env.production with production URLs
-            echo "NEXT_PUBLIC_API_BASE_URL=https://fourcornerfunding.com/api/v1" > .env.production
+            echo "NEXT_PUBLIC_API_BASE_URL=https://api.fourcornerfunding.com/api/v1" > .env.production
             echo "NEXT_PUBLIC_SITE_URL=https://fourcornerfunding.com" >> .env.production
-            echo "NEXT_PUBLIC_STORAGE_URL=https://fourcornerfunding.com/storage" >> .env.production
+            echo "NEXT_BACKEND_BASE_URL=https://api.fourcornerfunding.com" >> .env.production
             
             echo "--- Checking file update status ---"
             ls -l middleware.ts
