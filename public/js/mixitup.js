@@ -322,53 +322,6 @@
 			self._suckMode && (self.animation.enable = false);
 			(self._ff && self._ff <= 4) && (self.animation.enable = false);
 			
-			/* Polyfills
-			---------------------------------------------------------------------- */
-			
-			/**
-			 * window.requestAnimationFrame
-			 */
-			
-			for(var x = 0; x < vendorsRAF.length && !window.requestAnimationFrame; x++){
-				window.requestAnimationFrame = window[vendorsRAF[x]+'RequestAnimationFrame'];
-			}
-
-			/**
-			 * Object.getPrototypeOf
-			 */
-
-			if(typeof Object.getPrototypeOf !== 'function'){
-				if(typeof 'test'.__proto__ === 'object'){
-					Object.getPrototypeOf = function(object){
-						return object.__proto__;
-					};
-				} else {
-					Object.getPrototypeOf = function(object){
-						return object.constructor.prototype;
-					};
-				}
-			}
-
-			/**
-			 * Element.nextElementSibling
-			 */
-			
-			if(self._domNode.nextElementSibling === undf){
-				Object.defineProperty(Element.prototype, 'nextElementSibling',{
-					get: function(){
-						var el = this.nextSibling;
-						
-						while(el){
-							if(el.nodeType ===1){
-								return el;
-							}
-							el = el.nextSibling;
-						}
-						return null;
-					}
-				});
-			}
-			
 			self._execAction('_platformDetect', 1);
 		},
 		

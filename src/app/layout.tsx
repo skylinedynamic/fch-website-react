@@ -13,6 +13,28 @@ import React from 'react';
 import { seoConfig } from '@/config/seo';
 import { cmsService } from '@/modules/cms/services';
 import QueryProvider from '@/lib/providers/QueryProvider';
+import { Poppins, DM_Sans, Great_Vibes } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--body-font-family',
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'],
+  variable: '--heading-font-family',
+  display: 'swap',
+});
+
+const greatVibes = Great_Vibes({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-great-vibes',
+  display: 'swap',
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settingsRes, seoRes] = await Promise.all([
@@ -145,18 +167,49 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${poppins.variable} ${dmSans.variable} ${greatVibes.variable}`}>
       <head>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* Original CSS stylesheets */}
+        
+        {/* Preload Critical Assets */}
+        <link rel="preload" href="/images/home-3/hero/hero-bg.png" as="image" />
+        
+        {/* Critical CSS - Load Immediately */}
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/css/swiper.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/responsive.css" />
+        
+        {/* Non-Critical CSS - Load Asynchronously */}
+        <link rel="stylesheet" href="/css/animate.css" media="print" />
+        {/* Standard way for Next.js to handle async CSS without breaking hydration */}
+        <link rel="preload" href="/css/custom.css" as="style" />
         <link rel="stylesheet" href="/css/custom.css" />
-        <link rel="stylesheet" href="/css/flaticon.css" />
-        <link rel="stylesheet" href="/css/fontawesome.css" />
+        
+        <link rel="stylesheet" href="/css/fontawesome.css" media="print" />
+        <link rel="stylesheet" href="/css/fontawesome-free.css" media="print" />
+        <link rel="stylesheet" href="/css/flaticon.css" media="print" />
+        <link rel="stylesheet" href="/css/flaticon-finance.css" media="print" />
+        <link rel="stylesheet" href="/css/flaticon-set-business.css" media="print" />
+        <link rel="stylesheet" href="/css/swiper.min.css" media="print" />
+        <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="print" />
+        <link rel="stylesheet" href="/css/nice-select.css" media="print" />
+        <link rel="stylesheet" href="/css/jquery-ui.css" media="print" />
+        <link rel="stylesheet" href="/css/linear.css" media="print" />
+        <link rel="stylesheet" href="/css/tm-bs-mp.css" media="print" />
+        <link rel="stylesheet" href="/css/tm-utility-classes.css" media="print" />
+
+        {/* Script to activate async CSS */}
+        <Script id="async-css-loader" strategy="afterInteractive">
+          {`
+            (function() {
+              var links = document.querySelectorAll('link[media="print"]');
+              for (var i = 0; i < links.length; i++) {
+                links[i].media = 'all';
+              }
+            })();
+          `}
+        </Script>
       </head>
       <body className="body-bg">
         <JsonLd data={organizationSchema} />
