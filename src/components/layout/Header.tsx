@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSiteSettings } from '@/hooks/useCMS';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -153,9 +154,11 @@ export default function Header() {
             </li>
             <li>
               <div className="contact-info-box">
-                <span className="icon lnr-icon-envelope1"></span>
-                <span className="title">Send Email</span>
-                <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`}>{settings?.email || "Info@fourcornerfunding.com"}</a>
+                <EmailObfuscator
+                  email={settings?.email || "Info@fourcornerfunding.com"}
+                  showIcon={true}
+                  className=""
+                />
               </div>
             </li>
           </ul>

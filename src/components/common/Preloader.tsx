@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 
 // Minimum time (ms) the preloader is visible
-const MIN_DISPLAY_MS = 2500;
+const MIN_DISPLAY_MS = 800;
 
 export default function Preloader() {
   const preloaderRef = useRef<HTMLDivElement>(null);
@@ -11,40 +11,26 @@ export default function Preloader() {
     const el = preloaderRef.current;
     if (!el) return;
 
-    // Track when this component matched the route so we can enforce its respective min display time
     const mountTime = Date.now();
-
-    // Mirrors the original jQuery logic:
-    //   $(window).on('load', function () {
-    //     $(".preloader").addClass('loaded');
-    //     $(".preloader").delay(600).fadeOut();
-    //   });
-    //
-    // But also enforces a MINIMUM display time so the letters animation
-    // has room to play even on fast connections where window.load fires
-    // before React finishes hydrating.
 
     function startExitAnimation() {
       if (!el) return;
 
       // Step 1: Add 'loaded' — triggers CSS door-open + spinner/letters fade
-      //   .preloader.loaded .loader-section .bg  → width: 0  (0.3s delay, 0.7s duration)
-      //   .preloader.loaded .animation-preloader → opacity: 0 (0.3s)
       el.classList.add('loaded');
 
       // Dispatch immediately so WOW animations can start gracefully AS the doors open
       window.dispatchEvent(new Event('preloader-done'));
 
-      // Step 2: After 600ms, add 'fadeout' — mirrors jQuery .delay(600).fadeOut()
-      //   .preloader.fadeout → opacity: 0, transition: 0.4s
+      // Step 2: After 300ms (faster than 600ms), add 'fadeout'
       const fadeTimer = setTimeout(() => {
         el.classList.add('fadeout');
-      }, 600);
+      }, 300);
 
-      // Step 3: Hide from DOM after all animations done (600ms delay + 400ms fade = 1000ms)
+      // Step 3: Hide from DOM after all animations done (300ms delay + 400ms fade = 700ms)
       const hideTimer = setTimeout(() => {
         el.style.display = 'none';
-      }, 1100);
+      }, 700);
 
       return () => {
         clearTimeout(fadeTimer);
@@ -53,11 +39,9 @@ export default function Preloader() {
     }
 
     function onWindowLoad() {
-      // How long has the preloader been visible?
       const elapsed = Date.now() - mountTime;
       const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
 
-      // Wait until minDisplayTime has passed, then begin exit animation
       const minTimer = setTimeout(() => {
         startExitAnimation();
       }, remaining);
@@ -65,21 +49,32 @@ export default function Preloader() {
       return () => clearTimeout(minTimer);
     }
 
+    // Safety timeout: If everything takes too long, force the preloader to close after 5s
+    const safetyTimer = setTimeout(() => {
+      startExitAnimation();
+    }, 5000);
+
     let cleanup: (() => void) | undefined;
 
-    if (document.readyState === 'complete') {
-      // window.load already fired — enforce minimum time from mount
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      // DOM is already ready — enforce minimum time from mount
       cleanup = onWindowLoad() ?? undefined;
     } else {
-      // Wait for real window.load, then enforce minimum time
+      // Wait for DOM to be interactive (faster than window.load), then enforce minimum time
       const handler = () => {
         cleanup = onWindowLoad() ?? undefined;
       };
-      window.addEventListener('load', handler, { once: true });
-      return () => window.removeEventListener('load', handler);
+      window.addEventListener('DOMContentLoaded', handler, { once: true });
+      cleanup = () => {
+        window.removeEventListener('DOMContentLoaded', handler);
+        clearTimeout(safetyTimer);
+      };
     }
 
-    return () => cleanup?.();
+    return () => {
+      cleanup?.();
+      clearTimeout(safetyTimer);
+    };
   }, []);
 
   return (

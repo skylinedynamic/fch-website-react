@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useSiteSettings } from '@/hooks/useCMS';
 import { formatAddress } from '@/utils/address';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -41,7 +42,7 @@ export default function Footer() {
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
             <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
-        <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
+          <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
             {Array.isArray(settings?.social_links) &&
               settings.social_links
                 .filter((social) => social?.url) // ignore empty rows
@@ -99,9 +100,11 @@ export default function Footer() {
                         {settings?.phone_number || ""}</a>
                     </li>
                     <li>
-                      <a href={`mailto:${settings?.email || ""}`}><i
-                        className="fa-solid fa-envelope me-2"></i>
-                        {settings?.email || ""}</a>
+                      <EmailObfuscator
+                        email={settings?.email || "Info@fourcornerfunding.com"}
+                        showIcon={true}
+                        className="text-white"
+                      />
                     </li>
                   </ul>
                   <div className="footer-btn">

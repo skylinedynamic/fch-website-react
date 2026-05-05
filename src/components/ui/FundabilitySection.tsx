@@ -16,14 +16,24 @@ export default function FundabilitySection({ data }) {
         backgroundPosition: 'center'
       }}>
       <div className="circle-shape">
-        <img src={fundability.shape} alt="Circular decorative background for fundability section" />
+        <img 
+          src={fundability.shape} 
+          alt="Circular decorative background for fundability section" 
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div className="auto-container">
         <div className="why-choose-us-wrapper-2">
           <div className="row justify-content-between">
             <div className="col-xxl-3 col-xl-5">
               <div className="choose-us-image-2 wow fadeInUp animated" data-wow-delay=".3s">
-                <img src={fundability.image} alt="Dashboard visualizing business fundability scores" />
+                <img 
+                  src={fundability.image} 
+                  alt="Dashboard visualizing business fundability scores" 
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             </div>
             <div className="col-xxl-8 col-xl-7">
@@ -38,7 +48,6 @@ export default function FundabilitySection({ data }) {
                     {fundability.title}
                   </h2>
                 </div>
-
                 <div className="row">
                   <div className="tab-content light">
                     <div className="tab-pane fade show active">
@@ -49,7 +58,12 @@ export default function FundabilitySection({ data }) {
                         <ul className="why-list wow fadeInUp animated" data-wow-delay=".5s">
                           {fundability.list.map((item, index) => (
                             <li key={index}>
-                              <img src="/images/home-3/list-icon.png" alt="Checkmark list icon" />
+                              <img 
+                                src="/images/home-3/list-icon.png" 
+                                alt="Checkmark list icon" 
+                                loading="lazy"
+                                decoding="async"
+                              />
                               {item}
                             </li>
                           ))}
