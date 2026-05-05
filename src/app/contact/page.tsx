@@ -125,20 +125,24 @@ export default function ContactPage() {
                 <div className="auto-container">
                     <div className="row g-5">
                         {/* Address Block */}
-                        <div className="col-md-6 col-lg-4 wow fadeInLeft" data-wow-delay="0ms">
+                        <div className="col-md-6 col-lg-4 wow fadeInLeft" data-wow-delay="0ms" itemScope itemType="http://schema.org/FinancialService">
+                            <meta itemProp="name" content={settings?.site_name || "Four Corner Funding"} />
                             <div className="contact-details-block dark-card">
                                 <div className="inner-box">
                                     <div className="icon">
                                         <i className="fa-solid fa-location-dot"></i>
                                     </div>
                                     <h4 className="title">Address</h4>
-                                    <p className="text">
+                                    <p className="text" itemProp="address" itemScope itemType="http://schema.org/PostalAddress">
                                         {settings?.address ? (
                                             settings.address.split('\n').map((line, idx) => (
                                                 <span key={idx}>{line}<br /></span>
                                             ))
                                         ) : (
-                                            "3750 Gunn Highway, Suite 306 Tampa, FL. 33618"
+                                            <>
+                                                <span itemProp="streetAddress">3750 Gunn Highway, Suite 306</span><br />
+                                                <span itemProp="addressLocality">Tampa</span>, <span itemProp="addressRegion">FL</span>. <span itemProp="postalCode">33618</span>
+                                            </>
                                         )}
                                     </p>
                                 </div>
@@ -153,7 +157,7 @@ export default function ContactPage() {
                                     </div>
                                     <h4 className="title">Phone Number</h4>
                                     <p className="text">
-                                        <a href={`tel:${settings?.phone_number || "813-391-3333"}`} style={{ color: 'inherit' }}>{settings?.phone_number || "813-391-3333"}</a>
+                                        <a href={`tel:${settings?.phone_number || "813-391-3333"}`} style={{ color: 'inherit' }} itemProp="telephone">{settings?.phone_number || "813-391-3333"}</a>
                                     </p>
                                 </div>
                             </div>
@@ -167,7 +171,7 @@ export default function ContactPage() {
                                     </div>
                                     <h4 className="title">E-Mail Address</h4>
                                     <p className="text">
-                                        <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`} style={{ color: 'inherit' }}>{settings?.email || "Info@fourcornerfunding.com"}</a>
+                                        <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`} style={{ color: 'inherit' }} itemProp="email">{settings?.email || "Info@fourcornerfunding.com"}</a>
                                     </p>
                                 </div>
                             </div>
@@ -275,6 +279,9 @@ export default function ContactPage() {
                                         <button type="submit" className="theme-btn btn-style-one" disabled={isSubmitting}>
                                             {isSubmitting ? 'Sending...' : 'Submit Now'}
                                         </button>
+                                        <div className="recaptcha-disclosure mt-3">
+                                            This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.
+                                        </div>
                                     </form>
                                 </div>
                             </div>

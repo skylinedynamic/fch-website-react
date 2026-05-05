@@ -153,7 +153,7 @@ export default function DisclosurePage() {
                                 <div className="final-notice mt-5 pt-4 border-top">
                                     <p><strong>FINAL NOTICE</strong></p>
                                     <p>Four Corner Funding™ is a product of Four Corner Holdings, LLC.<br />
-                                    All rights reserved.</p>
+                                        All rights reserved.</p>
                                 </div>
                             </div>
                         </div>

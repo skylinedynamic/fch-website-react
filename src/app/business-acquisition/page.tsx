@@ -67,7 +67,7 @@ export default function BusinessAcquisitionPage() {
                 <div className="auto-container">
                     <div className="row">
                         <div className="col-xl-8 col-lg-7">
-                            
+
                             {/* Intro Card */}
                             <div className="sba-intro-block wow fadeInUp" data-wow-delay=".2s">
                                 <div className="sba-intro-label"><i className={acqIntroData.icon}></i> {acqIntroData.label}</div>
@@ -94,7 +94,7 @@ export default function BusinessAcquisitionPage() {
                                     <div className="sba-metric-body">
                                         <h4>{pillar.title}</h4>
                                         <p dangerouslySetInnerHTML={{ __html: pillar.desc }}></p>
-                                        
+
                                         {pillar.progressLabel && (
                                             <div className="sba-dscr-bar">
                                                 <div className="sba-dscr-fill">

@@ -51,9 +51,9 @@ const PreQualificationPage = () => {
 
     const countryVal = formData['country_code'] || '+1';
     const selectedCountryKey = countryCodeToKey[countryVal] || 'USA';
-    
+
     const fetchedStates = getStateNames(locationData, selectedCountryKey);
-    const stateOptions = locationData 
+    const stateOptions = locationData
         ? ['Select State', ...fetchedStates]
         : ['Loading States...'];
 
@@ -77,10 +77,10 @@ const PreQualificationPage = () => {
 
     const handleSelectChange = (name: string, value: string) => {
         setFormData(prev => ({ ...prev, [name]: value }));
-        setErrors(prev => { 
-            const n = { ...prev }; 
-            delete n[name]; 
-            return n; 
+        setErrors(prev => {
+            const n = { ...prev };
+            delete n[name];
+            return n;
         });
     };
 
@@ -145,7 +145,7 @@ const PreQualificationPage = () => {
         });
 
         setErrors(newErrors);
-        
+
         if (!isValid) {
             setShowErrors(true);
             const firstError = Object.keys(newErrors)[0];
@@ -175,7 +175,7 @@ const PreQualificationPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         setSubmitError(null);
         setSubmitSuccess(false);
 
@@ -289,7 +289,7 @@ const PreQualificationPage = () => {
 
                         <form onSubmit={currentStep === totalSteps ? handleSubmit : handleNext} className="prequal-form" noValidate>
                             {currentStep === 1 && (
-                                <PersonalInformation 
+                                <PersonalInformation
                                     formData={formData}
                                     handleInputChange={handleInputChange}
                                     handleSelectChange={handleSelectChange}
@@ -302,7 +302,7 @@ const PreQualificationPage = () => {
                                 />
                             )}
                             {currentStep === 2 && (
-                                <BusinessDetails 
+                                <BusinessDetails
                                     formData={formData}
                                     handleInputChange={handleInputChange}
                                     handleSelectChange={handleSelectChange}
@@ -311,7 +311,7 @@ const PreQualificationPage = () => {
                                 />
                             )}
                             {currentStep === 3 && (
-                                <FundingRequirements 
+                                <FundingRequirements
                                     formData={formData}
                                     handleInputChange={handleInputChange}
                                     handleSelectChange={handleSelectChange}
