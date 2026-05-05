@@ -57,8 +57,12 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
  */
 export async function getBlogPostMetadata(slug: string, blogData: any): Promise<Metadata> {
   const path = `/blog/${slug}`;
-  const siteRes = await cmsService.fetchSiteSettings();
+  const [seoRes, siteRes] = await Promise.all([
+    cmsService.fetchSeoSettings(path),
+    cmsService.fetchSiteSettings()
+  ]);
 
+  const seo = seoRes?.data;
   const site = siteRes?.data;
   const siteName = site?.site_name || fallbackSeo.title;
 
