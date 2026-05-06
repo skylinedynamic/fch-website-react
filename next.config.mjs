@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'api.fourcornerfunding.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.skylinedynamic.dev',
+        pathname: '/**',
+      },
     ],
   },
 };
