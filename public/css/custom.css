@@ -5951,3 +5951,8 @@ select.prequal-country-code option {
   margin-left: auto;
   margin-right: auto;
 }
+
+.custom-address {
+  line-height: 26px;
+  max-width: 350px;
+}

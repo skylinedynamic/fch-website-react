@@ -41,7 +41,7 @@ export default function Footer() {
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
             <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
-        <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
+          <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
             {Array.isArray(settings?.social_links) &&
               settings.social_links
                 .filter((social) => social?.url) // ignore empty rows
@@ -89,7 +89,7 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white" style={{ whiteSpace: 'pre-line' }}>
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
                     {settings?.site_name || ""} <br />
                     {formatAddress(settings?.address)}
                   </p>
