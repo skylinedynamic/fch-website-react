@@ -36,21 +36,11 @@ License: copyright commercial
 29. Clients Section
 30. Main Footer
 **********************************************/
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap");
-@import url("animate.css");
-@import url("swiper.min.css");
-@import url("jquery.fancybox.min.css");
-@import url("nice-select.css");
-@import url("jquery-ui.css");
-@import url("linear.css");
-@import url("fontawesome-free.css");
-@import url("fontawesome.css");
-@import url("flaticon.css");
-@import url("flaticon-finance.css");
-@import url("flaticon-set-business.css");
-@import url("tm-bs-mp.css");
-@import url("tm-utility-classes.css");
+/* 
+ * Render-blocking @imports removed for performance. 
+ * Fonts are now handled via next/font. 
+ * CSS dependencies are loaded in layout.tsx.
+ */
 
 :root {
   --theme-color-white: #ffffff;
@@ -88,8 +78,9 @@ License: copyright commercial
   --headings-color: #0B3130;
   --link-color: #0B3130;
   --link-hover-color: #C8F169;
-  --body-font-family: "Poppins", sans-serif;
-  --heading-font-family: "DM Sans", sans-serif;
+  /* Font families are now handled by next/font in layout.tsx */
+  /* --body-font-family: "Poppins", sans-serif; */
+  /* --heading-font-family: "DM Sans", sans-serif; */
   --style-font: "Manrope", sans-serif;
   --body-font-size: 16px;
   --body-line-height: 1.9;
@@ -24078,7 +24069,7 @@ Sidebar
 
 .footer-widget-wrapper .footer-widget-items .footer-content p {
   color: #B4B4B4;
-  max-width: 270px;
+  max-width: 300px;
   text-transform: capitalize;
 }
 

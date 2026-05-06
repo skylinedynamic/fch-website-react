@@ -11,7 +11,7 @@ export default function HeroSection({ data }: { data: HomeData }) {
       <div className="row g-4 align-items-center">
         <div className="col-xl-7 col-lg-6">
           <div className="hero-content">
-            <h1 className="wow fadeInUp" data-wow-delay=".2s">
+            <h1>
               {hero.title}
             </h1>
             <div className="text-item wow fadeInUp" data-wow-delay=".4s">

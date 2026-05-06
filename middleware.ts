@@ -2,35 +2,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const hostname = request.headers.get('host');
-  const url = request.nextUrl.clone();
-
-  // 1. Skip middleware for local development
-  if (!hostname || hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
-    return NextResponse.next();
-  }
-
-  // 2. Force HTTPS and Handle WWW to Non-WWW redirect (Canonicalization)
-  const isWww = hostname.startsWith('www.');
-  const isHttp = request.headers.get('x-forwarded-proto') === 'http';
-
-  if (isWww || isHttp) {
-    const newHostname = hostname.replace(/^www\./, '');
-    const protocol = 'https';
-    const newUrl = new URL(request.nextUrl.pathname + request.nextUrl.search, `${protocol}://${newHostname}`);
-    
-    const response = NextResponse.redirect(newUrl, 301);
-    
-    // Add HSTS (Strict-Transport-Security)
-    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    
-    return response;
-  }
-
-  // 3. Add HSTS to all other successful responses
+  // On AWS, Nginx handles SSL termination and HTTP→HTTPS redirects.
+  // Next.js middleware should NOT redirect here — doing so creates an infinite
+  // redirect loop because Nginx always forwards requests to Next.js over HTTP internally,
+  // meaning x-forwarded-proto will always appear as 'http' to this middleware.
+  //
+  // Simply pass the request through and attach security headers.
   const response = NextResponse.next();
+
   response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+
   return response;
 }
 

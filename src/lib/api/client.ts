@@ -1,4 +1,4 @@
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api/v1').replace(/\/+$/, '');
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
 
 export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) => {
   try {
@@ -6,6 +6,7 @@ export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) 
 
     // Ensure we don't duplicate /v1 if it's already in the base URL
     const url = `${API_BASE_URL}${path.replace('/v1', '')}`;
+
 
     const isGetOrHead = !options.method || ['GET', 'HEAD'].includes(options.method.toUpperCase());
 

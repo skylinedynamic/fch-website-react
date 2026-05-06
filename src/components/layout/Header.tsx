@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSiteSettings } from '@/hooks/useCMS';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
@@ -88,11 +89,14 @@ export default function Header() {
             <div className="logo-box">
               <div className="logo">
                 <Link href="/">
-                  <img
+                  <Image
                     src={settings?.header_logo || "/images/black-logo.png"}
                     alt={`${settings?.site_name || "Four Corner Funding"} logo - Black`}
                     title={settings?.site_name || "Four Corner Funding"}
+                    width={250}
+                    height={76}
                     style={{ maxHeight: '76px', width: 'auto' }}
+                    priority
                   />
                 </Link>
               </div>
@@ -125,7 +129,13 @@ export default function Header() {
           <div className="upper-box">
             <div className="nav-logo">
               <Link href="/">
-                <img src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} logo - White`} style={{ maxHeight: '54px', width: 'auto' }} />
+                <Image
+                  src={settings?.footer_logo || "/images/logo-white.png"}
+                  alt={`${settings?.site_name || "Four Corner Funding"} logo - White`}
+                  width={180}
+                  height={54}
+                  style={{ maxHeight: '54px', width: 'auto' }}
+                />
               </Link>
             </div>
             <div className="close-btn" onClick={closeMenu}><i className="icon fa fa-times"></i></div>
@@ -198,9 +208,11 @@ export default function Header() {
           <div className="inner-container">
             <div className="logo" style={{ width: '176px' }}>
               <Link href="/">
-                <img
+                <Image
                   src={settings?.header_logo || "/images/black-logo.png"}
                   alt={`${settings?.site_name || "Four Corner Funding"} logo`}
+                  width={250}
+                  height={76}
                   style={{ maxHeight: '76px', width: 'auto' }}
                 />
               </Link>
