@@ -90,7 +90,7 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white" style={{ whiteSpace: 'pre-line' }}>
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
                     {settings?.site_name || ""} <br />
                     {formatAddress(settings?.address)}
                   </p>

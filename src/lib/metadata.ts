@@ -57,20 +57,25 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
  */
 export async function getBlogPostMetadata(slug: string, blogData: any): Promise<Metadata> {
   const path = `/blog/${slug}`;
-  const siteRes = await cmsService.fetchSiteSettings();
+  const [seoRes, siteRes] = await Promise.all([
+    cmsService.fetchSeoSettings(path),
+    cmsService.fetchSiteSettings()
+  ]);
 
+  const seo = seoRes?.data;
   const site = siteRes?.data;
   const siteName = site?.site_name || fallbackSeo.title;
 
   // Priority fallback logic:
-  // 1. Blog's native meta_title / meta_description / keywords
-  // 2. Blog's title / summary
-  // 3. Global site default
-  const title = blogData?.meta_title || blogData?.title || siteName;
-  const description = blogData?.meta_description || blogData?.summary || site?.site_slogan || fallbackSeo.description;
-  const keywords = blogData?.keywords || '';
+  // 1. Specific SEO Settings for this path (from seo_settings table)
+  // 2. Blog's native meta fields
+  // 3. Blog's content fields (title/summary)
+  // 4. Global site default
+  const title = seo?.meta_title || blogData?.meta_title || blogData?.title || siteName;
+  const description = seo?.meta_description || blogData?.meta_description || blogData?.summary || site?.site_slogan || fallbackSeo.description;
+  const keywords = seo?.keywords || blogData?.keywords || '';
   
-  const imageUrl = blogData?.featured_image || blogData?.image;
+  const imageUrl = seo?.og_image || blogData?.featured_image || blogData?.image;
   const ogImage = imageUrl ? [{ url: imageUrl }] : undefined;
 
   return {
