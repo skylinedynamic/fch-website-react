@@ -171,28 +171,27 @@ export default async function RootLayout({
       <head>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
+
         {/* Preload Critical Assets */}
         <link rel="preload" href="/images/home-3/hero/hero-bg.png" as="image" />
-        
+
         {/* Critical CSS - Load Immediately */}
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/responsive.css" />
-        
+
         {/* Non-Critical CSS - Load Asynchronously */}
         <link rel="stylesheet" href="/css/animate.css" media="print" />
         {/* Standard way for Next.js to handle async CSS without breaking hydration */}
         <link rel="preload" href="/css/custom.css" as="style" />
         <link rel="stylesheet" href="/css/custom.css" />
-        
+
         <link rel="stylesheet" href="/css/fontawesome.css" media="print" />
         <link rel="stylesheet" href="/css/fontawesome-free.css" media="print" />
         <link rel="stylesheet" href="/css/flaticon.css" media="print" />
         <link rel="stylesheet" href="/css/flaticon-finance.css" media="print" />
         <link rel="stylesheet" href="/css/flaticon-set-business.css" media="print" />
         <link rel="stylesheet" href="/css/swiper.min.css" media="print" />
-        <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="print" />
         <link rel="stylesheet" href="/css/nice-select.css" media="print" />
         <link rel="stylesheet" href="/css/jquery-ui.css" media="print" />
         <link rel="stylesheet" href="/css/linear.css" media="print" />
@@ -252,9 +251,6 @@ export default async function RootLayout({
         {/* GSAP core + ALL plugins: must load synchronously in order */}
         <Script src="/js/gsap.js" strategy="beforeInteractive" />
         <Script src="/js/gsap-scroll-trigger.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-smoother.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-to-plugin.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-split-text.js" strategy="beforeInteractive" />
 
         {/* Register GSAP plugins immediately after they are available */}
         <Script id="gsap-register" strategy="beforeInteractive" dangerouslySetInnerHTML={{
@@ -262,20 +258,14 @@ export default async function RootLayout({
           (function () {
             if (typeof gsap !== 'undefined') {
               if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-              if (typeof ScrollSmoother !== 'undefined') gsap.registerPlugin(ScrollSmoother);
-              if (typeof ScrollToPlugin !== 'undefined') gsap.registerPlugin(ScrollToPlugin);
-              if (typeof SplitText !== 'undefined') gsap.registerPlugin(SplitText);
             }
           })();
         `}} />
 
         {/* WOW, Swiper, and other enhancement libs: can defer */}
         <Script src="/js/swiper.min.js" strategy="afterInteractive" />
-        <Script src="/js/split-type.min.js" strategy="afterInteractive" />
         <Script src="/js/parallaxie.js" strategy="afterInteractive" />
         <Script src="/js/wow.js" strategy="afterInteractive" />
-        <Script src="/js/jquery.fancybox.js" strategy="afterInteractive" />
-        <Script src="/js/bxslider.js" strategy="afterInteractive" />
         <Script src="/js/nice-select.min.js" strategy="afterInteractive" />
         <Script src="/js/knob.js" strategy="afterInteractive" />
         <Script src="/js/appear.js" strategy="afterInteractive" />
