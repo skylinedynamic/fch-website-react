@@ -1,8 +1,8 @@
-import { getBlogPosts } from '@/lib/api/cmsService';
+import { cmsService } from '@/services/cms.service';
 
 export default async function sitemap() {
   const baseUrl = 'https://fourcornerfunding.com';
-  
+
   const staticRoutes = [
     '',
     '/funding-options',
@@ -22,7 +22,7 @@ export default async function sitemap() {
   ];
 
   // Fetch dynamic blog posts from the API
-  const allPosts = await getBlogPosts();
+  const allPosts = await cmsService.fetchBlogPosts();
 
   const routes = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,

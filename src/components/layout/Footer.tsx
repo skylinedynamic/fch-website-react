@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useSiteSettings } from '@/modules/cms/queries';
+import { useSiteSettings } from '@/hooks/useCMS';
+import { formatAddress } from '@/utils/address';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 const quickLinks = [
@@ -32,15 +32,15 @@ export default function Footer() {
   return (
     <footer className="footer-section-2 fix footer-bg">
       <div className="bg-color">
-        <Image src="/images/home-2/footer-bg-color.png" alt="Footer background color gradient" width={1000} height={1000} style={{ width: '100%', height: 'auto' }} />
+        <img src="/images/home-2/footer-bg-color.png" alt="Footer background color gradient" />
       </div>
       <div className="footer-shape">
-        <Image src="/images/home-2/footer-shape.png" alt="Footer decorative background shape" width={1920} height={500} style={{ width: '100%', height: 'auto' }} />
+        <img src="/images/home-2/footer-shape.png" alt="Footer decorative background shape" />
       </div>
       <div className="auto-container">
         <div className="footer-top-wrapper">
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
-            <Image width={191} height={60} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} style={{ width: '191px', height: 'auto' }} />
+            <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
           <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
             {Array.isArray(settings?.social_links) &&
@@ -90,20 +90,14 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white">
-                    {settings?.site_name || "Four Corner Holdings, LLC"} <br />
-                    {settings?.address ? (
-                      settings.address.split('\n').map((line, idx) => (
-                        <span key={idx}>{line}<br /></span>
-                      ))
-                    ) : (
-                      <>3750 Gunn Highway, Suite 306<br /> Tampa, FL. 33618</>
-                    )}
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
+                    {settings?.site_name || ""} <br />
+                    {formatAddress(settings?.address)}
                   </p>
                   <ul className="contact-list-2 mb-4">
                     <li>
-                      <a href={`tel:${settings?.phone_number || "813-391-3333"}`}><i className="fa-solid fa-phone me-2"></i>
-                        {settings?.phone_number || "813-391-3333"}</a>
+                      <a href={`tel:${settings?.phone_number || ""}`}><i className="fa-solid fa-phone me-2"></i>
+                        {settings?.phone_number || ""}</a>
                     </li>
                     <li>
                       <EmailObfuscator

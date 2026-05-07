@@ -1,10 +1,10 @@
-import { getCreditBuilderData } from '@/lib/api/cmsService';
+import { creditBuilderService } from '@/services/creditBuilder.service';
 import Image from 'next/image';
 import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
 import { getDynamicMetadata } from '@/lib/metadata';
 
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 import JsonLd from '@/components/seo/JsonLd';
 
 export default async function CreditBuilderPage() {
-  const data = await getCreditBuilderData();
+  const data = await creditBuilderService.getCreditBuilderData();
 
   const serviceSchema = {
     '@context': 'https://schema.org',

@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { submitLead } from '@/lib/api/leadsService';
-import { useSiteSettings } from '@/modules/cms/queries';
+import { leadsService } from '@/services/leads.service';
+import { useSiteSettings } from '@/hooks/useCMS';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function ContactPage() {
@@ -71,7 +71,7 @@ export default function ContactPage() {
         try {
             const token = await executeRecaptcha('contact_form');
 
-            await submitLead({
+            await leadsService.submitLead({
                 contact_person: formData.name,
                 email: formData.email,
                 phone_number: phone || undefined,

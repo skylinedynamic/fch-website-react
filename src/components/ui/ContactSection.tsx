@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { submitLead } from '@/lib/api/leadsService';
+import { leadsService } from '@/services';
 
 export default function ContactSection({ data }: any) {
   const { contact } = data;
@@ -41,7 +41,7 @@ export default function ContactSection({ data }: any) {
     setErrorMessage('');
 
     try {
-      await submitLead({
+      await leadsService.submitLead({
         contact_person: formData.name,
         email: formData.email,
         phone_number: phone || undefined,

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { preQualificationSteps } from '@/data/preQualificationData';
+import { preQualificationSteps } from '@/data/preQualification';
 import SearchableSelect from '@/components/ui/SearchableSelect';
-import { fetchLocations, getStateNames, countryCodeToKey } from '@/lib/api/locationsService';
-import { submitPrequalification } from '@/lib/api/prequalificationService';
+import { locationsService, prequalificationService } from '@/services';
+import { countryCodeToKey } from '@/data/locations';
 
 import PersonalInformation from './PersonalInformation';
 import BusinessDetails from './BusinessDetails';
@@ -23,7 +23,7 @@ const PreQualificationPage = () => {
     const totalSteps = 3;
 
     useEffect(() => {
-        fetchLocations()
+        locationsService.fetchLocations()
             .then(data => {
                 console.log('[PrequalPage] API Loaded successfully');
                 setLocationData(data);
@@ -52,7 +52,7 @@ const PreQualificationPage = () => {
     const countryVal = formData['country_code'] || '+1';
     const selectedCountryKey = countryCodeToKey[countryVal] || 'USA';
 
-    const fetchedStates = getStateNames(locationData, selectedCountryKey);
+    const fetchedStates = locationsService.getStateNames(locationData, selectedCountryKey);
     const stateOptions = locationData
         ? ['Select State', ...fetchedStates]
         : ['Loading States...'];
@@ -205,7 +205,7 @@ const PreQualificationPage = () => {
                     notes: formData.note || null
                 };
 
-                await submitPrequalification(payload);
+                await prequalificationService.submitPrequalification(payload);
                 setSubmitSuccess(true);
                 setFormData({ country_code: '+1', has_debt: 'no' });
                 setCurrentStep(1);

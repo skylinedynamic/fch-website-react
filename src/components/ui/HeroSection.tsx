@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { HomeData } from '@/types/cms';
+import { HomeData } from '@/types/config.types';
 
 
 export default function HeroSection({ data }: { data: HomeData }) {

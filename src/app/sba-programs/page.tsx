@@ -15,7 +15,7 @@ import {
     sbaFaqData,
     sbaCtaData,
     sbaSidebarData
-} from '@/data/sbaProgramsData';
+} from '@/data/sbaPrograms';
 
 export default function SbaProgramsPage() {
     useEffect(() => {

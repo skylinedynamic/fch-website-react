@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
-import { cmsService } from '@/modules/cms/services';
+import { cmsService } from '@/services/cms.service';
 
 const fallbackSeo = {
   title: 'Four Corner Funding | Business Credit, Financing & Funding Partner',
   description: 'Four Corner Funding is your trusted business funding partner, providing expert credit building and flexible financing solutions.',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fourcornerfunding.com',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://fourcornerfunding.com',
 };
 
 /**
@@ -57,8 +57,12 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
  */
 export async function getBlogPostMetadata(slug: string, blogData: any): Promise<Metadata> {
   const path = `/blog/${slug}`;
-  const siteRes = await cmsService.fetchSiteSettings();
+  const [seoRes, siteRes] = await Promise.all([
+    cmsService.fetchSeoSettings(path),
+    cmsService.fetchSiteSettings()
+  ]);
 
+  const seo = seoRes?.data;
   const site = siteRes?.data;
   const siteName = site?.site_name || fallbackSeo.title;
 
@@ -69,7 +73,7 @@ export async function getBlogPostMetadata(slug: string, blogData: any): Promise<
   const title = blogData?.meta_title || blogData?.title || siteName;
   const description = blogData?.meta_description || blogData?.summary || site?.site_slogan || fallbackSeo.description;
   const keywords = blogData?.keywords || '';
-  
+
   const imageUrl = blogData?.featured_image || blogData?.image;
   const ogImage = imageUrl ? [{ url: imageUrl }] : undefined;
 
