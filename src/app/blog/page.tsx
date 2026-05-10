@@ -13,16 +13,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BlogIndexPage({
   searchParams,
 }: {
-  searchParams: { page?: string, category?: string, tag?: string }
+  searchParams: { page?: string, category?: string, tag?: string, search?: string }
 }) {
   const resolvedSearchParams = await searchParams;
   const page = Number(resolvedSearchParams?.page) || 1;
   const category = resolvedSearchParams?.category || '';
   const tag = resolvedSearchParams?.tag || '';
+  const search = resolvedSearchParams?.search || '';
 
   const filters: any = {};
   if (category) filters.category = category;
   if (tag) filters.tag = tag;
+  if (search) filters.search = search;
 
   const allPosts = await cmsService.fetchBlogPosts(filters);
   const totalPosts = allPosts.length;
@@ -103,15 +105,15 @@ export default async function BlogIndexPage({
                 <div className="text-center mt-5">
                   <ul className="modern-pagination">
                     {page > 1 && (
-                      <li><Link href={`/blog?page=${page - 1}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}`}><i className="fas fa-angle-left"></i></Link></li>
+                      <li><Link href={`/blog?page=${page - 1}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}${search ? `&search=${search}` : ''}`}><i className="fas fa-angle-left"></i></Link></li>
                     )}
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
                       <li key={pageNum}>
-                        <Link href={`/blog?page=${pageNum}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}`} className={pageNum === page ? 'active' : ''}>{pageNum}</Link>
+                        <Link href={`/blog?page=${pageNum}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}${search ? `&search=${search}` : ''}`} className={pageNum === page ? 'active' : ''}>{pageNum}</Link>
                       </li>
                     ))}
                     {page < totalPages && (
-                      <li><Link href={`/blog?page=${page + 1}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}`}><i className="fas fa-angle-right"></i></Link></li>
+                      <li><Link href={`/blog?page=${page + 1}${category ? `&category=${category}` : ''}${tag ? `&tag=${tag}` : ''}${search ? `&search=${search}` : ''}`}><i className="fas fa-angle-right"></i></Link></li>
                     )}
                   </ul>
                 </div>

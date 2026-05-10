@@ -4,8 +4,8 @@ import { HomeData } from '@/types/config.types';
 
 export const homeService = {
   getHomeData: async (): Promise<HomeData> => {
-    // Fetch latest 3 blogs regardless of featured status to ensure the section is populated
-    const latestBlogs = await cmsService.fetchBlogPosts({ per_page: 3 });
+    // Fetch latest 3 featured and published blogs
+    const latestBlogs = await cmsService.fetchBlogPosts({ per_page: 3, is_featured: 1 });
     
     return {
       ...homeConfig,

@@ -1,12 +1,55 @@
+'use client';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function BlogSidebar({ categories, tags, latestPosts }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/blog?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      router.push('/blog');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar__single custom-sidebar-search-wrapper">
         <div className="custom-sidebar-search">
-          <input type="search" placeholder="Search here" />
-          <button type="button" style={{ cursor: 'default' }}><i className="fa-solid fa-magnifying-glass"></i></button>
+          <input 
+            type="text" 
+            placeholder="Search here" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          {searchQuery && (
+            <button 
+              type="button" 
+              onClick={() => { setSearchQuery(''); router.push('/blog'); }}
+              style={{ cursor: 'pointer', marginRight: '10px', fontSize: '16px', opacity: 0.7 }}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          )}
+          <button 
+            type="button" 
+            onClick={() => handleSearch()}
+            style={{ cursor: 'pointer' }}
+          >
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
       </div>
 
