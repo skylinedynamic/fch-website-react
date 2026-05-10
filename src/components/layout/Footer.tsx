@@ -9,6 +9,7 @@ const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
   { href: '/credit-builder', label: 'Credit Builder' },
   { href: '/partner-program', label: 'Partner Program' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact Us' },
   { href: '/faq', label: 'FAQ' },
 ];
@@ -91,7 +92,11 @@ export default function Footer() {
                 </div>
                 <div className="footer-content">
                   <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
-                    {settings?.site_name || ""} <br />
+                    {settings?.site_name || ""}
+                    {/* {formatAddress(settings?.address)} */}
+                  </p>
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
+                    {/* {settings?.site_name || ""} <br /> */}
                     {formatAddress(settings?.address)}
                   </p>
                   <ul className="contact-list-2 mb-4">
@@ -109,8 +114,7 @@ export default function Footer() {
                   </ul>
                   <div className="footer-btn">
                     <Link href="/pre-qualification" className="footer-cta-btn">
-                      Get Pre-Qualified <span className="arrow"><i
-                        className="fa-regular fa-arrow-right"></i></span>
+                      Get Pre-Qualified <span className="arrow"><i className="fa-solid fa-arrow-right"></i></span>
                     </Link>
                   </div>
                 </div>

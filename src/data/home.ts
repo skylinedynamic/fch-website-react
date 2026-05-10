@@ -11,7 +11,7 @@ export const homeConfig: HomeData = {
     images: {
       bg: "/images/home-3/hero/hero-bg.png",
       main: "/images/home-3/hero/hero-image.png",
-      small: "/images/home-3/image.jpeg",
+      small: "/images/home-3/image.jpg",
       ellipse: "/images/home-3/hero/ellipse-shape.png",
       star: "/images/home-3/hero/white-star.png",
       paperShape: "/images/home-3/hero/paper-shape.png",

@@ -3,10 +3,10 @@ import Link from 'next/link';
 export default function BlogSidebar({ categories, tags, latestPosts }) {
   return (
     <div className="sidebar">
-      <div className="sidebar__single sidebar__search">
-        <div className="sidebar__search-form">
-          <input type="search" placeholder="Search here" readOnly />
-          <button type="button" style={{ cursor: 'default' }}><i className="far fa-search"></i></button>
+      <div className="sidebar__single custom-sidebar-search-wrapper">
+        <div className="custom-sidebar-search">
+          <input type="search" placeholder="Search here" />
+          <button type="button" style={{ cursor: 'default' }}><i className="fa-solid fa-magnifying-glass"></i></button>
         </div>
       </div>
 
@@ -21,7 +21,7 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
                 </div>
                 <div className="sidebar__post-content">
                   <h3>
-                    <span className="sidebar__post-title-span">{post.title}</span>
+                    <Link href={`/blog/${post.slug}`} className="sidebar__post-title-span">{post.title}</Link>
                   </h3>
                 </div>
               </li>
@@ -30,16 +30,16 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
         </div>
       )}
 
-      {categories && categories.length > 0 && (
+      {categories && categories.filter((cat: any) => cat.count > 0).length > 0 && (
         <div className="sidebar__single sidebar__category">
           <h3 className="sidebar__title">Categories</h3>
           <ul className="sidebar__category-list list-unstyled">
-            {categories.map((cat, index) => (
+            {categories.filter((cat: any) => cat.count > 0).map((cat, index) => (
               <li key={index} className={cat.active ? 'active' : ''}>
-                <span className="sidebar__link-span">
+                <Link href={`/blog?category=${cat.id}`} className="sidebar__link-span" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                   {cat.label}
                   <span className="icon-right-arrow"></span>
-                </span>
+                </Link>
               </li>
             ))}
           </ul>
@@ -51,7 +51,7 @@ export default function BlogSidebar({ categories, tags, latestPosts }) {
           <h3 className="sidebar__title">Tags</h3>
           <div className="sidebar__tags-list">
             {tags.map((tag, index) => (
-              <span key={index} className="sidebar__tag-span">{tag}</span>
+              <Link key={index} href={`/blog?tag=${tag}`} className="sidebar__tag-span">{tag}</Link>
             ))}
           </div>
         </div>
