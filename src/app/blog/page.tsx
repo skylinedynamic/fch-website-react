@@ -122,7 +122,7 @@ export default async function BlogIndexPage({
               <BlogSidebar
                 categories={categories.map((c: any) => ({ ...c, active: c.id === category }))}
                 tags={tags}
-
+                latestPosts={latestPosts}
               />
             </div>
           </div>
