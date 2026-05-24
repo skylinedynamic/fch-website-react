@@ -47,7 +47,7 @@ export default function SearchableSelect({
 
   // Reset search when props change
   useEffect(() => {
-    setSearch('');
+    setTimeout(() => setSearch(''), 0);
   }, [options, name, value]);
 
   // Debug invalid state
@@ -101,6 +101,7 @@ export default function SearchableSelect({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls="ss-dropdown-list"
         tabIndex={0}
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setOpen(prev => !prev); }}
       >
@@ -115,7 +116,7 @@ export default function SearchableSelect({
 
       {/* Dropdown */}
       {open && (
-        <div className="ss-dropdown" role="listbox">
+        <div className="ss-dropdown" role="listbox" id="ss-dropdown-list">
           <div className="ss-search-wrap">
             <span className="ss-search-icon">🔍</span>
             <input

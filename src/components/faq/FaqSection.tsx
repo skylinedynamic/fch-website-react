@@ -20,7 +20,7 @@ export default function FaqSection({ data }) {
             e.stopPropagation();
         }
         setActiveCategory(catId);
-        setActiveIndex(-1); // Close all on category change
+        setTimeout(() => setActiveIndex(-1), 0); // Close all on category change
     };
 
     const toggleAccordion = (index) => {
