@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function TermsOfServicePage() {
     useEffect(() => {
@@ -205,7 +206,7 @@ export default function TermsOfServicePage() {
                                     <p>Four Corner Holdings, LLC<br />
                                         3750 Gunn Highway, Suite 306<br />
                                         Tampa, FL 33618<br />
-                                        <a href="mailto:support@fourcornerfunding.com">support@fourcornerfunding.com</a><br />
+                                        <EmailObfuscator email="support@fourcornerfunding.com" showIcon={false} /><br />
                                         <a href="tel:8133913333">813-391-3333</a><br />
                                         <a href="https://www.fourcornerfunding.com">www.fourcornerfunding.com</a></p>
                                 </div>
