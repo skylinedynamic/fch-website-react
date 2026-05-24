@@ -14,7 +14,7 @@ export default function HeroSection({ data }: { data: HomeData }) {
             <h1>
               {hero.title}
             </h1>
-            <div className="text-item wow fadeInUp" data-wow-delay=".4s">
+            <div className="text-item">
               <p>{hero.text}</p>
               <img 
                 src={hero.images.small} 
@@ -24,7 +24,7 @@ export default function HeroSection({ data }: { data: HomeData }) {
                 decoding="async"
               />
             </div>
-            <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
+            <div className="hero-button">
               <Link href={hero.cta.link} className="theme-btn btn-style-one">
                 {hero.cta.text}
                 <span className="icon">
@@ -34,7 +34,7 @@ export default function HeroSection({ data }: { data: HomeData }) {
             </div>
           </div>
         </div>
-        <div className="col-xl-5 col-lg-6 wow fadeInUp" data-wow-delay=".3s">
+        <div className="col-xl-5 col-lg-6">
           <div className="hero-image ed_top_img">
             <img 
               src={hero.images.main} 
