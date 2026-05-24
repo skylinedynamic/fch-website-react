@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seo = seoRes?.data;
 
   const siteName = settings?.site_name || seoConfig.siteName;
-  const favicon = settings?.favicon || '/images/favicon.png';
+  const favicon = settings?.website_favicon || '/images/favicon.png';
 
   // Use dynamic SEO from table if available, else fallback to site settings or config
   const title = seo?.meta_title || siteName;
