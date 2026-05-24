@@ -16,13 +16,20 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
     cmsService.fetchSiteSettings()
   ]);
 
+  console.log('📊 Metadata Results - SEO:', seoRes, 'Site:', siteRes);
+
   const seo = seoRes?.data;
   const site = siteRes?.data;
+
+  console.log('✨ Parsed SEO Data:', seo);
+  console.log('✨ Parsed Site Data:', site);
 
   const siteName = site?.site_name || fallbackSeo.title;
   const defaultDesc = site?.site_slogan || fallbackSeo.description;
 
-  const title = seo?.meta_title || siteName;
+  // Prefer explicit site settings (site_name) when available, then CMS SEO entries,
+  // then fall back to the global defaults.
+  const title = site?.site_name || seo?.meta_title || fallbackSeo.title;
   const description = seo?.meta_description || defaultDesc;
   const keywords = seo?.keywords || '';
   const ogImage = seo?.og_image ? [{ url: seo.og_image }] : undefined;

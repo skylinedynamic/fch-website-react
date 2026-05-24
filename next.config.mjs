@@ -12,22 +12,19 @@ const nextConfig = {
         hostname: 'api.skylinedynamic.dev',
         pathname: '/**',
       },
-    ],
-  },
-  async redirects() {
-    return [
       {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.fourcornerfunding.com',
-          },
-        ],
-        destination: 'https://fourcornerfunding.com/:path*',
-        permanent: true,
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '8000',
+        pathname: '/**',
       },
-    ];
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

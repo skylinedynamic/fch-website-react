@@ -7,6 +7,7 @@ export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) 
     // Ensure we don't duplicate /v1 if it's already in the base URL
     const url = `${API_BASE_URL}${path.replace('/v1', '')}`;
 
+    console.log('🌐 API Request:', url);
 
     const isGetOrHead = !options.method || ['GET', 'HEAD'].includes(options.method.toUpperCase());
 
@@ -25,12 +26,17 @@ export const fetchFromApi = async (endpoint: string, options: RequestInit = {}) 
       next: { revalidate: 0 } // Default to no cache
     });
 
+    console.log('📨 API Status:', response.status, response.statusText);
+
     if (!response.ok) {
       console.warn(`API error: ${response.status} at ${url}`);
+      const errorBody = await response.text();
+      console.warn('Error body:', errorBody);
       return null;
     }
 
     const data = await response.json();
+    console.log('📦 API Response Data:', data);
     return data;
   } catch (error) {
     console.error(`Error fetching from ${endpoint}:`, error);

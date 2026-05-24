@@ -34,7 +34,16 @@ export const cmsService = {
   },
 
   fetchSeoSettings: async (path: string) => {
-    return fetchFromApi(API_ENDPOINTS.WEBSITE.SEO_SETTINGS(path));
+    try {
+      const endpoint = API_ENDPOINTS.WEBSITE.SEO_SETTINGS(path);
+      console.log('🔍 Calling SEO API endpoint:', endpoint);
+      const response = await fetchFromApi(endpoint);
+      console.log('✅ SEO API Response:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ SEO API Error:', error);
+      return null;
+    }
   },
 
   fetchBlogPosts: async (filters: any = {}) => {

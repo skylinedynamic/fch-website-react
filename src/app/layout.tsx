@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const seo = seoRes?.data;
 
   const siteName = settings?.site_name || seoConfig.siteName;
-  const favicon = settings?.favicon || '/images/favicon.png';
+  const favicon = settings?.website_favicon || '/images/favicon.png';
 
   // Use dynamic SEO from table if available, else fallback to site settings or config
   const title = seo?.meta_title || siteName;
@@ -126,7 +126,7 @@ export default async function RootLayout({
   const settings = settingsRes?.data || null;
   const siteName = settings?.site_name || seoConfig.siteName;
   const description = settings?.site_slogan || seoConfig.description;
-  const favicon = settings?.favicon || `${seoConfig.siteUrl}/images/favicon.png`;
+  const favicon = settings?.website_favicon || `${seoConfig.siteUrl}/images/favicon.png`;
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'FinancialService',
@@ -199,16 +199,16 @@ export default async function RootLayout({
         <link rel="stylesheet" href="/css/tm-utility-classes.css" media="print" />
 
         {/* Script to activate async CSS */}
-        <Script id="async-css-loader" strategy="afterInteractive">
-          {`
+        <Script id="async-css-loader" strategy="afterInteractive" dangerouslySetInnerHTML={{
+          __html: `
             (function() {
               var links = document.querySelectorAll('link[media="print"]');
               for (var i = 0; i < links.length; i++) {
                 links[i].media = 'all';
               }
             })();
-          `}
-        </Script>
+          `
+        }} />
       </head>
       <body className="body-bg">
         {/* ── JS Scripts (Critical) ───────────────────────────────────────── */}
@@ -219,16 +219,22 @@ export default async function RootLayout({
         <Script src="/js/jquery-ui.js" strategy="afterInteractive" />
 
         {/* GSAP core + ALL plugins: must load synchronously in order */}
-        <Script src="/js/gsap.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-trigger.js" strategy="beforeInteractive" />
+        <Script src="/js/gsap.js" strategy="afterInteractive" />
+        <Script src="/js/gsap-scroll-trigger.js" strategy="afterInteractive" />
 
         {/* Register GSAP plugins immediately after they are available */}
         <Script id="gsap-register" strategy="afterInteractive" dangerouslySetInnerHTML={{
           __html: `
           (function () {
-            if (typeof gsap !== 'undefined') {
-              if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-            }
+            var attempts = 0;
+            var interval = setInterval(function() {
+              if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                clearInterval(interval);
+              }
+              attempts++;
+              if (attempts > 100) clearInterval(interval); // Stop after 5 seconds
+            }, 50);
           })();
         `}} />
 
