@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { leadsService } from '@/services/leads.service';
 import { useSiteSettings } from '@/hooks/useCMS';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function ContactPage() {
     const [phone, setPhone] = useState('');
@@ -170,8 +171,8 @@ export default function ContactPage() {
                                         <i className="fa-solid fa-envelope"></i>
                                     </div>
                                     <h4 className="title">E-Mail Address</h4>
-                                    <p className="text">
-                                        <a href={`mailto:${settings?.email || "Info@fourcornerfunding.com"}`} style={{ color: 'inherit' }} itemProp="email">{settings?.email || "Info@fourcornerfunding.com"}</a>
+                                    <p className="text" itemProp="email">
+                                        <EmailObfuscator email={settings?.email || "Info@fourcornerfunding.com"} showIcon={false} className="text-inherit" />
                                     </p>
                                 </div>
                             </div>

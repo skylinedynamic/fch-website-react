@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { leadsService } from '@/services';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function ContactSection({ data }: any) {
   const { contact } = data;
@@ -100,7 +101,7 @@ export default function ContactSection({ data }: any) {
                     </div>
                     <div className="content">
                       <span>Send Us Email</span>
-                      <h3><a href={`mailto:${contact.info.email}`}>{contact.info.email}</a></h3>
+                      <h3><EmailObfuscator email={contact.info.email} showIcon={false} /></h3>
                     </div>
                   </li>
                 </ul>
