@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    domains: ['api.fourcornerfunding.com'],
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'api.fourcornerfunding.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
         hostname: 'api.fourcornerfunding.com',
         pathname: '/**',
       },
