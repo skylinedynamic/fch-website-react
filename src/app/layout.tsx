@@ -17,14 +17,14 @@ import { Poppins, DM_Sans, Great_Vibes } from 'next/font/google';
 
 const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
   variable: '--body-font-family',
   display: 'swap',
 });
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'],
+  weight: ['400', '500', '600', '700'],
   variable: '--heading-font-family',
   display: 'swap',
 });
@@ -174,23 +174,14 @@ export default async function RootLayout({
 
         {/* Preload Critical Assets */}
         <link rel="preload" href="/images/home-3/hero/hero-bg.png" as="image" />
-        
-        {/* Bundled CSS */}
+
         <link rel="stylesheet" href="/css/bundle.css" />
       </head>
       <body className="body-bg">
         {/* ── JS Scripts (Critical) ───────────────────────────────────────── */}
         <Script src="/js/bundle.js" strategy="afterInteractive" />
 
-        {/* Register GSAP plugins immediately after they are available */}
-        <Script id="gsap-register" strategy="afterInteractive" dangerouslySetInnerHTML={{
-          __html: `
-          (function () {
-            if (typeof gsap !== 'undefined') {
-              if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-            }
-          })();
-        `}} />
+
 
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />

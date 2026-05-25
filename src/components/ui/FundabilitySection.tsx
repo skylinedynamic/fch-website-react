@@ -57,13 +57,8 @@ export default function FundabilitySection({ data }) {
                       <div className="why-choose-list-items">
                         <ul className="why-list wow fadeInUp animated" data-wow-delay=".5s">
                           {fundability.list.map((item, index) => (
-                            <li key={index}>
-                              <img 
-                                src="/images/home-3/list-icon.png" 
-                                alt="Checkmark list icon" 
-                                loading="lazy"
-                                decoding="async"
-                              />
+                            <li key={index} className="why-list-item">
+                              <span className="list-icon" aria-hidden="true" />
                               {item}
                             </li>
                           ))}

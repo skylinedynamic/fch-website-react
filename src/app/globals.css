@@ -9,3 +9,14 @@
 .wow:not(.animated) {
   visibility: hidden;
 }
+
+/* Fundability list icon — single bg-image instead of per-item <img> requests */
+.why-list-item .list-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('/images/home-3/list-icon.png') no-repeat center / contain;
+  vertical-align: middle;
+  margin-right: 8px;
+  flex-shrink: 0;
+}

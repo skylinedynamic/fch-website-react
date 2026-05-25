@@ -11,13 +11,13 @@ export default function AboutSection({ data }) {
             <div className="image-column-3">
               <div className="inner-column">
                 <div className="image1 overlay-anim wow fadeInUp" data-wow-delay=".3s">
-                  <img src={about.images[0]} alt="Professional business meeting discussing financial options" />
+                  <img src={about.images[0]} alt="Professional business meeting discussing financial options" loading="lazy" decoding="async" />
                 </div>
                 <div className="info float-bob-x">
-                  <img src={about.infoImage} alt="Years of experience badge showing business growth statistics" />
+                  <img src={about.infoImage} alt="Years of experience badge showing business growth statistics" loading="lazy" decoding="async" />
                 </div>
                 <div className="image2 wow fadeInUp" data-wow-delay=".5s">
-                  <img src={about.images[1]} alt="Business owner analyzing financial data for capital growth" />
+                  <img src={about.images[1]} alt="Business owner analyzing financial data for capital growth" loading="lazy" decoding="async" />
                 </div>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function AboutSection({ data }) {
 
                 <div className="user">
                   <div className="image">
-                    <img src={about.founder.image} alt="Craig Rice - Founder of Four Corner Funding" />
+                    <img src={about.founder.image} alt="Craig Rice - Founder of Four Corner Funding" loading="lazy" decoding="async" />
                   </div>
                   <div>
                     <div className="signature-text">{about.founder.name}</div>

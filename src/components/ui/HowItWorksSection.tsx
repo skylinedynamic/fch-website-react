@@ -5,7 +5,7 @@ export default function HowItWorksSection({ data }) {
   return (
     <section className="how-it-work-section fix section-padding">
       <div className="circle-shape">
-        <img src="/images/home-3/footer-rightshape.png" alt="img" />
+        <img src="/images/home-3/footer-rightshape.png" alt="img" loading="lazy" decoding="async" />
       </div>
       <div className="auto-container">
         <div className="sec-title text-center">

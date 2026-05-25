@@ -43,8 +43,7 @@ export default function BusinessFundingSection({ data }) {
               <div key={idx} className="swiper-slide">
                 <div className="project-box-items-2">
                   <div className="project-image">
-                    <img src={slide.image} alt={slide.title} />
-                    <img src={slide.image} alt={slide.title} />
+                    <img src={slide.image} alt={slide.title} loading="lazy" decoding="async" />
                     <div className="shape-1">
                       <img src="/images/home-2/project/shape-1.png" alt="Decorative geometric shape for funding project slide" />
                     </div>
