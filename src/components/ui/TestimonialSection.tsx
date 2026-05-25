@@ -47,7 +47,7 @@ export default function TestimonialSection({ data }) {
                     </div>
                   </div>
                   <div className="content-box-style-3">
-                    <h3 className="text" style={{ color: '#fff' }}>"{t.text}"</h3>
+                    <h3 className="text" style={{ color: '#fff' }}>&quot;{t.text}&quot;</h3>
                     <h3 className="title" style={{ color: '#fff' }}>
                       {t.name} {t.company && `/ `}
                       {t.company && <span style={{ color: '#dfdfdf' }}>{t.company}</span>}

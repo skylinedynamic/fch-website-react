@@ -20,7 +20,7 @@ export default function FaqList({ categories, items }) {
 
   // When category changes, match HTML behavior by closing all items
   useEffect(() => {
-    setActiveIndex(-1);
+    setTimeout(() => setActiveIndex(-1), 0);
 
     // Re-sync WOW animations for newly visible items
     if (typeof window !== 'undefined' && window.WOW) {

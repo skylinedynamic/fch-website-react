@@ -1,11 +1,11 @@
 import './globals.css';
+
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
 import WowInit from '@/components/common/WowInit';
 import Script from 'next/script';
 import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
-
 
 import type { Metadata } from 'next';
 import React from 'react';
@@ -174,53 +174,13 @@ export default async function RootLayout({
 
         {/* Preload Critical Assets */}
         <link rel="preload" href="/images/home-3/hero/hero-bg.png" as="image" />
-
-        {/* Critical CSS - Load Immediately */}
-        <link rel="stylesheet" href="/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/css/style.css" />
-        <link rel="stylesheet" href="/css/responsive.css" />
-
-        {/* Non-Critical CSS - Load Asynchronously */}
-        <link rel="stylesheet" href="/css/animate.css" media="print" />
-        {/* Standard way for Next.js to handle async CSS without breaking hydration */}
-        <link rel="preload" href="/css/custom.css" as="style" />
-        <link rel="stylesheet" href="/css/custom.css" />
-
-        <link rel="stylesheet" href="/css/fontawesome.css" media="print" />
-        <link rel="stylesheet" href="/css/fontawesome-free.css" media="print" />
-        <link rel="stylesheet" href="/css/flaticon.css" media="print" />
-        <link rel="stylesheet" href="/css/flaticon-finance.css" media="print" />
-        <link rel="stylesheet" href="/css/flaticon-set-business.css" media="print" />
-        <link rel="stylesheet" href="/css/swiper.min.css" media="print" />
-        <link rel="stylesheet" href="/css/nice-select.css" media="print" />
-        <link rel="stylesheet" href="/css/jquery-ui.css" media="print" />
-        <link rel="stylesheet" href="/css/linear.css" media="print" />
-        <link rel="stylesheet" href="/css/tm-bs-mp.css" media="print" />
-        <link rel="stylesheet" href="/css/tm-utility-classes.css" media="print" />
-
-        {/* Script to activate async CSS */}
-        <Script id="async-css-loader" strategy="afterInteractive">
-          {`
-            (function() {
-              var links = document.querySelectorAll('link[media="print"]');
-              for (var i = 0; i < links.length; i++) {
-                links[i].media = 'all';
-              }
-            })();
-          `}
-        </Script>
+        
+        {/* Bundled CSS */}
+        <link rel="stylesheet" href="/css/bundle.css" />
       </head>
       <body className="body-bg">
         {/* ── JS Scripts (Critical) ───────────────────────────────────────── */}
-        {/* jQuery + Bootstrap: synchronous, needed everywhere */}
-        <Script src="/js/jquery.js" strategy="afterInteractive" />
-        <Script src="/js/popper.min.js" strategy="afterInteractive" />
-        <Script src="/js/bootstrap.min.js" strategy="afterInteractive" />
-        <Script src="/js/jquery-ui.js" strategy="afterInteractive" />
-
-        {/* GSAP core + ALL plugins: must load synchronously in order */}
-        <Script src="/js/gsap.js" strategy="beforeInteractive" />
-        <Script src="/js/gsap-scroll-trigger.js" strategy="beforeInteractive" />
+        <Script src="/js/bundle.js" strategy="afterInteractive" />
 
         {/* Register GSAP plugins immediately after they are available */}
         <Script id="gsap-register" strategy="afterInteractive" dangerouslySetInnerHTML={{
@@ -266,18 +226,6 @@ export default async function RootLayout({
           </div>
         </QueryProvider>
 
-        {/* ── JS Scripts ─────────────────────────────────────────────────── */}
-        {/* WOW, Swiper, and other enhancement libs: can defer */}
-        <Script src="/js/swiper.min.js" strategy="afterInteractive" />
-        <Script src="/js/parallaxie.js" strategy="afterInteractive" />
-        <Script src="/js/wow.js" strategy="afterInteractive" />
-        <Script src="/js/nice-select.min.js" strategy="afterInteractive" />
-        <Script src="/js/knob.js" strategy="afterInteractive" />
-        <Script src="/js/appear.js" strategy="afterInteractive" />
-        <Script src="/js/mixitup.js" strategy="afterInteractive" />
-
-        {/* Main theme script: runs last after all deps are ready */}
-        <Script src="/js/script.js" strategy="afterInteractive" />
       </body>
     </html>
   );
