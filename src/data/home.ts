@@ -43,7 +43,7 @@ export const homeConfig: HomeData = {
     text: "Four Corner Holdings, LLC is a Florida-based financial services and funding firm built to empower entrepreneurs and established businesses with strategic access to capital, credit-building systems, and customized lending solutions.",
     successRate: 88,
     cta: {
-      text: "Lets Talk With Us",
+      text: "Let's Talk",
       link: "/contact",
     },
     founder: {

@@ -222,6 +222,14 @@ const PreQualificationPage = () => {
 
     const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
 
+    const handleStartAssessment = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        const element = document.getElementById('prequal-section');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <>
             <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
@@ -232,19 +240,40 @@ const PreQualificationPage = () => {
                                 <li><Link href="/">Home</Link></li>
                                 <li>pre-qualification</li>
                             </ul>
-                            <h1 className="wow fadeInUp credit-builder-h1" data-wow-delay=".2s">Prequalify to Build Your Business Credit</h1>
+                            <h1 className="wow fadeInUp credit-builder-h1" data-wow-delay=".2s">
+                                Find Out What Funding Your Business May Qualify For
+                            </h1>
                             <div className="text-item wow fadeInUp animated" data-wow-delay=".4s">
                                 <p style={{ maxWidth: '781px' }}>
-                                    We don't just help you get funding – we guarantee strategies to build business credit,
-                                    improve fundability, and secure long-term growth.
-                                    Complete your profile to get matched with pre-qualified programs – no credit impact.
+                                    Complete our Funding Readiness Assessment to identify approval gaps, funding opportunities, business credit opportunities, and next-step recommendations.
                                 </p>
                             </div>
+                            <div className="trust-bar wow fadeInUp animated" data-wow-delay=".5s">
+                                <div className="trust-item">
+                                    <span className="trust-item-icon">✅</span>
+                                    <span>No Credit Impact</span>
+                                </div>
+                                <div className="trust-item">
+                                    <span className="trust-item-icon">✅</span>
+                                    <span>Takes Less Than 3 Minutes</span>
+                                </div>
+                                <div className="trust-item">
+                                    <span className="trust-item-icon">✅</span>
+                                    <span>Funding Readiness Review</span>
+                                </div>
+                                <div className="trust-item">
+                                    <span className="trust-item-icon">✅</span>
+                                    <span>Funding & Business Credit Opportunities</span>
+                                </div>
+                            </div>
                             <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
-                                <Link href="/contact" className="theme-btn btn-style-one">
-                                    Contact Us
+                                <a href="#prequal-section" onClick={handleStartAssessment} className="theme-btn btn-style-one">
+                                    Start My Assessment
                                     <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
-                                </Link>
+                                </a>
+                                <p className="sub-btn-text">
+                                    Join business owners who want to understand their funding readiness before applying.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -253,6 +282,42 @@ const PreQualificationPage = () => {
 
             <section className="sba-article-section pre-padding" id="prequal-section">
                 <div className="auto-container">
+                    <div className="discover-section wow fadeInUp" data-wow-delay=".2s">
+                        <h2 className="discover-title">What You'll Discover</h2>
+                        <div className="discover-grid">
+                            <div className="discover-card">
+                                <div className="discover-card-icon">
+                                    <i className="fas fa-check"></i>
+                                </div>
+                                <span className="discover-card-text">Potential Funding Opportunities</span>
+                            </div>
+                            <div className="discover-card">
+                                <div className="discover-card-icon">
+                                    <i className="fas fa-check"></i>
+                                </div>
+                                <span className="discover-card-text">Business Credit Opportunities</span>
+                            </div>
+                            <div className="discover-card">
+                                <div className="discover-card-icon">
+                                    <i className="fas fa-check"></i>
+                                </div>
+                                <span className="discover-card-text">Approval Risks & Red Flags</span>
+                            </div>
+                            <div className="discover-card">
+                                <div className="discover-card-icon">
+                                    <i className="fas fa-check"></i>
+                                </div>
+                                <span className="discover-card-text">Funding Readiness Gaps </span>
+                            </div>
+                            <div className="discover-card">
+                                <div className="discover-card-icon">
+                                    <i className="fas fa-check"></i>
+                                </div>
+                                <span className="discover-card-text">Next-Step Recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="prequal-form-container wow fadeInUp" data-wow-delay=".2s">
                         <div className="prequal-progress-wrapper">
                             <div className="prequal-step-info mb-4 d-flex justify-content-between align-items-center">
@@ -338,6 +403,40 @@ const PreQualificationPage = () => {
                                 )}
                             </div>
                         </form>
+                    </div>
+
+                    <div className="next-steps-section wow fadeInUp" data-wow-delay=".2s">
+                        <h2 className="next-steps-title">What Happens Next?</h2>
+                        <div className="next-steps-grid">
+                            <div className="next-step-card">
+                                <div className="next-step-number">1</div>
+                                <h3 className="next-step-heading">Complete Your Assessment</h3>
+                                <p className="next-step-desc">
+                                    Answer a few questions about your business and funding goals.
+                                </p>
+                            </div>
+                            <div className="next-step-card">
+                                <div className="next-step-number">2</div>
+                                <h3 className="next-step-heading">Funding Readiness Review</h3>
+                                <p className="next-step-desc">
+                                    We evaluate key factors lenders commonly review.
+                                </p>
+                            </div>
+                            <div className="next-step-card">
+                                <div className="next-step-number">3</div>
+                                <h3 className="next-step-heading">Identify Opportunities & Gaps</h3>
+                                <p className="next-step-desc">
+                                    Discover potential strengths, weaknesses, and areas for improvement.
+                                </p>
+                            </div>
+                            <div className="next-step-card">
+                                <div className="next-step-number">4</div>
+                                <h3 className="next-step-heading">Explore Next Steps</h3>
+                                <p className="next-step-desc">
+                                    Receive guidance on business credit, funding readiness, and capital access opportunities.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

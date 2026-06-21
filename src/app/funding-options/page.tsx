@@ -226,7 +226,7 @@ export default function FundingOptionsPage() {
                     className="theme-btn btn-style-one wow fadeInUp"
                     data-wow-delay=".5s"
                   >
-                    Lets Talk With Us
+                    Let's Talk
                     <span className="icon">
                       <i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i>
                     </span>
@@ -335,7 +335,7 @@ export default function FundingOptionsPage() {
                   className="theme-btn btn-style-one wow fadeInUp animated"
                   data-wow-delay=".5s"
                 >
-                  Lets Talk With Us
+                  Let's Talk
                   <span className="icon">
                     <i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i>
                   </span>

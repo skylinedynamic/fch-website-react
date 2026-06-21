@@ -20298,6 +20298,10 @@ Section Title
     width: 15px;
     height: 15px;
   }
+
+  .about-content-3 .theme-btn .icon {
+    font-size: 42px !important;
+  }
 }
 
 @media (max-width: 575.98px) {
@@ -20306,6 +20310,10 @@ Section Title
     padding-right: 42px;
     padding-right: 88px;
     height: 57px;
+  }
+
+  .about-content-3 .theme-btn .icon {
+    font-size: 42px !important;
   }
 }
 
