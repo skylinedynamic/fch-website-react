@@ -157,17 +157,25 @@ const PreQualificationPage = () => {
         return isValid;
     };
 
+    const scrollToFormTop = () => {
+        const element = document.getElementById('prequal-form-container');
+        if (element) {
+            const y = element.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    };
+
     const handleNext = (e) => {
         e.preventDefault();
         if (validateStep(currentStep)) {
             setCurrentStep(prev => prev + 1);
-            window.scrollTo({ top: 400, behavior: 'smooth' });
+            scrollToFormTop();
         }
     };
 
     const handlePrev = () => {
         setCurrentStep(prev => prev - 1);
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+        scrollToFormTop();
     };
 
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -209,7 +217,7 @@ const PreQualificationPage = () => {
                 setSubmitSuccess(true);
                 setFormData({ country_code: '+1', has_debt: 'no' });
                 setCurrentStep(1);
-                window.scrollTo({ top: 400, behavior: 'smooth' });
+                scrollToFormTop();
                 setTimeout(() => { setSubmitSuccess(false); }, 5000);
             } catch (err: any) {
                 console.error('Submission failed:', err);
@@ -318,7 +326,7 @@ const PreQualificationPage = () => {
                         </div>
                     </div>
 
-                    <div className="prequal-form-container wow fadeInUp" data-wow-delay=".2s">
+                    <div id="prequal-form-container" className="prequal-form-container wow fadeInUp" data-wow-delay=".2s">
                         <div className="prequal-progress-wrapper">
                             <div className="prequal-step-info mb-4 d-flex justify-content-between align-items-center">
                                 <span className="step-count-text">Step {currentStep} of {totalSteps}</span>
