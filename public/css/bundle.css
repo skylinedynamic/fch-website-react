@@ -43478,7 +43478,7 @@ html {
   background: #ffffff;
   color: #103C3B;
   border: 1.5px solid #e2e8f0;
-  padding: 14px 28px;
+  padding: 0px 28px;
   border-radius: 12px;
   font-weight: 700;
   font-size: 15px;
@@ -43522,9 +43522,9 @@ html {
 .btn-submit {
   color: #fff;
   border: none;
-  padding: 16px 45px;
+  padding: 6px 15px;
   border-radius: 15px;
-  font-weight: 800;
+  font-weight: 500;
   font-size: 16px;
   display: flex;
   align-items: center;
