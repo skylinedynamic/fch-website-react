@@ -349,16 +349,7 @@ const PreQualificationPage = () => {
                             </div>
                         </div>
 
-                        {submitSuccess && (
-                            <div className="form-alert form-alert--success mb-4">
-                                Thank you! Your pre-qualification request has been submitted successfully.
-                            </div>
-                        )}
-                        {submitError && (
-                            <div className="form-alert form-alert--error mb-4">
-                                {submitError}
-                            </div>
-                        )}
+
 
                         <form onSubmit={currentStep === totalSteps ? handleSubmit : handleNext} className="prequal-form" noValidate>
                             {currentStep === 1 && (
@@ -411,6 +402,17 @@ const PreQualificationPage = () => {
                                 )}
                             </div>
                         </form>
+
+                        {submitSuccess && (
+                            <div className="form-alert form-alert--success mb-4">
+                                Thank you! Your pre-qualification request has been submitted successfully.
+                            </div>
+                        )}
+                        {submitError && (
+                            <div className="form-alert form-alert--error mb-4">
+                                {submitError}
+                            </div>
+                        )}
                     </div>
 
                     <div className="next-steps-section wow fadeInUp" data-wow-delay=".2s">
