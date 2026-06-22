@@ -251,6 +251,16 @@
   margin-bottom: 6px;
 }
 
+/* Bulletproof fix for iOS Safari input placeholder jumping */
+.prequal-input {
+  height: auto !important;
+  min-height: 60px !important;
+  padding-top: 19px !important;
+  padding-bottom: 19px !important;
+  line-height: normal !important;
+}
+
+
 /* Responsive SearchableSelect styling */
 .ss-native-select {
   position: absolute;
