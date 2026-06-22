@@ -59,7 +59,7 @@
   background: #ffffff;
   border-radius: 20px;
   padding: 45px 35px;
-  margin-top: -150px;
+  margin-top: 15px;
   margin-bottom: 40px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
@@ -247,8 +247,6 @@
   display: none !important;
 }
 
-.prequal-step .row.g-4 > [class*="col-"] .form-group-label {
+.prequal-step .row.g-4>[class*="col-"] .form-group-label {
   margin-bottom: 6px;
 }
-
-

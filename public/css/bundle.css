@@ -651,6 +651,10 @@ progress {
   .container-sm {
     max-width: 540px
   }
+
+  .discover-section {
+    margin-top: 15px;
+  }
 }
 
 @media (min-width:768px) {
@@ -659,6 +663,10 @@ progress {
   .container-md,
   .container-sm {
     max-width: 720px
+  }
+
+  .discover-section {
+    margin-top: 15px;
   }
 }
 
@@ -44091,7 +44099,7 @@ select.prequal-country-code option {
 }
 
 .pre-padding {
-  padding-top: 200px;
+  padding-top: 100px;
 }
 
 .sba-intro-text {
@@ -45244,7 +45252,7 @@ select.prequal-country-code option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  padding: 10px 40px;
   font-size: 15px;
   color: #334155;
   cursor: pointer;
