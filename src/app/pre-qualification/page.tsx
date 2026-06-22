@@ -406,7 +406,7 @@ const PreQualificationPage = () => {
                                     </button>
                                 ) : (
                                     <button type="submit" className="btn-submit" disabled={isSubmitting}>
-                                        {isSubmitting ? 'Submitting...' : 'Submit Prequalification'} <i className="fas fa-check-circle"></i>
+                                        {isSubmitting ? 'Submitting...' : 'Submit'} <i className="fas fa-check-circle"></i>
                                     </button>
                                 )}
                             </div>
