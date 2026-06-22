@@ -279,6 +279,36 @@
 }
 
 @media (max-width: 768px) {
+  /* Compact mobile form fields */
+  .prequal-input {
+    min-height: 48px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  .ss-trigger {
+    height: 48px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  .prequal-country-trigger,
+  .prequal-country-dropdown {
+    height: 48px !important;
+  }
+
+  .prequal-country-trigger {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  .prequal-textarea {
+    min-height: 100px !important;
+    padding: 12px 16px !important;
+  }
+
   .ss-native-select {
     display: block;
     position: absolute;

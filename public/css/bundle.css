@@ -43251,7 +43251,7 @@ html {
   display: block;
   animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   background: linear-gradient(180deg, rgba(240, 253, 250, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
-  padding: 30px;
+  padding: 15px;
   border-radius: 20px;
   margin: -30px;
   margin-bottom: 0;
