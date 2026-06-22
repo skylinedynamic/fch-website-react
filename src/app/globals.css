@@ -250,3 +250,46 @@
 .prequal-step .row.g-4>[class*="col-"] .form-group-label {
   margin-bottom: 6px;
 }
+
+/* Responsive SearchableSelect styling */
+.ss-native-select {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  z-index: -1;
+}
+
+/* Focus styles for accessible keyboard navigation */
+.ss-wrapper:focus-within .ss-trigger {
+  border-color: #2D9A96;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(45, 154, 150, 0.12);
+}
+
+@media (max-width: 768px) {
+  .ss-native-select {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  .ss-clear {
+    display: none !important;
+  }
+
+  .ss-dropdown {
+    display: none !important;
+  }
+}

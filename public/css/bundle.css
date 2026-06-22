@@ -45203,8 +45203,8 @@ select.prequal-country-code option {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 10px 40px;
+  border-bottom: 0px solid #f1f5f9;
 }
 
 .ss-search-icon {

@@ -81,14 +81,13 @@ export default function SearchableSelect({
       ref={containerRef}
       className={`ss-wrapper${invalid ? ' prequal-error' : ''}`}
     >
-      {/* Hidden native select for form submission */}
+      {/* Native select overlay on mobile, hidden on desktop */}
       <select
         name={name}
         value={value}
-        onChange={() => {}}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="ss-hidden-select"
+        onChange={(e) => onChange(name, e.target.value)}
+        className="ss-native-select"
+        required={required}
       >
         <option value="">{placeholder}</option>
         {choices.map(o => <option key={o} value={o}>{o}</option>)}
