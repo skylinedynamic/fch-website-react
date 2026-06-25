@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 
 /*!
  * Bootstrap v5.0.2 (https://getbootstrap.com/)
@@ -12058,7 +12058,7 @@ ul {
   list-style-position: inside;
   margin: 0;
   padding: 0;
-  list-style: none;
+  /* list-style: none; */
 }
 
 b,
@@ -45525,7 +45525,7 @@ select.prequal-country-code option {
 }
 
 .blog-details__list {
-  list-style: none;
+  /* list-style: none; */
   padding: 0;
   margin: 25px 0;
 }
@@ -102301,4 +102301,36 @@ a.ui-button:active,
 
 .position-inherit {
   position: inherit !important;
+}
+
+/* Blog details content list styling override */
+.blog-details__content ul {
+  list-style-type: disc !important;
+  list-style-position: outside !important;
+  padding-left: 24px !important;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.blog-details__content ol {
+  list-style-type: decimal !important;
+  list-style-position: outside !important;
+  padding-left: 24px !important;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.blog-details__content li {
+  list-style-type: inherit !important;
+  display: list-item !important;
+  margin-bottom: 8px !important;
+  padding-left: 4px !important;
+}
+
+.blog-details__content ul ul,
+.blog-details__content ul ol,
+.blog-details__content ol ul,
+.blog-details__content ol ol {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
 }
