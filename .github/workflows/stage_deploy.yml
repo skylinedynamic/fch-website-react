@@ -39,6 +39,9 @@ jobs:
             
             cd /var/www/html/fch
             
+            echo "--- Fixing directory permissions ---"
+            sudo chown -R ubuntu:ubuntu /var/www/html/fch
+            
             echo "--- Verifying Git Remote ---"
             git remote -v
             
