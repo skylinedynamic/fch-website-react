@@ -32,14 +32,18 @@ jobs:
           script: |
             set -e
             echo "--- Current User: $(whoami) ---"
-            echo "--- Starting deployment on server ---"11
+            echo "--- Starting deployment on server ---"
             
             # Fix: Git security check fails when repo is owned by root but run as ubuntu
             git config --global --add safe.directory /var/www/html/fourcornerfunding
             
             cd /var/www/html/fourcornerfunding
             
-            echo "--- Verifying Git Remote ---"
+            echo "--- Fixing directory permissions ---"
+            sudo chown -R $(whoami):$(whoami) /var/www/html/fourcornerfunding
+            
+            echo "--- Configuring Git Remote Authentication ---"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/invento-software-limited/fch-website-react.git
             git remote -v
             
             echo "--- Pulling latest code from origin/release ---"
@@ -64,7 +68,7 @@ jobs:
             
             echo "--- Restarting application (PM2) ---"
             # Ensure pm2 is in the path or use absolute path if needed
-            pm2 restart fch-website || pm2 start npm --name "fch-website" -- start
+            pm2 restart fch-website || pm2 restart fourcornerfunding || pm2 start npm --name "fch-website" -- start
             
             echo "--- Restarting Nginx ---"
             # Only restart if config is valid
