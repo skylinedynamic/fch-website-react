@@ -42,7 +42,8 @@ jobs:
             echo "--- Fixing directory permissions ---"
             sudo chown -R ubuntu:ubuntu /var/www/html/fch
             
-            echo "--- Verifying Git Remote ---"
+            echo "--- Configuring Git Remote Authentication ---"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/invento-software-limited/fch-website-react.git
             git remote -v
             
             echo "--- Pulling latest code from origin/stage ---"
