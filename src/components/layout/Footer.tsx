@@ -162,9 +162,14 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <p className="footer-text wow fadeInUp" data-wow-delay=".3s">Copyright © {currentYear} {settings?.site_name || "Four Corner Funding"}. All
-          Rights Reserved.
-        </p>
+        <div className="footer-text footer-legal-text wow fadeInUp" data-wow-delay=".3s">
+          <p>
+            Four Corner Funding is a registered Florida fictitious name (d/b/a) of Four Corner Holdings, LLC (Florida Document No. L23000004266). Four Corner Holdings, LLC is not a bank, lender, broker-dealer, or financial institution and does not make credit decisions. All financing is originated and underwritten by independent third-party funding sources and is subject to their underwriting, credit approval, documentation verification, and final discretion. Platform outputs support readiness evaluation and workflow; they are not credit decisions and are not guarantees of approval. Where a transaction is placed, Four Corner Holdings, LLC is compensated by the funding source at closing. Client-paid fees, where applicable, are software subscription fees and are not contingent on any financing outcome.
+          </p>
+          <p>
+            © {currentYear} Four Corner Holdings, LLC. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

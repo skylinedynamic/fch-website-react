@@ -365,3 +365,20 @@
   margin-top: 6px !important;
   margin-bottom: 6px !important;
 }
+
+/* Footer legal text styling */
+.footer-legal-text {
+  text-align: left !important;
+  line-height: 1.6;
+}
+
+.footer-legal-text p {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  text-align: left !important;
+  margin-bottom: 0;
+}
+
+.footer-legal-text p:first-child {
+  margin-bottom: 15px;
+}
