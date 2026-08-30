@@ -1,0 +1,90 @@
+name: Deploy to Staging Server
+
+on:
+  push:
+    branches:
+      - stage
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Deploy & Build on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGE_SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.STAGE_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            echo "--- Current User: $(whoami) ---"
+            echo "--- Starting deployment on server ---"
+            
+            # Fix: Git security check fails when repo is owned by root but run as ubuntu
+            git config --global --add safe.directory /var/www/html/fch
+            
+            cd /var/www/html/fch
+            
+            echo "--- Fixing directory permissions ---"
+            sudo chown -R ubuntu:ubuntu /var/www/html/fch
+            
+            echo "--- Configuring Git Remote Authentication ---"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/invento-software-limited/fch-website-react.git
+            git remote -v
+            
+            echo "--- Pulling latest code from origin/stage ---"
+            # Force update origin in case of stale references
+            git fetch --all
+            git reset --hard origin/stage
+            
+            echo "--- Creating Environment File ---"
+            # Creating .env.production with staging URLs
+            echo "NEXT_PUBLIC_API_BASE_URL=https://api.skylinedynamic.dev/api/v1" > .env.production
+            echo "NEXT_PUBLIC_SITE_URL=https://skylinedynamic.dev" >> .env.production
+            echo "NEXT_BACKEND_BASE_URL=https://api.skylinedynamic.dev" >> .env.production
+            
+            echo "--- Checking file update status ---"
+            ls -l middleware.ts
+            
+            echo "--- Installing dependencies ---"
+            npm ci
+            
+            echo "--- Building Next.js app ---"
+            npm run build
+            
+            echo "--- Restarting application (PM2) ---"
+            # Ensure pm2 is in the path or use absolute path if needed
+            pm2 restart fch-website || pm2 restart fch || pm2 start npm --name "fch-website" -- start
+            
+            echo "--- Restarting Nginx ---"
+            # Only restart if config is valid
+            sudo nginx -t && sudo systemctl restart nginx
+            
+            echo "--- Deployment finished successfully! ---"
+
+      - name: Post-Deployment Smoke Test
+        run: |
+          echo "Waiting for server to boot..."
+          sleep 5
+          STAGE_URL="https://skylinedynamic.dev/"
+          HTTP_STATUS=$(curl -s -L -o /dev/null -w "%{http_code}" --max-time 15 "$STAGE_URL" || echo "000")
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Smoke test passed! Staging responded with HTTP $HTTP_STATUS."
+          else
+            echo "❌ Smoke test failed! Expected HTTP 200 but received $HTTP_STATUS."
+            exit 1
+          fi

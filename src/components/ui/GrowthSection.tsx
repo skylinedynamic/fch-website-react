@@ -11,7 +11,7 @@ export default function GrowthSection({ data }) {
                 <span className="triangle triangle2"></span>
                 {growthFeatures.subtitle}
               </h6>
-              <h2 className="wow fadeInUp" data-wow-delay=".2s">{growthFeatures.title}</h2>
+              <h3 className="title wow fadeInUp" data-wow-delay=".2s">{growthFeatures.title}</h3>
             </div>
           </div>
         </div>

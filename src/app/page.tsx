@@ -1,4 +1,4 @@
-import { getHomeData } from '@/lib/api/cmsService';
+import { homeService } from '@/services/home.service';
 import HeroSection from '@/components/ui/HeroSection';
 import ProcessSection from '@/components/ui/ProcessSection';
 import AboutSection from '@/components/ui/AboutSection';
@@ -13,8 +13,15 @@ import ContactSection from '@/components/ui/ContactSection';
 import FaqSection from '@/components/ui/FaqSection';
 import BlogSection from '@/components/ui/BlogSection';
 
+import { Metadata } from 'next';
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/');
+}
+
 export default async function Home() {
-  const homeData = await getHomeData();
+  const homeData = await homeService.getHomeData();
   return (
     <main>
       <HeroSection data={homeData} />

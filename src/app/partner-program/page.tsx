@@ -1,21 +1,19 @@
-import { getPartnerProgramData } from '@/lib/api/cmsService';
+import { partnerService } from '@/services/partner.service';
 import Image from 'next/image';
 import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
-export const metadata: Metadata = {
-    title: 'Partner Program',
-    description: 'Build Your Own Business Funding Empire. Offer business credit building and funding services.',
-    alternates: {
-        canonical: `${seoConfig.siteUrl}/partner-program`,
-    },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+    return getDynamicMetadata('/partner-program');
+}
 
 export default async function PartnerProgramPage() {
-    const data = await getPartnerProgramData();
+    const data = await partnerService.getPartnerProgramData();
 
     return (
         <main>

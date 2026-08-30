@@ -11,7 +11,7 @@ export default function PartnerSection({ data }) {
             <span className="triangle triangle2"></span>
             {partner.subtitle}
           </h6>
-          <h2 className="wow fadeInUp animated" data-wow-delay=".3s" dangerouslySetInnerHTML={{ __html: partner.title }} />
+          <h3 className="title wow fadeInUp animated" data-wow-delay=".3s" dangerouslySetInnerHTML={{ __html: partner.title }} />
         </div>
         <div className="row">
           <div className="col-12">

@@ -1,17 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 
-export default function BlogDetailsClient({ 
-  initialPost, 
-  initialCategories, 
+export default function BlogDetailsClient({
+  initialPost,
+  initialCategories,
   initialTags,
   initialPrevPost,
   initialNextPost,
-  slug 
+  latestPosts,
+  slug
 }) {
   const [post, setPost] = useState(initialPost);
   const [categories, setCategories] = useState(initialCategories);
@@ -37,7 +39,8 @@ export default function BlogDetailsClient({
             <div className="hero-content">
               <ul className="page-breadcrumb wow fadeInUp animated pb-2" data-wow-delay=".3s">
                 <li><Link href="/">Home</Link></li>
-                <li>Blog Details</li>
+                <li><Link href="/blog">Blog</Link></li>
+                <li>{post.title}</li>
               </ul>
               <h1 className="wow fadeInUp" data-wow-delay=".2s">{post.title}</h1>
               <div className="hero-button wow fadeInUp animated" data-wow-delay=".6s">
@@ -79,12 +82,12 @@ export default function BlogDetailsClient({
                       <span key={i}>{tag}</span>
                     ))}
                   </p>
-                  <div className="blog-details__social-list">
+                  {/* <div className="blog-details__social-list">
                     <span><i className="fa fa-x"></i></span>
                     <span><i className="fab fa-facebook"></i></span>
                     <span><i className="fab fa-pinterest-p"></i></span>
                     <span><i className="fab fa-instagram"></i></span>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Dynamic Nav Links */}
@@ -108,9 +111,12 @@ export default function BlogDetailsClient({
             {/* Sidebar */}
             <div className="col-xl-4 col-lg-5">
               <BlogSidebar
-                categories={categories}
-                tags={tags}
-                latestPosts={post.latestPosts}
+                categories={categories.filter((c: any) => post.category && c.id === post.category.slug).map((c: any) => ({
+                  ...c,
+                  active: true
+                }))}
+                tags={post.tags}
+                latestPosts={latestPosts}
               />
             </div>
           </div>

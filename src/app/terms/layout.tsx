@@ -1,19 +1,11 @@
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { getDynamicMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Terms of Service',
-  description: 'Legal terms and conditions for using the Four Corner Funding platform and services.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/terms`,
-  },
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/terms');
+}
 
-export default function TermsLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;

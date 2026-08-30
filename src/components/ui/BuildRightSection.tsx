@@ -34,12 +34,12 @@ export default function BuildRightSection({ data }) {
                     <span className="triangle triangle2"></span>
                     {buildRight.subtitle}
                   </h6>
-                  <h2
+                  <h3
                     className="title light wow fadeInUp animated"
                     data-wow-delay=".2s"
                   >
                     {buildRight.title}
-                  </h2>
+                  </h3>
                 </div>
 
                 <div className="tab-content light">

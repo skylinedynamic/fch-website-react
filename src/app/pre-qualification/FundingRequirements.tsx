@@ -55,7 +55,7 @@ const FundingRequirements: React.FC<FundingRequirementsProps> = ({
                     </label>
                     <SearchableSelect
                         name="purpose"
-                        options={["Select Purpose", "Working Capital", "Equipment", "Inventory", "Marketing", "Expansion", "Other"]}
+                        options={["Select Purpose", "Working Capital", "Equipment", "Expansion", "Real Estate", "Debt Refinance / Consolidation", "Business Acquisition", "Startup Funding", "Other"]}
                         value={formData.purpose || ''}
                         onChange={handleSelectChange}
                         invalid={showErrors && !!errors.purpose}

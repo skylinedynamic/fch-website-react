@@ -2,16 +2,13 @@ import Link from 'next/link';
 import FundingFaq from './FundingFaq';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
-export const metadata: Metadata = {
-  title: 'Funding Options',
-  description:
-    'From SBA loans to fast working capital, our AI-powered platform matches your business with the best-fit programs. No guesswork, no hard credit pulls.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/funding-options`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/funding-options');
+}
 
 const fundingCards = [
   {
@@ -229,7 +226,7 @@ export default function FundingOptionsPage() {
                     className="theme-btn btn-style-one wow fadeInUp"
                     data-wow-delay=".5s"
                   >
-                    Lets Talk With Us
+                    Let's Talk
                     <span className="icon">
                       <i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i>
                     </span>
@@ -338,7 +335,7 @@ export default function FundingOptionsPage() {
                   className="theme-btn btn-style-one wow fadeInUp animated"
                   data-wow-delay=".5s"
                 >
-                  Lets Talk With Us
+                  Let's Talk
                   <span className="icon">
                     <i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i>
                   </span>

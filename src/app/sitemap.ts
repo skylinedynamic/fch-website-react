@@ -1,6 +1,8 @@
-export default function sitemap() {
+import { cmsService } from '@/services/cms.service';
+
+export default async function sitemap() {
   const baseUrl = 'https://fourcornerfunding.com';
-  
+
   const staticRoutes = [
     '',
     '/funding-options',
@@ -19,25 +21,20 @@ export default function sitemap() {
     '/blog',
   ];
 
-  // Assuming blogData is available in the data directory
-  // In a real scenario, you might fetch these from an API or DB
-  const blogSlugs = [
-    'financial-consequences-tax-errors',
-    'work-life-balance-hectic-world',
-    'mastering-work-life-business-goal',
-  ];
+  // Fetch dynamic blog posts from the API
+  const allPosts = await cmsService.fetchBlogPosts();
 
   const routes = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly',
+    changeFrequency: 'monthly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
 
-  const blogPosts = blogSlugs.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
+  const blogPosts = allPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly',
+    changeFrequency: 'weekly' as const,
     priority: 0.6,
   }));
 

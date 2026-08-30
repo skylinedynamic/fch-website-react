@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import { submitLead } from '@/lib/api/leadsService';
+import { leadsService } from '@/services';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function ContactSection({ data }: any) {
   const { contact } = data;
@@ -41,7 +42,7 @@ export default function ContactSection({ data }: any) {
     setErrorMessage('');
 
     try {
-      await submitLead({
+      await leadsService.submitLead({
         contact_person: formData.name,
         email: formData.email,
         phone_number: phone || undefined,
@@ -77,9 +78,9 @@ export default function ContactSection({ data }: any) {
                     <span className="triangle triangle2"></span>
                     {contact.subtitle}
                   </h6>
-                  <h2 className="wow fadeInUp" data-wow-delay=".3s">
+                  <h3 className="title wow fadeInUp" data-wow-delay=".3s">
                     let's work together
-                  </h2>
+                  </h3>
                 </div>
                 <p className="contact-text wow fadeInUp" data-wow-delay=".5s">
                   We help startups, growing businesses, and partners nationwide — reach out today to get started.
@@ -100,7 +101,7 @@ export default function ContactSection({ data }: any) {
                     </div>
                     <div className="content">
                       <span>Send Us Email</span>
-                      <h3><a href={`mailto:${contact.info.email}`}>{contact.info.email}</a></h3>
+                      <h3><EmailObfuscator email={contact.info.email} showIcon={false} /></h3>
                     </div>
                   </li>
                 </ul>

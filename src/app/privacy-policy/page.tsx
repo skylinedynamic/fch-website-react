@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function PrivacyPolicyPage() {
     useEffect(() => {
@@ -184,7 +185,7 @@ export default function PrivacyPolicyPage() {
                                         <li>Request deletion (subject to legal limitations)</li>
                                         <li>Opt out of certain communications</li>
                                     </ul>
-                                    <p>Requests can be submitted to: <a href="mailto:support@fourcornerfunding.com">support@fourcornerfunding.com</a></p>
+                                    <p>Requests can be submitted to: <EmailObfuscator email="support@fourcornerfunding.com" showIcon={false} /></p>
                                 </div>
 
                                 <div className="term-block mb-3">
@@ -222,7 +223,7 @@ export default function PrivacyPolicyPage() {
                                     <p>Four Corner Holdings, LLC<br />
                                         3750 Gunn Highway, Suite 306<br />
                                         Tampa, FL 33618<br />
-                                        <a href="mailto:support@fourcornerfunding.com">support@fourcornerfunding.com</a><br />
+                                        <EmailObfuscator email="support@fourcornerfunding.com" showIcon={false} /><br />
                                         <a href="tel:8133913333">813-391-3333</a><br />
                                         <a href="https://www.fourcornerfunding.com">www.fourcornerfunding.com</a></p>
                                 </div>

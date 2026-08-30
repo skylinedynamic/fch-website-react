@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { submitLead } from '@/lib/api/leadsService';
+import { leadsService } from '@/services/leads.service';
+import { useSiteSettings } from '@/hooks/useCMS';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function ContactPage() {
     const [phone, setPhone] = useState('');
@@ -11,6 +14,9 @@ export default function ContactPage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [interestOpen, setInterestOpen] = useState(false);
     const interestRef = useRef<HTMLDivElement>(null);
+    const { data: response } = useSiteSettings();
+    const settings = response?.data;
+    const { executeRecaptcha } = useGoogleReCaptcha();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -57,14 +63,23 @@ export default function ContactPage() {
         setSuccessMessage('');
         setErrorMessage('');
 
+        if (!executeRecaptcha) {
+            setErrorMessage('ReCaptcha not ready. Please try again.');
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            await submitLead({
+            const token = await executeRecaptcha('contact_form');
+
+            await leadsService.submitLead({
                 contact_person: formData.name,
                 email: formData.email,
                 phone_number: phone || undefined,
                 company_name: formData.company || undefined,
                 interest: formData.interest || undefined,
                 requirements_details: formData.message || undefined,
+                recaptcha_token: token,
             });
 
             setSuccessMessage('Thank you for reaching out! Your message has been sent.');
@@ -111,14 +126,26 @@ export default function ContactPage() {
                 <div className="auto-container">
                     <div className="row g-5">
                         {/* Address Block */}
-                        <div className="col-md-6 col-lg-4 wow fadeInLeft" data-wow-delay="0ms">
+                        <div className="col-md-6 col-lg-4 wow fadeInLeft" data-wow-delay="0ms" itemScope itemType="http://schema.org/FinancialService">
+                            <meta itemProp="name" content={settings?.site_name || "Four Corner Funding"} />
                             <div className="contact-details-block dark-card">
                                 <div className="inner-box">
                                     <div className="icon">
                                         <i className="fa-solid fa-location-dot"></i>
                                     </div>
                                     <h4 className="title">Address</h4>
-                                    <p className="text">3750 Gunn Highway, Suite 306 Tampa, FL. 33618</p>
+                                    <p className="text" itemProp="address" itemScope itemType="http://schema.org/PostalAddress">
+                                        {settings?.address ? (
+                                            settings.address.split('\n').map((line, idx) => (
+                                                <span key={idx}>{line}<br /></span>
+                                            ))
+                                        ) : (
+                                            <>
+                                                <span itemProp="streetAddress">3750 Gunn Highway, Suite 306</span><br />
+                                                <span itemProp="addressLocality">Tampa</span>, <span itemProp="addressRegion">FL</span>. <span itemProp="postalCode">33618</span>
+                                            </>
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +158,7 @@ export default function ContactPage() {
                                     </div>
                                     <h4 className="title">Phone Number</h4>
                                     <p className="text">
-                                        <a href="tel:813-391-3333" style={{ color: 'inherit' }}>813-391-3333</a>
+                                        <a href={`tel:${settings?.phone_number || "813-391-3333"}`} style={{ color: 'inherit' }} itemProp="telephone">{settings?.phone_number || "813-391-3333"}</a>
                                     </p>
                                 </div>
                             </div>
@@ -143,9 +170,9 @@ export default function ContactPage() {
                                     <div className="icon">
                                         <i className="fa-solid fa-envelope"></i>
                                     </div>
-                                    <h4 className="title">Email Address</h4>
-                                    <p className="text">
-                                        <a href="mailto:Info@fourcornerfunding.com" style={{ color: 'inherit' }}>Info@fourcornerfunding.com</a>
+                                    <h4 className="title">E-Mail Address</h4>
+                                    <p className="text" itemProp="email">
+                                        <EmailObfuscator email={settings?.email || "Info@fourcornerfunding.com"} showIcon={false} className="text-inherit" />
                                     </p>
                                 </div>
                             </div>
@@ -164,10 +191,14 @@ export default function ContactPage() {
                                         </p>
                                     </div>
                                     <div className="google-map">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.9026235120837!2d-82.48482817448344!3d28.034468817835467!2m3!1f275.9634941696157!2f44.31251129127868!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88c2c1393912d155%3A0x41d1edef6ef2477b!2s3750%20Gunn%20Hwy%20suite%20306%2C%20Tampa%2C%20FL%2033618%2C%20USA!5e1!3m2!1sen!2sbd!4v1772000051944!5m2!1sen!2sbd"
-                                            width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                        {settings?.map_iframe ? (
+                                            <div dangerouslySetInnerHTML={{ __html: settings.map_iframe }} />
+                                        ) : (
+                                            <iframe
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.9026235120837!2d-82.48482817448344!3d28.034468817835467!2m3!1f275.9634941696157!2f44.31251129127868!3f0!3m2!1i1024!2i768!4f35!3m3!1m2!1s0x88c2c1393912d155%3A0x41d1edef6ef2477b!2s3750%20Gunn%20Hwy%20suite%20306%2C%20Tampa%2C%20FL%2033618%2C%20USA!5e1!3m2!1sen!2sbd!4v1772000051944!5m2!1sen!2sbd"
+                                                width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -249,6 +280,9 @@ export default function ContactPage() {
                                         <button type="submit" className="theme-btn btn-style-one" disabled={isSubmitting}>
                                             {isSubmitting ? 'Sending...' : 'Submit Now'}
                                         </button>
+                                        <div className="recaptcha-disclosure mt-3">
+                                            This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.
+                                        </div>
                                     </form>
                                 </div>
                             </div>

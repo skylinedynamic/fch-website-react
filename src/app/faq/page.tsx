@@ -1,22 +1,20 @@
-import { getFaqData } from '@/lib/api/cmsService';
+import { faqService } from '@/services/faq.service';
 import Link from 'next/link';
 import FaqSection from '@/components/faq/FaqSection';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
-export const metadata: Metadata = {
-  title: 'FAQ',
-  description: 'Frequently Asked Questions about Business Funding and Credit Building',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/faq`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/faq');
+}
 
 import JsonLd from '@/components/seo/JsonLd';
 
 export default async function FaqPage() {
-  const data = await getFaqData();
+  const data = await faqService.getFaqData();
 
   const faqSchema = {
     '@context': 'https://schema.org',

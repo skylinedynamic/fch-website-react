@@ -1,23 +1,21 @@
-import { getCreditBuilderData } from '@/lib/api/cmsService';
+import { creditBuilderService } from '@/services/creditBuilder.service';
 import Image from 'next/image';
 import Link from 'next/link';
 import CreditBuilderFaq from '@/components/credit-builder/CreditBuilderFaq';
 
 import { Metadata } from 'next';
-import { seoConfig } from '@/config/seo';
+import { seoConfig } from '@/data/seo';
 
-export const metadata: Metadata = {
-  title: 'Credit Builder',
-  description: 'Structured, underwriting-aligned business credit infrastructure built for real funding eligibility.',
-  alternates: {
-    canonical: `${seoConfig.siteUrl}/credit-builder`,
-  },
-};
+import { getDynamicMetadata } from '@/lib/metadata';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getDynamicMetadata('/credit-builder');
+}
 
 import JsonLd from '@/components/seo/JsonLd';
 
 export default async function CreditBuilderPage() {
-  const data = await getCreditBuilderData();
+  const data = await creditBuilderService.getCreditBuilderData();
 
   const serviceSchema = {
     '@context': 'https://schema.org',

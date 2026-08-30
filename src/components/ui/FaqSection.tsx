@@ -39,11 +39,11 @@ export default function FaqSection({ data }) {
                     <div className="accordion" id="accordionExample2">
                       {faq.items.map((item, idx) => (
                         <div key={idx} className="accordion-item wow fadeInUp" data-wow-delay={`${idx * 2}00ms`}>
-                          <h2 className="accordion-header">
+                          <h3 className="accordion-header">
                             <button className={`accordion-button ${idx === 1 ? '' : 'collapsed'}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapseFaq${idx}`} aria-expanded={idx === 1 ? 'true' : 'false'} aria-controls={`collapseFaq${idx}`}>
                               {item.question}
                             </button>
-                          </h2>
+                          </h3>
                           <div id={`collapseFaq${idx}`} className={`accordion-collapse collapse ${idx === 1 ? 'show' : ''}`} data-bs-parent="#accordionExample2">
                             <div className="accordion-body">
                               <p className="text">{item.answer}</p>

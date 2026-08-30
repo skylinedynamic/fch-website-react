@@ -15,7 +15,7 @@ import {
     realEstatePositioningData,
     realEstateFaqData,
     realEstateSidebarData
-} from '@/data/realEstateData';
+} from '@/data/realEstate';
 
 export default function RealEstatePage() {
     useEffect(() => {
@@ -69,7 +69,7 @@ export default function RealEstatePage() {
                 <div className="auto-container">
                     <div className="row">
                         <div className="col-xl-8 col-lg-7">
-                            
+
                             {/* Intro Section */}
                             <div id="re-overview" className="sba-intro-block wow fadeInUp" data-wow-delay=".2s">
                                 <div className="sba-intro-label"><i className={realEstateIntroData.icon}></i> {realEstateIntroData.label}</div>

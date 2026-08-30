@@ -1,9 +1,15 @@
+'use client';
+
 import Link from 'next/link';
+import { useSiteSettings } from '@/hooks/useCMS';
+import { formatAddress } from '@/utils/address';
+import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
   { href: '/credit-builder', label: 'Credit Builder' },
   { href: '/partner-program', label: 'Partner Program' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact Us' },
   { href: '/faq', label: 'FAQ' },
 ];
@@ -15,14 +21,15 @@ const legalLinks = [
 ];
 
 const supportLinks = [
-  { href: '#', label: 'About Us' },
   { href: '/credit-builder', label: 'Credit Builder' },
   { href: 'https://app.fourcornerfunding.com/', label: 'Borrower Portal', external: true },
   { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Portal', external: true },
-  { href: '#', label: 'Career' },
 ];
 
 export default function Footer() {
+  const { data: response } = useSiteSettings();
+  const settings = response?.data;
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="footer-section-2 fix footer-bg">
       <div className="bg-color">
@@ -34,13 +41,44 @@ export default function Footer() {
       <div className="auto-container">
         <div className="footer-top-wrapper">
           <Link href="/" className="footer-logo wow fadeInUp" data-wow-delay=".3s">
-            <img style={{ width: '191px' }} src="/images/logo-white.png" alt="Four Corner Funding white logo" />
+            <img style={{ width: '191px' }} src={settings?.footer_logo || "/images/logo-white.png"} alt={`${settings?.site_name || "Four Corner Funding"} white logo`} />
           </Link>
           <div className="social-icon wow fadeInUp" data-wow-delay=".5s">
-            <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
-            <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
-            <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
-            <a href="#"><i className="fa-brands fa-pinterest-p"></i></a>
+            {Array.isArray(settings?.social_links) &&
+              settings.social_links
+                .filter((social) => social?.url) // ignore empty rows
+                .map((social, index) => {
+                  const platform = (social?.platform || '')
+                    .toString()
+                    .trim()
+                    .toLowerCase();
+
+                  const iconMap = {
+                    facebook: 'fa-facebook-f',
+                    linkedin: 'fa-linkedin-in',
+                    youtube: 'fa-youtube',
+                    instagram: 'fa-instagram',
+                    pinterest: 'fa-pinterest-p',
+                    twitter: 'fa-x-twitter',
+                    'twitter (x)': 'fa-x-twitter',
+                    x: 'fa-x-twitter',
+                  };
+
+                  const iconClass = iconMap[platform];
+
+                  if (!iconClass) return null;
+
+                  return (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className={`fa-brands ${iconClass}`}></i>
+                    </a>
+                  );
+                })}
           </div>
         </div>
 
@@ -53,24 +91,30 @@ export default function Footer() {
                   <h3 className="font-size-24 text-white font-weight-500">Head office</h3>
                 </div>
                 <div className="footer-content">
-                  <p className="text-white">Four Corner Holdings, LLC <br /> 3750 Gunn Highway, Suite 306
-                    <br /> Tampa, FL. 33618
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
+                    {settings?.site_name || ""}
+                    {/* {formatAddress(settings?.address)} */}
+                  </p>
+                  <p className="text-white custom-address" style={{ whiteSpace: 'pre-line' }}>
+                    {/* {settings?.site_name || ""} <br /> */}
+                    {formatAddress(settings?.address)}
                   </p>
                   <ul className="contact-list-2 mb-4">
                     <li>
-                      <a href="tel:813-391-3333"><i className="fa-solid fa-phone me-2"></i>
-                        813-391-3333</a>
+                      <a href={`tel:${settings?.phone_number || ""}`}><i className="fa-solid fa-phone me-2"></i>
+                        {settings?.phone_number || ""}</a>
                     </li>
                     <li>
-                      <a href="mailto:Info@fourcornerfunding.com"><i
-                        className="fa-solid fa-envelope me-2"></i>
-                        Info@fourcornerfunding.com</a>
+                      <EmailObfuscator
+                        email={settings?.email || "Info@fourcornerfunding.com"}
+                        showIcon={true}
+                        className="text-white"
+                      />
                     </li>
                   </ul>
                   <div className="footer-btn">
                     <Link href="/pre-qualification" className="footer-cta-btn">
-                      Get Pre-Qualified <span className="arrow"><i
-                        className="fa-regular fa-arrow-right"></i></span>
+                      Get Pre-Qualified <span className="arrow"><i className="fa-solid fa-arrow-right"></i></span>
                     </Link>
                   </div>
                 </div>
@@ -118,9 +162,14 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <p className="footer-text wow fadeInUp" data-wow-delay=".3s">Copyright © 2026 Four Corner Funding. All
-          Rights Reserved.
-        </p>
+        <div className="footer-text footer-legal-text wow fadeInUp" data-wow-delay=".3s">
+          <p>
+            Four Corner Funding is a registered Florida fictitious name (d/b/a) of Four Corner Holdings, LLC (Florida Document No. L23000004266). Four Corner Holdings, LLC is not a bank, lender, broker-dealer, or financial institution and does not make credit decisions. All financing is originated and underwritten by independent third-party funding sources and is subject to their underwriting, credit approval, documentation verification, and final discretion. Platform outputs support readiness evaluation and workflow; they are not credit decisions and are not guarantees of approval. Where a transaction is placed, Four Corner Holdings, LLC is compensated by the funding source at closing. Client-paid fees, where applicable, are software subscription fees and are not contingent on any financing outcome.
+          </p>
+          <p>
+            © {currentYear} Four Corner Holdings, LLC. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -20,7 +20,7 @@ export default function FaqSection({ data }) {
             e.stopPropagation();
         }
         setActiveCategory(catId);
-        setActiveIndex(-1); // Close all on category change
+        setTimeout(() => setActiveIndex(-1), 0); // Close all on category change
     };
 
     const toggleAccordion = (index) => {
@@ -93,6 +93,17 @@ export default function FaqSection({ data }) {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 767px) {
+          .faq-section .faq-acc-btn {
+            font-size: 18px !important;
+            line-height: 24px !important;
+          }
+          .faq-section .faq-acc-content .text {
+            font-size: 15px !important;
+            line-height: 21px !important;
           }
         }
       `}</style>
