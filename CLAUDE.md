@@ -38,6 +38,6 @@ No test runner is configured — no jest/vitest/playwright config and no test fi
 
 ## Related projects
 Sibling repos under `d:\laragon\www\`, part of the same FCH (Four Corner Funding) system:
-- **`fch-backend-api`** — Laravel 12 API backend. This site consumes its public, unauthenticated `v1/website` routes (`routes/website.php`) for CMS content, blog, SEO settings, and lead/pre-qualification submission — see `API_ENDPOINTS` in `src/lib/api/endpoints.ts`.
+- **`fch-backend-api`** (`fch-api`) — **the base project of the platform.** Laravel 12 API backend. This site consumes its public, unauthenticated `v1/website` routes (`routes/website.php`) for CMS content, blog, SEO settings, and lead/pre-qualification submission — see `API_ENDPOINTS` in `src/lib/api/endpoints.ts`. The data model, API contracts and compliance controls originate there — this repo is a consumer. For any change that spans both, start in `fch-api` and follow its response shapes.
 - **`fch-borrower-react`** (`client-fch`) — the authenticated borrower portal. Separate stack (Vite + Zustand + TanStack Query, axios) and separate deploy target; this site's "Apply"/pre-qualification flows hand off to it but share no code.
 - **`Fch-admin-frontend-react`** — the internal admin/back-office panel (same Vite stack as the borrower portal), used to manage the CMS content, leads, and blog data this site reads.
