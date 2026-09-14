@@ -1,9 +1,12 @@
 import './globals.css';
+import './blog-content.css';
+import './blog-theme.css';
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
 import WowInit from '@/components/common/WowInit';
+import ProjectPanelInit from '@/components/common/ProjectPanelInit';
 import Script from 'next/script';
 import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
 
@@ -216,6 +219,7 @@ export default async function RootLayout({
 
         <Preloader />
         <WowInit />
+        <ProjectPanelInit />
         <QueryProvider>
           <div className="page-wrapper body-bg">
             <Header />
