@@ -1,0 +1,677 @@
+/* ==========================================================================
+   Blog listing + article design
+   --------------------------------------------------------------------------
+   Everything is scoped under `.blog-page`, which sits on <main> of the blog
+   listing and the article page. The same `.news-box-items` card markup is
+   reused by the home page's BlogSection, so an unscoped rule here would
+   restyle the homepage too.
+
+   Article body styling (headings, lists, tables inside the post) is NOT here -
+   that lives in blog-content.css, shared with the CMS editor.
+   ========================================================================== */
+
+.blog-page {
+  --bp-ink: var(--headings-color, #0b3130);
+  --bp-body: var(--text-color, #646464);
+  --bp-accent: var(--theme-color1, #39bdbb);
+  --bp-deep: var(--theme-color2, #103c3b);
+  --bp-line: #e8eceb;
+  --bp-surface: #f6f8f8;
+  --bp-radius: 18px;
+  --bp-shadow: 0 2px 14px rgba(11, 49, 48, 0.05);
+  --bp-shadow-lift: 0 18px 40px rgba(11, 49, 48, 0.13);
+}
+
+/* --------------------------------------------------------------------------
+   Hero - the theme's 80px h1 is unusable for a long post title
+   -------------------------------------------------------------------------- */
+
+.blog-page .hero-section .hero-content h1 {
+  font-size: clamp(28px, 4.4vw, 54px);
+  line-height: 1.18;
+  margin-bottom: 8px;
+  overflow-wrap: break-word;
+}
+
+.blog-page .hero-section .page-breadcrumb {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.blog-page .hero-section .page-breadcrumb li {
+  overflow-wrap: anywhere;
+}
+
+@media only screen and (max-width: 767px) {
+  .blog-page .hero-section .hero-button .theme-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Post cards
+   -------------------------------------------------------------------------- */
+
+.blog-page .news-box-items {
+  background: #fff;
+  border: 1px solid var(--bp-line);
+  border-radius: var(--bp-radius);
+  box-shadow: var(--bp-shadow);
+  /* Column layout so the "Learn More" row sits on the baseline of every card
+     regardless of how long the title or excerpt runs. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.blog-page .news-box-items:hover {
+  border-color: rgba(57, 189, 187, 0.55);
+  box-shadow: var(--bp-shadow-lift);
+  transform: translateY(-6px);
+}
+
+/* Fixed ratio keeps a row of cards even when editors upload mixed image sizes. */
+.blog-page .news-box-items .news-image {
+  aspect-ratio: 16 / 10;
+  /* Shows through when a featured image fails to load, instead of a white gap. */
+  background: var(--bp-surface);
+  border-radius: 0;
+  flex: 0 0 auto;
+}
+
+.blog-page .news-box-items .news-image img {
+  border-radius: 0;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* The theme stacks two <img>: the first is a hidden reveal layer, the second is
+   the visible one. Only animate the visible layer. */
+.blog-page .news-box-items .news-image img:nth-child(2) {
+  transition: transform 0.6s ease;
+}
+
+.blog-page .news-box-items:hover .news-image img:nth-child(2) {
+  transform: scale(1.06);
+}
+
+.blog-page .news-box-items .news-image .post-box {
+  align-items: center;
+  background: rgba(16, 60, 59, 0.92);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: center;
+  left: 14px;
+  padding: 9px 14px;
+  top: 14px;
+  width: auto;
+}
+
+.blog-page .news-box-items .news-image .post-box .date {
+  font-size: 19px;
+}
+
+.blog-page .news-box-items .news-image .post-box .month {
+  letter-spacing: 0.04em;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+.blog-page .blog-card__cat {
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 100px;
+  color: var(--bp-deep);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  max-width: calc(100% - 28px);
+  overflow: hidden;
+  padding: 6px 14px;
+  position: absolute;
+  right: 14px;
+  text-overflow: ellipsis;
+  top: 14px;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.blog-page .news-box-items .news-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  margin-top: 0;
+  padding: 22px 24px 22px;
+}
+
+.blog-page .news-box-items .news-content .comments-list {
+  background: rgba(57, 189, 187, 0.12);
+  color: var(--bp-deep);
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 8px 15px;
+}
+
+.blog-page .news-box-items .news-content .comments-list li {
+  font-size: 13px;
+}
+
+.blog-page .news-box-items .news-content h3 {
+  border-bottom: 0;
+  /* Two lines max so cards in a row stay visually balanced. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 20px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.blog-page .blog-card__excerpt {
+  color: var(--bp-body);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0 0 18px;
+  overflow: hidden;
+}
+
+.blog-page .news-box-items .news-content .link-btn {
+  border-top: 1px solid rgba(11, 49, 48, 0.08);
+  gap: 8px;
+  /* Pins the row to the bottom of the card. */
+  margin-top: auto;
+  padding-top: 16px;
+  transition: color 0.3s ease;
+  width: fit-content;
+}
+
+.blog-page .news-box-items .news-content .link-btn:hover {
+  color: var(--bp-accent);
+}
+
+.blog-page .news-box-items .news-content .link-btn .icon {
+  transition: transform 0.3s ease;
+}
+
+.blog-page .news-box-items .news-content .link-btn:hover .icon {
+  transform: translateX(4px);
+}
+
+.blog-page .blog-empty {
+  background: var(--bp-surface);
+  border: 1px dashed var(--bp-line);
+  border-radius: var(--bp-radius);
+  color: var(--bp-body);
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.blog-page .blog-empty i {
+  color: var(--bp-accent);
+  display: block;
+  font-size: 34px;
+  margin-bottom: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Pagination
+   -------------------------------------------------------------------------- */
+
+.blog-page .modern-pagination {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+.blog-page .modern-pagination li a {
+  background-color: #fff;
+  border: 1px solid var(--bp-line);
+  border-radius: 10px;
+  font-size: 15px;
+  height: 44px;
+  min-width: 44px;
+}
+
+.blog-page .modern-pagination li a:hover {
+  background-color: var(--bp-surface);
+  border-color: var(--bp-accent);
+  color: var(--bp-deep);
+}
+
+.blog-page .modern-pagination li a.active {
+  background-color: var(--bp-deep);
+  border-color: var(--bp-deep);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Article page
+   -------------------------------------------------------------------------- */
+
+.blog-page .blog-details__img {
+  border-radius: var(--bp-radius);
+  overflow: hidden;
+  /* Shows through when a featured image fails to load, instead of a white gap. */
+  background: var(--bp-surface);
+}
+
+/* Same date pill as the listing cards. The theme leaves this one square and
+   pinned to the top right. */
+.blog-page .blog-details__date {
+  align-items: center;
+  background: rgba(16, 60, 59, 0.92);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: center;
+  left: 16px;
+  padding: 10px 16px;
+  right: auto;
+  top: 16px;
+  width: auto;
+}
+
+.blog-page .blog-details__date .day {
+  color: var(--bp-accent);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.blog-page .blog-details__date .month {
+  color: #fff;
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.blog-page .blog-details__img img {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+.blog-page .blog-details__content {
+  margin-top: 28px;
+}
+
+.blog-page .blog-details__meta {
+  align-items: center;
+  column-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 6px;
+  row-gap: 8px;
+}
+
+.blog-page .blog-details__meta li {
+  margin: 0;
+}
+
+.blog-page .blog-details__meta li + li {
+  margin-left: 0;
+}
+
+.blog-page .blog-details__meta li span {
+  align-items: center;
+  background: var(--bp-surface);
+  border-radius: 100px;
+  color: var(--bp-deep);
+  display: inline-flex;
+  font-size: 13.5px;
+  font-weight: 500;
+  gap: 7px;
+  padding: 7px 15px;
+}
+
+.blog-page .blog-details__meta li span i {
+  color: var(--bp-accent);
+}
+
+.blog-page .blog-details__title {
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.35;
+  margin-bottom: 18px;
+  margin-top: 14px;
+}
+
+.blog-page .blog-details__bottom {
+  border-top: 1px solid var(--bp-line);
+  gap: 16px;
+  margin-top: 40px;
+  padding: 26px 0 22px;
+}
+
+.blog-page .blog-details__tags {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.blog-page .blog-details__tags > span {
+  font-size: 17px;
+  margin-right: 4px;
+}
+
+.blog-page .blog-details__tags a {
+  background-color: var(--bp-surface);
+  border: 1px solid var(--bp-line);
+  color: var(--bp-deep);
+  font-size: 13.5px;
+  font-weight: 500;
+  margin: 0;
+  padding: 7px 16px;
+  transition: all 0.3s ease;
+}
+
+.blog-page .blog-details__tags a:hover {
+  background-color: var(--bp-deep);
+  border-color: var(--bp-deep);
+  color: #fff;
+}
+
+.blog-page .blog-details__tags a + a {
+  margin-left: 0;
+}
+
+/* Prev / next post */
+.blog-page .nav-links {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* The theme reserves 53px below for a comment block this site does not use. */
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+
+/* The theme sizes .prev/.next as `width: calc(50% - 15px)` flex rows, which
+   inside a 2-column grid halves them a second time and leaves the cards
+   stranded at a quarter width with a gap between. Let each one own its column
+   and let the link stretch to fill it. */
+.blog-page .nav-links > div {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.blog-page .nav-links > div > a {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.blog-page .nav-links > div > a {
+  background: #fff;
+  border: 1px solid var(--bp-line);
+  border-radius: 14px;
+  color: var(--bp-ink);
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+}
+
+.blog-page .nav-links > div > a::before {
+  color: var(--bp-body);
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.blog-page .nav-links .prev > a::before {
+  content: "\2190  Previous";
+}
+
+.blog-page .nav-links .next > a {
+  text-align: right;
+}
+
+.blog-page .nav-links .next > a::before {
+  content: "Next  \2192";
+}
+
+.blog-page .nav-links > div > a:hover {
+  border-color: var(--bp-deep);
+  box-shadow: var(--bp-shadow-lift);
+}
+
+.blog-page .nav-links > div > a:hover::before {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 992px) {
+  .blog-page .sidebar {
+    /* Header height + breathing room. */
+    position: sticky;
+    top: 110px;
+  }
+}
+
+.blog-page .custom-sidebar-search {
+  border-radius: 14px;
+  height: 56px;
+  padding: 0 20px;
+}
+
+.blog-page .custom-sidebar-search input {
+  font-size: 15px;
+  min-width: 0;
+}
+
+.blog-page .custom-sidebar-search button {
+  flex: 0 0 auto;
+  transition: opacity 0.3s ease;
+}
+
+.blog-page .custom-sidebar-search button:hover {
+  opacity: 0.75;
+}
+
+.blog-page .sidebar__post,
+.blog-page .sidebar__category,
+.blog-page .sidebar__tags {
+  background-color: #fff;
+  border: 1px solid var(--bp-line);
+  border-radius: var(--bp-radius);
+  box-shadow: var(--bp-shadow);
+  padding: 26px 24px;
+}
+
+.blog-page .sidebar__title {
+  font-size: 18px;
+  margin-bottom: 18px;
+  margin-left: 0;
+  padding-bottom: 14px;
+  position: relative;
+}
+
+.blog-page .sidebar__title::after {
+  background: var(--bp-accent);
+  border-radius: 2px;
+  bottom: 0;
+  content: "";
+  height: 3px;
+  left: 0;
+  position: absolute;
+  width: 34px;
+}
+
+.blog-page .sidebar__post .sidebar__post-list li {
+  border-radius: 12px;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.blog-page .sidebar__post .sidebar__post-list li + li {
+  margin-top: 4px;
+}
+
+.blog-page .sidebar__post .sidebar__post-list li:hover {
+  background-color: var(--bp-surface);
+}
+
+.blog-page .sidebar__post .sidebar__post-list .sidebar__post-image {
+  flex: 0 0 66px;
+  margin-right: 14px;
+  width: 66px;
+}
+
+.blog-page .sidebar__post .sidebar__post-list .sidebar__post-image img {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.blog-page .sidebar__post-content h3 {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.blog-page .sidebar__post-title-span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.blog-page .sidebar__category-list li a {
+  border-radius: 10px;
+  font-size: 15px;
+  padding: 10px 14px;
+  transition: all 0.3s ease;
+}
+
+.blog-page .sidebar__category-list li a:hover,
+.blog-page .sidebar__category-list li.active a {
+  background-color: var(--bp-surface);
+  color: var(--bp-deep);
+  padding-left: 18px;
+}
+
+.blog-page .sidebar__tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.blog-page .sidebar__tags-list a {
+  background: var(--bp-surface);
+  border: 1px solid var(--bp-line);
+  border-radius: 100px;
+  font-size: 13px;
+  margin: 0;
+  padding: 7px 15px;
+  transition: all 0.3s ease;
+}
+
+.blog-page .sidebar__tags-list a:hover {
+  background: var(--bp-deep);
+  border-color: var(--bp-deep);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 1199px) {
+  .blog-page .news-box-items .news-content {
+    padding: 20px;
+  }
+
+  .blog-page .news-box-items .news-content h3 {
+    font-size: 19px;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .blog-page .sidebar {
+    margin-top: 40px;
+  }
+
+  .blog-page .blog-details__bottom {
+    margin-top: 30px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .blog-page .news-box-items .news-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .blog-page .blog-details__img img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .blog-page .nav-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .blog-page .nav-links .next > a {
+    text-align: left;
+  }
+
+  .blog-page .sidebar__post,
+  .blog-page .sidebar__category,
+  .blog-page .sidebar__tags {
+    padding: 22px 20px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .blog-page .news-box-items .news-content {
+    padding: 18px;
+  }
+
+  .blog-page .news-box-items .news-content h3 {
+    font-size: 18px;
+  }
+
+  .blog-page .blog-card__excerpt {
+    font-size: 14.5px;
+  }
+
+  .blog-page .modern-pagination li a {
+    height: 40px;
+    min-width: 40px;
+    font-size: 14px;
+  }
+
+  .blog-page .blog-details__meta li span {
+    font-size: 12.5px;
+    padding: 6px 12px;
+  }
+}

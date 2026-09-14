@@ -31,7 +31,7 @@ export default function BlogDetailsClient({
   if (!post) return null;
 
   return (
-    <main>
+    <main className="blog-page">
       {/* Hero Section */}
       <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
         <div className="row g-4 align-items-center">
@@ -70,16 +70,20 @@ export default function BlogDetailsClient({
                 <div className="blog-details__content">
                   <ul className="list-unstyled blog-details__meta">
                     <li><span><i className="fas fa-user-circle"></i> {post.author}</span></li>
+                    <li><span><i className="fas fa-calendar-alt"></i> {post.month} {post.date}, {post.year}</span></li>
+                    {post.category?.name && (
+                      <li><span><i className="fas fa-folder-open"></i> {post.category.name}</span></li>
+                    )}
                   </ul>
                   <h3 className="blog-details__title">{post.title}</h3>
-                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                  <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
                 </div>
 
                 <div className="blog-details__bottom">
                   <p className="blog-details__tags">
                     <span>Tags</span>
                     {post.tags.map((tag, i) => (
-                      <span key={i}>{tag}</span>
+                      <Link key={i} href={`/blog?tag=${encodeURIComponent(tag)}`}>{tag}</Link>
                     ))}
                   </p>
                   {/* <div className="blog-details__social-list">
