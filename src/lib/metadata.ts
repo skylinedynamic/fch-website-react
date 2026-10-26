@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { cmsService } from '@/services/cms.service';
 import { seoConfig } from '@/data/seo';
+import { resolvePageTitle, withSiteName } from '@/lib/pageTitle';
 
 const fallbackSeo = {
   title: 'Four Corner Funding | Business Credit, Financing & Funding Partner',
@@ -9,9 +10,11 @@ const fallbackSeo = {
 };
 
 /**
- * Helper to fetch dynamic metadata for any static route (e.g. '/', '/contact', '/faq')
+ * Helper to fetch dynamic metadata for any static route (e.g. '/', '/contact', '/faq').
+ * Title, description, keywords and image all come from the path's SEO Settings
+ * entry (Admin > CMS > SEO Settings); `pageName` titles the page while it has none.
  */
-export async function getDynamicMetadata(path: string): Promise<Metadata> {
+export async function getDynamicMetadata(path: string, pageName?: string): Promise<Metadata> {
   const [seoRes, siteRes] = await Promise.all([
     cmsService.fetchSeoSettings(path),
     cmsService.fetchSiteSettings()
@@ -20,15 +23,15 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
   const seo = seoRes?.data;
   const site = siteRes?.data;
 
-  const siteName = site?.site_name || fallbackSeo.title;
+  // The brand name alone - it is what gets appended to page titles, so it must
+  // not fall back to the long default title.
+  const siteName = site?.site_name || seoConfig.siteName;
   const defaultDesc = site?.site_slogan || fallbackSeo.description;
   const siteUrl = site?.site_url || fallbackSeo.siteUrl || seoConfig.siteUrl;
 
-  // Title: prefer CMS meta_title, format with template if available
-  const rawTitle = seo?.meta_title || siteName;
-  const title = seo?.meta_title && seoConfig.titleTemplate
-    ? seoConfig.titleTemplate.replace('%s', seo.meta_title)
-    : rawTitle;
+  // Title: the CMS meta_title with the site name once (BUG-058); without one,
+  // "<Page Name> | <site name>" - see resolvePageTitle.
+  const title = resolvePageTitle(seo, siteName, path, pageName, fallbackSeo.title);
 
   const description = seo?.meta_description || defaultDesc;
 
@@ -54,7 +57,8 @@ export async function getDynamicMetadata(path: string): Promise<Metadata> {
   const ogImage = pickImage ? [{ url: abs(pickImage) as string }] : undefined;
 
   return {
-    title,
+    // absolute: the root layout's "%s | site" template must not add the brand again.
+    title: { absolute: title },
     description,
     keywords,
     alternates: {
@@ -90,17 +94,15 @@ export async function getBlogPostMetadata(slug: string, blogData: any): Promise<
 
   const seo = seoRes?.data;
   const site = siteRes?.data;
-  const siteName = site?.site_name || fallbackSeo.title;
+  const siteName = site?.site_name || seoConfig.siteName;
   const siteUrl = site?.site_url || fallbackSeo.siteUrl || seoConfig.siteUrl;
 
   // Priority fallback logic:
   // 1. Blog's native meta_title / meta_description / keywords
   // 2. Blog's title / summary
   // 3. Global site default
-  const rawTitle = blogData?.meta_title || blogData?.title || siteName;
-  const title = blogData?.meta_title && seoConfig.titleTemplate
-    ? seoConfig.titleTemplate.replace('%s', blogData.meta_title)
-    : rawTitle;
+  // A saved meta title is shown exactly as saved; otherwise "<post title> | <site name>".
+  const title = blogData?.meta_title?.trim() || withSiteName(blogData?.title, siteName);
 
   const description = blogData?.meta_description || blogData?.summary || site?.site_slogan || fallbackSeo.description;
 
@@ -121,7 +123,7 @@ export async function getBlogPostMetadata(slug: string, blogData: any): Promise<
   const ogImage = imageUrl ? [{ url: abs(imageUrl) as string }] : undefined;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     alternates: {
