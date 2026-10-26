@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/contact');
+  return getDynamicMetadata('/contact', 'Contact Us');
 }
 
 import { seoConfig } from '@/data/seo';

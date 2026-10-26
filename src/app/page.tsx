@@ -16,7 +16,7 @@ import { Metadata } from 'next';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/');
+  return getDynamicMetadata('/', 'Home');
 }
 
 export default async function Home() {
