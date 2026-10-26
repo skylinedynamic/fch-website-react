@@ -8,7 +8,7 @@ import { seoConfig } from '@/data/seo';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/faq');
+  return getDynamicMetadata('/faq', 'FAQ');
 }
 
 import JsonLd from '@/components/seo/JsonLd';

@@ -9,7 +9,7 @@ import { seoConfig } from '@/data/seo';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-    return getDynamicMetadata('/partner-program');
+    return getDynamicMetadata('/partner-program', 'Partner Program');
 }
 
 export default async function PartnerProgramPage() {

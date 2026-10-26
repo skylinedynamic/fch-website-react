@@ -12,12 +12,11 @@ import TestimonialSection from '@/components/ui/TestimonialSection';
 import ContactSection from '@/components/ui/ContactSection';
 import FaqSection from '@/components/ui/FaqSection';
 import BlogSection from '@/components/ui/BlogSection';
-
 import { Metadata } from 'next';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/');
+  return getDynamicMetadata('/', 'Home');
 }
 
 export default async function Home() {
