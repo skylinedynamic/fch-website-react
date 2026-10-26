@@ -30,6 +30,12 @@ Each of the eight gets a `layout.tsx`, the same pattern as `contact/layout.tsx`:
   - after: all eight serve their CMS title and `og:title` (e.g. "SBA Loan Programs | …", "Commercial Real Estate Financing | …").
 - `eslint` and `tsc --noEmit` clean.
 
+
+## Merge with origin/stage (same day)
+`origin/stage` (PR #3, `bugfix/qa-round1-release-v2`) added layouts for the same eight pages in parallel. Its version calls `getDynamicMetadata(path, pageName)`, the page name used as a fallback title, and comes with the BUG-058 title fix (`src/lib/pageTitle.ts`: a saved CMS title is shown as saved, no brand added). All eight `layout.tsx` conflicts were resolved with **origin's version**. Nothing else conflicted.
+
+**Checked after the merge** (`next dev` on the local API): `/sba-programs` → "SBA Loan Programs | Four Corner Funding"; `/real-estate`, `/business-acquisition` and `/pre-qualification` show their CMS titles; `/faq` and `/terms` no longer repeat the brand. `tsc --noEmit` and `eslint` are clean.
+
 ## Open items
-- Every title, these eight and the pages that already worked (`/faq`, `/contact`, …), repeats "| Four Corner Funding" two or three times. The CMS title already ends with the brand, and the title template adds it again. That is **BUG-058** (Arafat), not changed here.
+- The repeated brand in titles (BUG-058) is fixed by the incoming origin/stage commits, not here.
 - QA sheet: BUG-105 → Fixed after the stage deploy.
