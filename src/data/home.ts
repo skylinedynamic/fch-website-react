@@ -1,4 +1,5 @@
 import { HomeData } from '@/types/config.types';
+import { PARTNER_PORTAL_URL } from '@/lib/portals';
 
 export const homeConfig: HomeData = {
   hero: {
@@ -196,7 +197,7 @@ export const homeConfig: HomeData = {
         ],
         cta: {
           text: "Apply to Become a Partner",
-          link: "https://partner.fourcornerfunding.com/",
+          link: PARTNER_PORTAL_URL,
         },
       },
       {
@@ -211,7 +212,7 @@ export const homeConfig: HomeData = {
         ],
         cta: {
           text: "Request White-Label Information",
-          link: "https://partner.fourcornerfunding.com/",
+          link: PARTNER_PORTAL_URL,
         },
       },
     ],
