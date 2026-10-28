@@ -51,11 +51,23 @@ jobs:
             git fetch --all
             git reset --hard origin/stage
             
-            echo "--- Creating Environment File ---"
-            # Creating .env.production with staging URLs
-            echo "NEXT_PUBLIC_API_BASE_URL=https://api.skylinedynamic.dev/api/v1" > .env.production
-            echo "NEXT_PUBLIC_SITE_URL=https://skylinedynamic.dev" >> .env.production
-            echo "NEXT_BACKEND_BASE_URL=https://api.skylinedynamic.dev" >> .env.production
+            echo "--- Creating Environment File (.env.development) ---"
+            # Staging URLs go into .env.development only - stage never has a .env.production
+            echo "NEXT_PUBLIC_API_BASE_URL=https://api.skylinedynamic.dev/api/v1" > .env.development
+            echo "NEXT_PUBLIC_SITE_URL=https://skylinedynamic.dev" >> .env.development
+            echo "NEXT_BACKEND_BASE_URL=https://api.skylinedynamic.dev" >> .env.development
+            echo "NEXT_PUBLIC_PARTNER_PORTAL_URL=https://admin.skylinedynamic.dev/" >> .env.development
+            echo "NEXT_PUBLIC_BORROWER_PORTAL_URL=https://client.skylinedynamic.dev/" >> .env.development
+            cat .env.development
+
+            # Remove any .env.production left from an earlier deploy
+            rm -f .env.production
+
+            # `npm run build` / `npm start` do not read .env.development, so load it
+            # into the environment (which Next.js reads first) for the build and PM2
+            set -a
+            . ./.env.development
+            set +a
             
             echo "--- Checking file update status ---"
             ls -l middleware.ts
@@ -68,7 +80,8 @@ jobs:
             
             echo "--- Restarting application (PM2) ---"
             # Ensure pm2 is in the path or use absolute path if needed
-            pm2 restart fch-website || pm2 restart fch || pm2 start npm --name "fch-website" -- start
+            # --update-env passes the staging values loaded above to the running app
+            pm2 restart fch-website --update-env || pm2 restart fch --update-env || pm2 start npm --name "fch-website" -- start
             
             echo "--- Restarting Nginx ---"
             # Only restart if config is valid

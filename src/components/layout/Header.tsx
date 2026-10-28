@@ -5,13 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSiteSettings } from '@/hooks/useCMS';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
+import { BORROWER_PORTAL_URL, PARTNER_PORTAL_URL } from '@/lib/portals';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
   { href: '/credit-builder', label: 'Credit Builder' },
   { href: '/partner-program', label: 'Partner Program' },
   { href: '/faq', label: 'FAQ' },
-  { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Sign In', external: true },
+  { href: PARTNER_PORTAL_URL, label: 'Partner Sign In', external: true },
 ];
 
 interface NavigationProps {
@@ -107,7 +108,7 @@ export default function Header() {
                 <Navigation />
               </nav>
 
-              <a href="https://app.fourcornerfunding.com/" target="_blank"
+              <a href={BORROWER_PORTAL_URL} target="_blank"
                 rel="noopener noreferrer"
                 className="theme-btn btn-style-one"
                 style={{ padding: '24px 35px', marginTop: '10px' }}>
@@ -148,7 +149,7 @@ export default function Header() {
           <ul className="contact-list-one">
             <li>
               <div className="sticky-button">
-                <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
+                <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
                   className="theme-btn btn-style-one sticky-header-btn"
                   data-wow-delay=".6s">
                   Borrower Portal
@@ -223,7 +224,7 @@ export default function Header() {
                 <div className="navbar-collapse show collapse clearfix d-flex">
                   <Navigation className="clearfix" onLinkClick={closeMenu} />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
-                    <a href="https://app.fourcornerfunding.com/" target="_blank" rel="noopener noreferrer"
+                    <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
                       className="theme-btn btn-style-one sticky-header-btn"
                       data-wow-delay=".6s">
                       Borrower Portal

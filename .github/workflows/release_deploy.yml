@@ -56,6 +56,9 @@ jobs:
             echo "NEXT_PUBLIC_API_BASE_URL=https://api.fourcornerfunding.com/api/v1" > .env.production
             echo "NEXT_PUBLIC_SITE_URL=https://fourcornerfunding.com" >> .env.production
             echo "NEXT_BACKEND_BASE_URL=https://api.fourcornerfunding.com" >> .env.production
+            echo "NEXT_PUBLIC_PARTNER_PORTAL_URL=https://partner.fourcornerfunding.com/" >> .env.production
+            echo "NEXT_PUBLIC_BORROWER_PORTAL_URL=https://app.fourcornerfunding.com/" >> .env.production
+            cat .env.production
             
             echo "--- Checking file update status ---"
             ls -l middleware.ts
