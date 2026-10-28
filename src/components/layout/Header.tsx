@@ -73,14 +73,22 @@ export default function Header() {
             display: none !important;
           }
         }
-        .sticky-header .sticky-header-btn,
-        .mobile-menu .sticky-header-btn {
+        .sticky-header.fixed-header .sticky-header-btn,
+        .mobile-menu-visible .mobile-menu .sticky-header-btn {
           margin-top: 2px !important;
           padding: 16px 35px !important;
           visibility: visible !important;
           opacity: 1 !important;
           animation-delay: 0.6s !important;
           animation-name: fadeInUp !important;
+        }
+        /* The sticky header and mobile menu stay in the page while hidden
+           (opacity 0) — make sure nothing inside them can be clicked until shown. */
+        .sticky-header:not(.fixed-header),
+        .sticky-header:not(.fixed-header) *,
+        body:not(.mobile-menu-visible) .mobile-menu,
+        body:not(.mobile-menu-visible) .mobile-menu * {
+          pointer-events: none !important;
         }
       `}} />
       {/* Header Lower */}

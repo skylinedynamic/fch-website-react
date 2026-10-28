@@ -43918,8 +43918,8 @@ select.prequal-country-code option {
   width: auto !important;
 }
 
-.sticky-header .sticky-header-btn,
-.mobile-menu .sticky-header-btn {
+.sticky-header.fixed-header .sticky-header-btn,
+.mobile-menu-visible .mobile-menu .sticky-header-btn {
   margin-top: 2px !important;
   padding: 16px 35px !important;
   visibility: visible !important;
