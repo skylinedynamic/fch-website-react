@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useSiteSettings } from '@/hooks/useCMS';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { BORROWER_PORTAL_URL, PARTNER_PORTAL_URL } from '@/lib/portals';
+import { APPLY_PAGE_PATH } from '@/lib/applyForm';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -67,6 +68,36 @@ export default function Header() {
         .header-style-one .main-box .btn-style-one {
           display: inline-flex !important;
         }
+        .header-lower .outer-box .apply-now-btn {
+          margin-right: 12px;
+        }
+        /* Two header buttons (Apply Now + Borrower Portal) only fit in one row
+           with the five links from 1440px up; tighten the spacing below that. */
+        @media (min-width: 1200px) and (max-width: 1439.98px) {
+          .header-lower .main-menu .navigation > li {
+            margin-right: 22px;
+          }
+          .header-style-one.header-3 .main-box .main-menu {
+            margin-right: 20px;
+          }
+          .header-lower .outer-box .btn-style-one {
+            padding: 18px 22px !important;
+          }
+          .header-lower .outer-box .apply-now-btn {
+            margin-right: 8px;
+          }
+        }
+        /* The sticky header's container stops at 1320px, so it needs the
+           tighter spacing at every desktop width to keep both buttons in a row. */
+        .sticky-header.fixed-header .main-menu .navigation > li {
+          margin-left: 28px !important;
+        }
+        .sticky-header.fixed-header .sticky-button {
+          margin-left: 12px !important;
+        }
+        .sticky-header.fixed-header .sticky-header-btn {
+          padding: 16px 24px !important;
+        }
         @media (max-width: 1199px) {
           .header-lower .outer-box .btn-style-one,
           .sticky-header .sticky-button {
@@ -116,6 +147,12 @@ export default function Header() {
                 <Navigation />
               </nav>
 
+              <Link href={APPLY_PAGE_PATH}
+                className="theme-btn btn-style-one apply-now-btn"
+                style={{ padding: '24px 35px', marginTop: '10px' }}>
+                Apply Now
+              </Link>
+
               <a href={BORROWER_PORTAL_URL} target="_blank"
                 rel="noopener noreferrer"
                 className="theme-btn btn-style-one"
@@ -155,6 +192,15 @@ export default function Header() {
           </div>
 
           <ul className="contact-list-one">
+            <li>
+              <div className="sticky-button">
+                <Link href={APPLY_PAGE_PATH} onClick={closeMenu}
+                  className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
+                  data-wow-delay=".6s">
+                  Apply Now
+                </Link>
+              </div>
+            </li>
             <li>
               <div className="sticky-button">
                 <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
@@ -232,6 +278,13 @@ export default function Header() {
                 <div className="navbar-collapse show collapse clearfix d-flex">
                   <Navigation className="clearfix" onLinkClick={closeMenu} />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
+                    <Link href={APPLY_PAGE_PATH}
+                      className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
+                      data-wow-delay=".6s">
+                      Apply Now
+                    </Link>
+                  </div>
+                  <div className="sticky-button" style={{ marginLeft: '12px' }}>
                     <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
                       className="theme-btn btn-style-one sticky-header-btn"
                       data-wow-delay=".6s">

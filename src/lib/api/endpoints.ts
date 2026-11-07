@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
         BLOG_DETAILS: (slug: string) => `/website/blogs/${slug}`,
         BLOG_CATEGORIES: '/website/blogs/categories',
         BLOG_TAGS: '/website/blogs/tags',
+        APPLY_FORM: '/website/embed-form',
     },
     LEADS: {
         SUBMIT: '/website/leads',
