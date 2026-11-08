@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import {
+    APPLY_FORM_AUTO_HEIGHT_ATTRIBUTE,
     APPLY_FORM_MAX_HEIGHT,
     APPLY_FORM_MESSAGE_SOURCE,
     APPLY_FORM_MIN_HEIGHT,
-    APPLY_FORM_TITLE,
-    type ApplyFormDetails,
     type ApplyFormMessage,
 } from '@/lib/applyForm';
 
@@ -31,46 +30,74 @@ const originOf = (url: string): string | null => {
 };
 
 /**
- * The embedded application. The form reports its height and where to scroll
- * (see APPLY_FORM_MESSAGE_SOURCE); messages are accepted only from this
- * iframe and only from the form's own origin. Until the first height arrives,
- * the CSS fallback height applies.
+ * The embed code from the site settings, rendered as pasted (the API sends it
+ * only while it passes the save check - see lib/applyForm).
+ *
+ * The code's <script> (embed.js) does not run when React inserts HTML, so
+ * this does its job for the iframe: with automatic height (the iframe carries
+ * APPLY_FORM_AUTO_HEIGHT_ATTRIBUTE) it follows the form's reported height, and
+ * it always follows the form's scroll requests. Messages are accepted only
+ * from that iframe and from the form's own origin.
  */
-export default function ApplyFormFrame({ form }: { form: ApplyFormDetails }) {
-    const frameRef = useRef<HTMLIFrameElement>(null);
-    const [height, setHeight] = useState<number | null>(null);
+export default function ApplyFormFrame({ code }: { code: string }) {
+    const wrapRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const formOrigin = originOf(form.form_url);
+        const frame = wrapRef.current?.querySelector('iframe');
+        if (!frame) return;
+
+        const formOrigin = originOf(frame.src);
+        const autoHeight = frame.hasAttribute(APPLY_FORM_AUTO_HEIGHT_ATTRIBUTE);
 
         const onMessage = (event: MessageEvent) => {
-            const frame = frameRef.current;
-            if (!frame || event.source !== frame.contentWindow || event.origin !== formOrigin) return;
+            if (event.source !== frame.contentWindow || event.origin !== formOrigin) return;
             if (!isFormMessage(event.data)) return;
 
             if (event.data.type === 'resize') {
-                setHeight(Math.min(APPLY_FORM_MAX_HEIGHT, Math.max(APPLY_FORM_MIN_HEIGHT, Math.ceil(event.data.height))));
+                // A fixed height stays as pasted; only the scroll requests apply.
+                if (!autoHeight) return;
+                const height = Math.min(APPLY_FORM_MAX_HEIGHT, Math.max(APPLY_FORM_MIN_HEIGHT, Math.ceil(event.data.height)));
+                frame.style.height = `${height}px`;
+                // The attribute too, so the inspector shows the real height
+                // rather than the code's 800.
+                frame.setAttribute('height', String(height));
+                frame.setAttribute('scrolling', 'no');
                 return;
             }
 
+            // With a fixed height the form scrolls itself inside the iframe, so
+            // the page only brings the iframe's top into view; adding the
+            // form's offset as well would scroll past the field.
             const frameTop = frame.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({ top: Math.max(0, frameTop + event.data.top - STICKY_HEADER_OFFSET), behavior: 'smooth' });
+            const offsetInForm = autoHeight ? event.data.top : 0;
+            window.scrollTo({ top: Math.max(0, frameTop + offsetInForm - STICKY_HEADER_OFFSET), behavior: 'smooth' });
+        };
+
+        // Introduce this page to the form, so it reports its height even when
+        // the browser sent it no referrer to learn this page's origin from.
+        // Until the form arrives the iframe holds a blank page of this page's
+        // own origin, which can be read; the loaded form cannot.
+        const formLoaded = () => {
+            try {
+                return !frame.contentWindow?.location.href;
+            } catch {
+                return true;
+            }
+        };
+        const sayHello = () => {
+            if (formOrigin && formLoaded()) {
+                frame.contentWindow?.postMessage({ source: APPLY_FORM_MESSAGE_SOURCE, type: 'hello' }, formOrigin);
+            }
         };
 
         window.addEventListener('message', onMessage);
-        return () => window.removeEventListener('message', onMessage);
-    }, [form.form_url]);
+        frame.addEventListener('load', sayHello);
+        sayHello();
+        return () => {
+            window.removeEventListener('message', onMessage);
+            frame.removeEventListener('load', sayHello);
+        };
+    }, [code]);
 
-    return (
-        <div className="apply-frame-wrap">
-            <iframe
-                ref={frameRef}
-                src={form.form_url}
-                title={form.form_title || APPLY_FORM_TITLE}
-                className="apply-frame"
-                allow="clipboard-write"
-                style={height ? { height: `${height}px` } : undefined}
-            />
-        </div>
-    );
+    return <div ref={wrapRef} className="apply-frame-wrap" dangerouslySetInnerHTML={{ __html: code }} />;
 }

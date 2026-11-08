@@ -6,4 +6,3 @@ export * from './partner.service';
 export * from './faq.service';
 export * from './locations.service';
 export * from './prequalification.service';
-export * from './applyForm.service';

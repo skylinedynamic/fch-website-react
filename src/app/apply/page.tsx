@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { APPLY_FORM_ANCHOR } from '@/lib/applyForm';
-import { useApplyForm } from '@/hooks/useCMS';
+import { APPLY_FORM_ANCHOR, formLinkFromCode } from '@/lib/applyForm';
+import { useSiteSettings } from '@/hooks/useCMS';
 import ApplyHero from './components/ApplyHero';
 import ApplyFormFrame from './components/ApplyFormFrame';
 import FundingOptionsOverview from './components/FundingOptionsOverview';
@@ -11,7 +11,11 @@ import SoftPullNotice from './components/SoftPullNotice';
 import './apply.css';
 
 export default function ApplyPage() {
-    const { data: applyForm, isLoading } = useApplyForm();
+    // The embed code pasted in the admin's CMS > Site Settings, from the site
+    // settings; null shows the "not available" notice.
+    const { data: settings, isLoading } = useSiteSettings();
+    const formCode = settings?.data?.apply_form_embed_code || null;
+    const formLink = formCode ? formLinkFromCode(formCode) : null;
 
     useEffect(() => {
         if (typeof window !== 'undefined' && (window as any).WOW) {
@@ -53,8 +57,8 @@ export default function ApplyPage() {
                                 <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
                                 Loading the application…
                             </div>
-                        ) : applyForm ? (
-                            <ApplyFormFrame form={applyForm} />
+                        ) : formCode ? (
+                            <ApplyFormFrame code={formCode} />
                         ) : (
                             <div className="apply-form-state apply-form-state--error" role="alert">
                                 <i className="fas fa-exclamation-circle" aria-hidden="true"></i>
@@ -63,8 +67,8 @@ export default function ApplyPage() {
                         )}
 
                         <div className="apply-form-foot">
-                            {applyForm && (
-                                <a href={applyForm.form_url} target="_blank" rel="noopener noreferrer" className="apply-newtab-link">
+                            {formLink && (
+                                <a href={formLink} target="_blank" rel="noopener noreferrer" className="apply-newtab-link">
                                     <i className="fas fa-external-link-alt" aria-hidden="true"></i> Open Application in a New Tab
                                 </a>
                             )}

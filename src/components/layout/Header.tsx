@@ -14,6 +14,7 @@ const navLinks = [
   { href: '/partner-program', label: 'Partner Program' },
   { href: '/faq', label: 'FAQ' },
   { href: PARTNER_PORTAL_URL, label: 'Partner Sign In', external: true },
+  { href: BORROWER_PORTAL_URL, label: 'Borrower Portal', external: true },
 ];
 
 interface NavigationProps {
@@ -68,27 +69,41 @@ export default function Header() {
         .header-style-one .main-box .btn-style-one {
           display: inline-flex !important;
         }
-        .header-lower .outer-box .apply-now-btn {
-          margin-right: 12px;
+        /* Apply Now sits on the dark tab cut into the hero image's top-right
+           corner (hero-bg.png: 1860px wide, tab from x=1530, ~18%). With
+           background-size: cover from the top-left, the visible tab is never
+           wider than 18% of the hero (100vw minus its 30px side margins), so
+           reserving that much keeps the links off the tab at every width.
+           The 40px is the header's own right inset, already inside the tab. */
+        .header-lower .outer-box .header-cta {
+          display: flex;
+          justify-content: flex-end;
+          flex-shrink: 0;
+          min-width: calc((100vw - 60px) * 0.18 - 40px);
         }
-        /* Two header buttons (Apply Now + Borrower Portal) only fit in one row
-           with the five links from 1440px up; tighten the spacing below that. */
+        /* Six links plus the space kept for the tab only fit in one row with
+           the template's 50px gaps from 1680px up; tighten them below that. */
+        .header-lower .main-menu .navigation > li:last-child {
+          margin-right: 0;
+        }
+        @media (min-width: 1440px) and (max-width: 1679.98px) {
+          .header-lower .main-menu .navigation > li {
+            margin-right: 34px;
+          }
+        }
         @media (min-width: 1200px) and (max-width: 1439.98px) {
           .header-lower .main-menu .navigation > li {
-            margin-right: 22px;
+            margin-right: 16px;
           }
           .header-style-one.header-3 .main-box .main-menu {
-            margin-right: 20px;
+            margin-right: 16px;
           }
           .header-lower .outer-box .btn-style-one {
             padding: 18px 22px !important;
           }
-          .header-lower .outer-box .apply-now-btn {
-            margin-right: 8px;
-          }
         }
         /* The sticky header's container stops at 1320px, so it needs the
-           tighter spacing at every desktop width to keep both buttons in a row. */
+           tighter spacing at every desktop width to keep the links and Apply Now in a row. */
         .sticky-header.fixed-header .main-menu .navigation > li {
           margin-left: 28px !important;
         }
@@ -99,6 +114,7 @@ export default function Header() {
           padding: 16px 24px !important;
         }
         @media (max-width: 1199px) {
+          .header-lower .outer-box .header-cta,
           .header-lower .outer-box .btn-style-one,
           .sticky-header .sticky-button {
             display: none !important;
@@ -147,18 +163,13 @@ export default function Header() {
                 <Navigation />
               </nav>
 
-              <Link href={APPLY_PAGE_PATH}
-                className="theme-btn btn-style-one apply-now-btn"
-                style={{ padding: '24px 35px', marginTop: '10px' }}>
-                Apply Now
-              </Link>
-
-              <a href={BORROWER_PORTAL_URL} target="_blank"
-                rel="noopener noreferrer"
-                className="theme-btn btn-style-one"
-                style={{ padding: '24px 35px', marginTop: '10px' }}>
-                Borrower Portal
-              </a>
+              <div className="header-cta">
+                <Link href={APPLY_PAGE_PATH}
+                  className="theme-btn btn-style-one apply-now-btn"
+                  style={{ padding: '24px 35px', marginTop: '10px' }}>
+                  Apply Now
+                </Link>
+              </div>
 
               <div className="mobile-nav-toggler" onClick={toggleMenu}>
                 <span className="icon lnr-icon-bars"></span>
@@ -199,15 +210,6 @@ export default function Header() {
                   data-wow-delay=".6s">
                   Apply Now
                 </Link>
-              </div>
-            </li>
-            <li>
-              <div className="sticky-button">
-                <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
-                  className="theme-btn btn-style-one sticky-header-btn"
-                  data-wow-delay=".6s">
-                  Borrower Portal
-                </a>
               </div>
             </li>
             <li>
@@ -283,13 +285,6 @@ export default function Header() {
                       data-wow-delay=".6s">
                       Apply Now
                     </Link>
-                  </div>
-                  <div className="sticky-button" style={{ marginLeft: '12px' }}>
-                    <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
-                      className="theme-btn btn-style-one sticky-header-btn"
-                      data-wow-delay=".6s">
-                      Borrower Portal
-                    </a>
                   </div>
                 </div>
               </nav>
