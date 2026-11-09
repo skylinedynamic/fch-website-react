@@ -1,9 +1,12 @@
 import './globals.css';
+import './blog-content.css';
+import './blog-theme.css';
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Preloader from '@/components/common/Preloader';
 import WowInit from '@/components/common/WowInit';
+import ProjectPanelInit from '@/components/common/ProjectPanelInit';
 import Script from 'next/script';
 import ReCaptchaProvider from '@/components/providers/ReCaptchaProvider';
 
@@ -12,6 +15,7 @@ import React from 'react';
 
 import { seoConfig } from '@/data/seo';
 import { cmsService } from '@/services/cms.service';
+import { resolvePageTitle } from '@/lib/pageTitle';
 import QueryProvider from '@/lib/providers/QueryProvider';
 import { Poppins, DM_Sans, Great_Vibes } from 'next/font/google';
 
@@ -48,8 +52,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteName = settings?.site_name || seoConfig.siteName;
   const favicon = settings?.website_favicon || '/images/favicon.png';
 
-  // Use dynamic SEO from table if available, else fallback to site settings or config
-  const title = seo?.meta_title || siteName;
+  // Use dynamic SEO from table if available, else fallback to site settings or config.
+  // The home meta_title exactly as saved, else the default title (BUG-058). Pages set
+  // their own title (absolute); this default and the template below only cover a
+  // page that does not.
+  const title = resolvePageTitle(seo, siteName, '/', 'Home', seoConfig.defaultTitle);
   const description = seo?.meta_description || settings?.site_slogan || seoConfig.description;
   const keywords = seo?.keywords || seoConfig.keywords;
   const ogImage = seo?.og_image || seoConfig.ogImage;
@@ -216,6 +223,7 @@ export default async function RootLayout({
 
         <Preloader />
         <WowInit />
+        <ProjectPanelInit />
         <QueryProvider>
           <div className="page-wrapper body-bg">
             <Header />

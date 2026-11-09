@@ -7,7 +7,7 @@ import { seoConfig } from '@/data/seo';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/funding-options');
+  return getDynamicMetadata('/funding-options', 'Funding Options');
 }
 
 const fundingCards = [

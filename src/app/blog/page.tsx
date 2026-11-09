@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/blog');
+  return getDynamicMetadata('/blog', 'Blog');
 }
 
 export default async function BlogIndexPage({
@@ -38,7 +38,7 @@ export default async function BlogIndexPage({
   const latestPosts = await cmsService.fetchBlogPosts({ per_page: 3 });
 
   return (
-    <main>
+    <main className="blog-page">
       {/* Hero Section */}
       <section className="hero-section hero-3" style={{ backgroundImage: "url('/images/home-3/hero/hero-bg.png')" }}>
         <div className="row g-4 align-items-center">
@@ -67,8 +67,8 @@ export default async function BlogIndexPage({
             <div className="col-xl-8 col-lg-7">
               <div className="row">
                 {posts.map((post, idx) => (
-                  <div key={idx} className="col-xl-6 col-lg-6 col-md-6 mb-4">
-                    <div className="news-box-items mt-0" style={{ height: '100%' }}>
+                  <div key={idx} className="col-xl-6 col-lg-12 col-md-6 mb-4">
+                    <div className="news-box-items mt-0">
                       <div className="news-image">
                         <img src={post.image} alt={post.title} />
                         <img src={post.image} alt={post.title} />
@@ -76,6 +76,9 @@ export default async function BlogIndexPage({
                           <span className="date">{post.date}</span>
                           <span className="month">{post.month}</span>
                         </span>
+                        {post.category?.name && (
+                          <span className="blog-card__cat">{post.category.name}</span>
+                        )}
                       </div>
                       <div className="news-content">
                         <ul className="comments-list">
@@ -84,6 +87,9 @@ export default async function BlogIndexPage({
                         <h3>
                           <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                         </h3>
+                        {post.summary && (
+                          <p className="blog-card__excerpt">{post.summary}</p>
+                        )}
                         <Link href={`/blog/${post.slug}`} className="link-btn">
                           Learn More
                           <span className="icon"><i className="lnr-icon-arrow-right"></i></span>
@@ -94,8 +100,12 @@ export default async function BlogIndexPage({
                 ))}
 
                 {posts.length === 0 && (
-                  <div className="col-12 text-center">
-                    <p>No posts found for the selected criteria.</p>
+                  <div className="col-12">
+                    <div className="blog-empty">
+                      <i className="fas fa-newspaper"></i>
+                      <h4>No posts found</h4>
+                      <p className="mb-0">Nothing matches the selected criteria yet. Try another category or clear your search.</p>
+                    </div>
                   </div>
                 )}
               </div>

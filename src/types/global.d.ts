@@ -7,5 +7,6 @@ declare global {
         gsap: any;
         jQuery: any;
         $: any;
+        gtag?: (...args: unknown[]) => void;
     }
 }

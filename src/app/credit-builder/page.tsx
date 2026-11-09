@@ -9,7 +9,7 @@ import { seoConfig } from '@/data/seo';
 import { getDynamicMetadata } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getDynamicMetadata('/credit-builder');
+  return getDynamicMetadata('/credit-builder', 'Credit Builder');
 }
 
 import JsonLd from '@/components/seo/JsonLd';

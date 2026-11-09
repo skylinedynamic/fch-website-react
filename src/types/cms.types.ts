@@ -11,6 +11,8 @@ export interface SiteSettings {
   partner_logo: string;
   favicon: string;
   map_iframe: string;
+  /** /apply's embed code, as pasted in CMS > Site Settings (null when none). */
+  apply_form_embed_code?: string | null;
   agreement_signing_enabled: string | number;
   social_links: Array<{
     platform: string;

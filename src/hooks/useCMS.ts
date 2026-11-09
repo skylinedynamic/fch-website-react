@@ -28,3 +28,4 @@ export const useBlogTags = () => {
     queryFn: () => cmsService.fetchBlogTags()
   });
 };
+

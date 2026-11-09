@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSiteSettings } from '@/hooks/useCMS';
 import { formatAddress } from '@/utils/address';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
+import { BORROWER_PORTAL_URL, PARTNER_PORTAL_URL } from '@/lib/portals';
 
 const quickLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -22,8 +23,8 @@ const legalLinks = [
 
 const supportLinks = [
   { href: '/credit-builder', label: 'Credit Builder' },
-  { href: 'https://app.fourcornerfunding.com/', label: 'Borrower Portal', external: true },
-  { href: 'https://partner.fourcornerfunding.com/', label: 'Partner Portal', external: true },
+  { href: BORROWER_PORTAL_URL, label: 'Borrower Portal', external: true },
+  { href: PARTNER_PORTAL_URL, label: 'Partner Portal', external: true },
 ];
 
 export default function Footer() {
