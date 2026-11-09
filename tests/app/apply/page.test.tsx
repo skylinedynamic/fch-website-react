@@ -42,6 +42,15 @@ describe('/apply page tracking', () => {
     expect(window.gtag).toHaveBeenCalledWith('event', 'application_submitted');
   });
 
+  // SCRUM-435 S435-BUG-03: decided behaviour, which the CMS help text now states.
+  it('with no embed code it shows the "not available" notice and no form or link', async () => {
+    const { container } = renderWithProviders(<ApplyPage />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('The application is not available right now.');
+    expect(container.querySelector('iframe')).toBeNull();
+    expect(screen.queryByRole('link', { name: /Open Application in a New Tab/ })).toBeNull();
+  });
+
   it('sends nothing just for opening the page', async () => {
     server.use(siteSettingsHandler({ apply_form_embed_code: CODE }));
     const { container } = renderWithProviders(<ApplyPage />);
