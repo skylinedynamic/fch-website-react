@@ -4,6 +4,7 @@ import type { Page } from '@playwright/test';
 
 const BACKEND_PATH = resolve(process.env.E2E_BACKEND_PATH ?? '../fch-api');
 const API_BASE = 'http://127.0.0.1:8000';
+const WEBSITE_BASE = 'http://localhost:3100';
 
 /** The local host partner's form key. Only reads the database. */
 const hostFormKey = (): string => {
@@ -43,9 +44,18 @@ export const blockGoogleAnalytics = async (page: Page) => {
  *   exclude localhost, so the settings answer and the form's framing header are
  *   adjusted in the browser only.
  * - The submit answer is supplied here, so no application is stored or mailed.
+ *
+ * `publishedAddress` serves the form from the website's own address, as the
+ * edge's /form/* proxy does on stage and production; otherwise it comes from the
+ * API's address, as a form on another site does.
  */
-export const openApplyWithForm = async (page: Page, submitAnswer: { status: number; body: unknown }) => {
-  const formUrl = `${API_BASE}/form/${hostFormKey()}`;
+export const openApplyWithForm = async (
+  page: Page,
+  submitAnswer: { status: number; body: unknown },
+  { publishedAddress = false, path = '/apply' }: { publishedAddress?: boolean; path?: string } = {},
+) => {
+  const apiFormUrl = `${API_BASE}/form/${hostFormKey()}`;
+  const formUrl = publishedAddress ? `${WEBSITE_BASE}/form/${hostFormKey()}` : apiFormUrl;
 
   await page.route('**/api/v1/website/settings', async (route) => {
     const response = await route.fetch();
@@ -55,7 +65,7 @@ export const openApplyWithForm = async (page: Page, submitAnswer: { status: numb
   });
 
   await page.route(`${formUrl}*`, async (route) => {
-    const response = await route.fetch();
+    const response = await route.fetch({ url: apiFormUrl });
     const headers = { ...response.headers() };
     delete headers['content-security-policy'];
     delete headers['x-frame-options'];
@@ -71,11 +81,22 @@ export const openApplyWithForm = async (page: Page, submitAnswer: { status: numb
     }),
   );
 
-  await page.goto('/apply');
+  await page.goto(path);
 
   const form = page.frameLocator('iframe[title="Application"]');
-  await form.locator('#loanAppForm').waitFor({ state: 'attached' });
+  // select2 is drawn once the form's script has run and its submit handler is on.
+  await form.locator('.select2-container').first().waitFor({ state: 'attached' });
   return form;
+};
+
+/** The next submit's `origin_page` field, or null when it sends none. */
+export const originPageOfNextSubmit = async (page: Page, submit: () => Promise<void>) => {
+  const [request] = await Promise.all([
+    page.waitForRequest('**/v1/embed/submit/**'),
+    submit(),
+  ]);
+  const match = /name="origin_page"\r\n\r\n([^\r]*)\r\n/.exec(request.postData() ?? '');
+  return match ? match[1] : null;
 };
 
 /**
