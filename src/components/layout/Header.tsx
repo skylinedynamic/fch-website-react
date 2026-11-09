@@ -7,6 +7,7 @@ import { useSiteSettings } from '@/hooks/useCMS';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { BORROWER_PORTAL_URL, PARTNER_PORTAL_URL } from '@/lib/portals';
 import { APPLY_PAGE_PATH } from '@/lib/applyForm';
+import { APPLY_NOW_LOCATIONS, trackApplyNowClick } from '@/lib/analytics';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -165,6 +166,7 @@ export default function Header() {
 
               <div className="header-cta">
                 <Link href={APPLY_PAGE_PATH}
+                  onClick={() => trackApplyNowClick(APPLY_NOW_LOCATIONS.HEADER)}
                   className="theme-btn btn-style-one apply-now-btn"
                   style={{ padding: '24px 35px', marginTop: '10px' }}>
                   Apply Now
@@ -205,7 +207,11 @@ export default function Header() {
           <ul className="contact-list-one">
             <li>
               <div className="sticky-button">
-                <Link href={APPLY_PAGE_PATH} onClick={closeMenu}
+                <Link href={APPLY_PAGE_PATH}
+                  onClick={() => {
+                    trackApplyNowClick(APPLY_NOW_LOCATIONS.MOBILE);
+                    closeMenu();
+                  }}
                   className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
                   data-wow-delay=".6s">
                   Apply Now
@@ -281,6 +287,7 @@ export default function Header() {
                   <Navigation className="clearfix" onLinkClick={closeMenu} />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
                     <Link href={APPLY_PAGE_PATH}
+                      onClick={() => trackApplyNowClick(APPLY_NOW_LOCATIONS.STICKY)}
                       className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
                       data-wow-delay=".6s">
                       Apply Now

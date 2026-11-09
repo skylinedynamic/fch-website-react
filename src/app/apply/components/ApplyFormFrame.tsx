@@ -8,6 +8,7 @@ import {
     APPLY_FORM_MIN_HEIGHT,
     type ApplyFormMessage,
 } from '@/lib/applyForm';
+import { trackApplicationSubmitted } from '@/lib/analytics';
 
 /** Room left above the form when scrolling to it, for the sticky header. */
 const STICKY_HEADER_OFFSET = 100;
@@ -18,7 +19,7 @@ const isFormMessage = (data: unknown): data is ApplyFormMessage => {
     if (message.source !== APPLY_FORM_MESSAGE_SOURCE) return false;
     if (message.type === 'resize') return typeof message.height === 'number' && Number.isFinite(message.height);
     if (message.type === 'scroll') return typeof message.top === 'number' && Number.isFinite(message.top);
-    return false;
+    return message.type === 'submitted';
 };
 
 const originOf = (url: string): string | null => {
@@ -36,8 +37,9 @@ const originOf = (url: string): string | null => {
  * The code's <script> (embed.js) does not run when React inserts HTML, so
  * this does its job for the iframe: with automatic height (the iframe carries
  * APPLY_FORM_AUTO_HEIGHT_ATTRIBUTE) it follows the form's reported height, and
- * it always follows the form's scroll requests. Messages are accepted only
- * from that iframe and from the form's own origin.
+ * it always follows the form's scroll requests. It also counts the form's
+ * confirmed submissions. Messages are accepted only from that iframe and from
+ * the form's own origin.
  */
 export default function ApplyFormFrame({ code }: { code: string }) {
     const wrapRef = useRef<HTMLDivElement>(null);
@@ -52,6 +54,11 @@ export default function ApplyFormFrame({ code }: { code: string }) {
         const onMessage = (event: MessageEvent) => {
             if (event.source !== frame.contentWindow || event.origin !== formOrigin) return;
             if (!isFormMessage(event.data)) return;
+
+            if (event.data.type === 'submitted') {
+                trackApplicationSubmitted();
+                return;
+            }
 
             if (event.data.type === 'resize') {
                 // A fixed height stays as pasted; only the scroll requests apply.

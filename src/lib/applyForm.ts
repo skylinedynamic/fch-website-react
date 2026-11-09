@@ -35,14 +35,16 @@ export const APPLY_PAGE_PATH = '/apply';
 
 /**
  * Messages the embedded form posts to this page (fch-api
- * resources/views/embed-form/index.blade.php): its content height, and where
- * in the form to scroll. Only layout numbers - never field values.
+ * resources/views/embed-form/index.blade.php): its content height, where in
+ * the form to scroll, and that the API confirmed a submission. Only layout
+ * numbers and that bare signal - never field values.
  */
 export const APPLY_FORM_MESSAGE_SOURCE = 'fch-embed-form';
 
 export type ApplyFormMessage =
   | { source: typeof APPLY_FORM_MESSAGE_SOURCE; type: 'resize'; height: number }
-  | { source: typeof APPLY_FORM_MESSAGE_SOURCE; type: 'scroll'; top: number };
+  | { source: typeof APPLY_FORM_MESSAGE_SOURCE; type: 'scroll'; top: number }
+  | { source: typeof APPLY_FORM_MESSAGE_SOURCE; type: 'submitted' };
 
 /** Bounds for a reported height, so a bad message cannot collapse or balloon the frame. */
 export const APPLY_FORM_MIN_HEIGHT = 600;

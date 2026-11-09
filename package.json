@@ -7,6 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "smoke-test": "curl -s -o /dev/null -w '%{http_code}' https://fourcornerfunding.com/ | grep -q '200'"
   },
   "dependencies": {
@@ -17,13 +21,21 @@
     "react-google-recaptcha-v3": "^1.11.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
     "@types/jest": "^30.0.0",
     "@types/node": "25.5.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "typescript": "^5.9.3"
+    "jsdom": "29.1.1",
+    "msw": "2.15.0",
+    "typescript": "^5.9.3",
+    "vitest": "3.2.4"
   },
   "browserslist": [
     "last 2 versions",
