@@ -20,6 +20,9 @@ const hostFormKey = (): string => {
   return key;
 };
 
+/** The local host's form, opened directly rather than in the /apply iframe. */
+export const hostFormUrl = (): string => `${API_BASE}/form/${hostFormKey()}`;
+
 /** Events the page has given to gtag(), read back from window.dataLayer. */
 export const gaEvents = (page: Page) =>
   page.evaluate(() =>
