@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useSiteSettings } from '@/hooks/useCMS';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import { BORROWER_PORTAL_URL, PARTNER_PORTAL_URL } from '@/lib/portals';
+import { APPLY_PAGE_PATH } from '@/lib/applyForm';
+import { APPLY_NOW_LOCATIONS, trackApplyNowClick } from '@/lib/analytics';
 
 const navLinks = [
   { href: '/funding-options', label: 'Funding Options' },
@@ -13,6 +15,7 @@ const navLinks = [
   { href: '/partner-program', label: 'Partner Program' },
   { href: '/faq', label: 'FAQ' },
   { href: PARTNER_PORTAL_URL, label: 'Partner Sign In', external: true },
+  { href: BORROWER_PORTAL_URL, label: 'Borrower Portal', external: true },
 ];
 
 interface NavigationProps {
@@ -67,7 +70,52 @@ export default function Header() {
         .header-style-one .main-box .btn-style-one {
           display: inline-flex !important;
         }
+        /* Apply Now sits on the dark tab cut into the hero image's top-right
+           corner (hero-bg.png: 1860px wide, tab from x=1530, ~18%). With
+           background-size: cover from the top-left, the visible tab is never
+           wider than 18% of the hero (100vw minus its 30px side margins), so
+           reserving that much keeps the links off the tab at every width.
+           The 40px is the header's own right inset, already inside the tab. */
+        .header-lower .outer-box .header-cta {
+          display: flex;
+          justify-content: flex-end;
+          flex-shrink: 0;
+          min-width: calc((100vw - 60px) * 0.18 - 40px);
+        }
+        /* Six links plus the space kept for the tab only fit in one row with
+           the template's 50px gaps from 1680px up; tighten them below that. */
+        .header-lower .main-menu .navigation > li:last-child {
+          margin-right: 0;
+        }
+        @media (min-width: 1440px) and (max-width: 1679.98px) {
+          .header-lower .main-menu .navigation > li {
+            margin-right: 34px;
+          }
+        }
+        @media (min-width: 1200px) and (max-width: 1439.98px) {
+          .header-lower .main-menu .navigation > li {
+            margin-right: 16px;
+          }
+          .header-style-one.header-3 .main-box .main-menu {
+            margin-right: 16px;
+          }
+          .header-lower .outer-box .btn-style-one {
+            padding: 18px 22px !important;
+          }
+        }
+        /* The sticky header's container stops at 1320px, so it needs the
+           tighter spacing at every desktop width to keep the links and Apply Now in a row. */
+        .sticky-header.fixed-header .main-menu .navigation > li {
+          margin-left: 28px !important;
+        }
+        .sticky-header.fixed-header .sticky-button {
+          margin-left: 12px !important;
+        }
+        .sticky-header.fixed-header .sticky-header-btn {
+          padding: 16px 24px !important;
+        }
         @media (max-width: 1199px) {
+          .header-lower .outer-box .header-cta,
           .header-lower .outer-box .btn-style-one,
           .sticky-header .sticky-button {
             display: none !important;
@@ -116,12 +164,14 @@ export default function Header() {
                 <Navigation />
               </nav>
 
-              <a href={BORROWER_PORTAL_URL} target="_blank"
-                rel="noopener noreferrer"
-                className="theme-btn btn-style-one"
-                style={{ padding: '24px 35px', marginTop: '10px' }}>
-                Borrower Portal
-              </a>
+              <div className="header-cta">
+                <Link href={APPLY_PAGE_PATH}
+                  onClick={() => trackApplyNowClick(APPLY_NOW_LOCATIONS.HEADER)}
+                  className="theme-btn btn-style-one apply-now-btn"
+                  style={{ padding: '24px 35px', marginTop: '10px' }}>
+                  Apply Now
+                </Link>
+              </div>
 
               <div className="mobile-nav-toggler" onClick={toggleMenu}>
                 <span className="icon lnr-icon-bars"></span>
@@ -157,11 +207,15 @@ export default function Header() {
           <ul className="contact-list-one">
             <li>
               <div className="sticky-button">
-                <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
-                  className="theme-btn btn-style-one sticky-header-btn"
+                <Link href={APPLY_PAGE_PATH}
+                  onClick={() => {
+                    trackApplyNowClick(APPLY_NOW_LOCATIONS.MOBILE);
+                    closeMenu();
+                  }}
+                  className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
                   data-wow-delay=".6s">
-                  Borrower Portal
-                </a>
+                  Apply Now
+                </Link>
               </div>
             </li>
             <li>
@@ -232,11 +286,12 @@ export default function Header() {
                 <div className="navbar-collapse show collapse clearfix d-flex">
                   <Navigation className="clearfix" onLinkClick={closeMenu} />
                   <div className="sticky-button" style={{ marginLeft: '45px' }}>
-                    <a href={BORROWER_PORTAL_URL} target="_blank" rel="noopener noreferrer"
-                      className="theme-btn btn-style-one sticky-header-btn"
+                    <Link href={APPLY_PAGE_PATH}
+                      onClick={() => trackApplyNowClick(APPLY_NOW_LOCATIONS.STICKY)}
+                      className="theme-btn btn-style-one sticky-header-btn apply-now-btn"
                       data-wow-delay=".6s">
-                      Borrower Portal
-                    </a>
+                      Apply Now
+                    </Link>
                   </div>
                 </div>
               </nav>
