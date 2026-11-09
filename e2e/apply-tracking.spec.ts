@@ -48,6 +48,13 @@ test('a confirmed submission is tracked once, with no applicant data', async ({ 
   await submitForm(page);
 
   await expect(form.getByRole('heading', { name: 'Application Submitted!' })).toBeVisible();
+  // SCRUM-435 S435-BUG-02: the next step, with no response-time promise.
+  const confirmation = form.locator('#successScreen');
+  // The host's own site name in the local database, not its company name.
+  await expect(confirmation).toContainText('Thank you for applying with Four Corner Funding.');
+  await expect(confirmation).toContainText('will review it');
+  await expect(confirmation).toContainText('does not guarantee approval or funding');
+  await expect(confirmation).not.toContainText('shortly');
   await expect
     .poll(async () => (await gaEvents(page)).filter((event) => event.name === 'application_submitted'))
     .toEqual([{ name: 'application_submitted' }]);
