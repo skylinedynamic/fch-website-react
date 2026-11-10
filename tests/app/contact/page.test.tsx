@@ -52,9 +52,16 @@ describe('/contact map', () => {
 const renderPage = (siteKey?: string) =>
   renderWithProviders(siteKey ? <ReCaptchaProvider siteKey={siteKey}><ContactPage /></ReCaptchaProvider> : <ContactPage />);
 
-const fillAndSubmit = async () => {
+/** Picks an answer to "What brings you here today?" (the custom dropdown). */
+const chooseInterest = async (label: string) => {
+  await userEvent.click(screen.getByText('What brings you here today?*'));
+  await userEvent.click(screen.getByText(label));
+};
+
+const fillAndSubmit = async (interest: string | null = 'Explore becoming a client') => {
   await userEvent.type(screen.getByPlaceholderText('Your Name*'), 'Jane Doe');
   await userEvent.type(screen.getByPlaceholderText('Email Address*'), 'jane@example.com');
+  if (interest) await chooseInterest(interest);
   await userEvent.type(screen.getByPlaceholderText('Enter Your Message here'), 'Hello');
   await userEvent.click(screen.getByRole('button', { name: 'Submit Now' }));
 };
@@ -130,5 +137,45 @@ describe('/contact form and reCAPTCHA', () => {
 
     expect(await screen.findByText('Please complete the reCAPTCHA verification.')).toBeInTheDocument();
     expect(screen.queryByText(/Thank you/)).not.toBeInTheDocument();
+  });
+});
+
+describe('/contact "What brings you here today?"', () => {
+  it.each([
+    ['Explore becoming a client', 'Borrower'],
+    ['Explore partnership opportunities', 'Partner'],
+  ])('sends "%s" as interest "%s"', async (label, code) => {
+    const sent: Record<string, unknown>[] = [];
+    server.use(leadsHandler(sent));
+    renderPage();
+
+    await fillAndSubmit(label);
+
+    expect(await screen.findByText('Thank you for reaching out! Your message has been sent.')).toBeInTheDocument();
+    expect(sent[0]).toMatchObject({ interest: code });
+  });
+
+  it('shows the chosen answer in the field', async () => {
+    renderPage();
+
+    await chooseInterest('Explore partnership opportunities');
+
+    expect(screen.queryByText('What brings you here today?*')).not.toBeInTheDocument();
+    expect(screen.getByText('Explore partnership opportunities')).toBeInTheDocument();
+  });
+
+  it('asks for an answer under the field, and sends nothing, when none is chosen', async () => {
+    const sent: Record<string, unknown>[] = [];
+    server.use(leadsHandler(sent));
+    renderPage();
+
+    await fillAndSubmit(null);
+
+    expect(await screen.findByText('Please choose what brings you here today.')).toBeInTheDocument();
+    expect(sent).toHaveLength(0);
+
+    // Choosing one clears the message.
+    await chooseInterest('Explore becoming a client');
+    expect(screen.queryByText('Please choose what brings you here today.')).not.toBeInTheDocument();
   });
 });

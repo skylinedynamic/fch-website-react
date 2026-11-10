@@ -1,35 +1,28 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { leadErrorMessage, leadsService } from '@/services/leads.service';
 import { useSiteSettings } from '@/hooks/useCMS';
 import { useRecaptchaToken } from '@/hooks/useRecaptchaToken';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import ContactMap from './components/ContactMap';
+import InterestSelect from './components/InterestSelect';
+import { LEAD_INTEREST_REQUIRED_MESSAGE, type LeadInterest } from '@/lib/leadInterest';
 
 export default function ContactPage() {
     const [phone, setPhone] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [interestOpen, setInterestOpen] = useState(false);
-    const interestRef = useRef<HTMLDivElement>(null);
+    const [interestError, setInterestError] = useState('');
     const { data: response } = useSiteSettings();
     const settings = response?.data;
     const getRecaptchaToken = useRecaptchaToken();
 
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (interestRef.current && !interestRef.current.contains(e.target as Node)) {
-                setInterestOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
-
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        name: string; email: string; company: string; interest: LeadInterest | ''; message: string;
+    }>({
         name: '',
         email: '',
         company: '',
@@ -60,9 +53,16 @@ export default function ContactPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setIsSubmitting(true);
         setSuccessMessage('');
         setErrorMessage('');
+
+        // Required (it decides whether the lead is a client or a partner lead).
+        if (!formData.interest) {
+            setInterestError(LEAD_INTEREST_REQUIRED_MESSAGE);
+            return;
+        }
+
+        setIsSubmitting(true);
 
         try {
             // No token when reCAPTCHA is not set up in Site Settings.
@@ -220,36 +220,14 @@ export default function ContactPage() {
                                                 onChange={handlePhoneChange}
                                             />
                                         </div>
-                                        {/* Custom React Dropdown — bypasses nice-select */}
-                                        <div className={`contact-interest-group${interestOpen ? ' open' : ''}`} ref={interestRef}>
-                                            <div
-                                                className={`contact-interest-trigger${formData.interest ? ' has-value' : ''}`}
-                                                onClick={() => setInterestOpen(prev => !prev)}
-                                            >
-                                                <i className="fa-light fa-circle-question"></i>
-                                                <span className="contact-interest-trigger-text">
-                                                    {formData.interest || 'What brings you here today?*'}
-                                                </span>
-                                                <i className={`fa-light fa-chevron-down contact-interest-chevron${interestOpen ? ' rotated' : ''}`}></i>
-                                            </div>
-                                            {interestOpen && (
-                                                <div className="contact-interest-dropdown">
-                                                    {['Explore becoming a client', 'Explore partnership opportunities'].map(opt => (
-                                                        <div
-                                                            key={opt}
-                                                            className={`contact-interest-dropdown-item${formData.interest === opt ? ' active' : ''}`}
-                                                            onClick={() => {
-                                                                setFormData(prev => ({ ...prev, interest: opt }));
-                                                                setInterestOpen(false);
-                                                            }}
-                                                        >
-                                                            {formData.interest === opt && <i className="fa-solid fa-check"></i>}
-                                                            {opt}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
+                                        <InterestSelect
+                                            value={formData.interest}
+                                            error={interestError}
+                                            onChange={(interest) => {
+                                                setFormData(prev => ({ ...prev, interest }));
+                                                setInterestError('');
+                                            }}
+                                        />
                                         <div className="type-feild">
                                             <i className="fa-light fa-pen-to-square"></i>
                                             <textarea name="message" id="message" placeholder="Enter Your Message here" value={formData.message} onChange={handleChange}></textarea>

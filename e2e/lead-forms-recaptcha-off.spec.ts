@@ -49,13 +49,21 @@ const reveal = async (page: Page, target: Locator) => {
   }).toPass({ timeout: 20000 });
 };
 
-const fillAndSubmit = async (page: Page, form: string) => {
+/** Picks an answer in the contact page's "What brings you here today?" dropdown. */
+const chooseInterest = async (page: Page, form: string, label: string) => {
+  const scope = page.locator(form);
+  await scope.getByText('What brings you here today?*').click();
+  await scope.getByText(label).click();
+};
+
+const fillAndSubmit = async (page: Page, form: string, interest?: string) => {
   const scope = page.locator(form);
   const name = scope.getByPlaceholder('Your Name*');
   await reveal(page, name);
 
   await name.pressSequentially('E2E Lead');
   await scope.getByPlaceholder('Email Address*').pressSequentially('e2e.lead@example.com');
+  if (interest) await chooseInterest(page, form, interest);
   await scope.getByPlaceholder('Enter Your Message here').pressSequentially('Testing the form');
   await expect(name).toHaveValue('E2E Lead');
 
@@ -65,21 +73,25 @@ const fillAndSubmit = async (page: Page, form: string) => {
   await submit.click();
 };
 
+const CONTACT_FORM = '#contact_form';
+const CONTACT_THANKS = 'Thank you for reaching out! Your message has been sent.';
+
+// The contact page also asks "What brings you here today?" (required there).
 const FORMS = [
-  { name: '/contact form', path: '/contact', form: '#contact_form', thanks: 'Thank you for reaching out! Your message has been sent.' },
-  { name: 'home "Need Help For Project!" form', path: '/', form: 'form.custom-contact-form', thanks: 'Thank you! Your message has been sent successfully.' },
+  { name: '/contact form', path: '/contact', form: CONTACT_FORM, thanks: CONTACT_THANKS, interest: 'Explore becoming a client' },
+  { name: 'home "Need Help For Project!" form', path: '/', form: 'form.custom-contact-form', thanks: 'Thank you! Your message has been sent successfully.', interest: undefined },
 ];
 
 test.beforeEach(async ({ page }) => {
   await blockGoogleAnalytics(page);
 });
 
-for (const { name, path, form, thanks } of FORMS) {
+for (const { name, path, form, thanks, interest } of FORMS) {
   test(`the ${name} sends the lead without a token when reCAPTCHA is not set up`, async ({ page }) => {
     const sent = await answerLeads(page, CREATED);
     await page.goto(path);
 
-    await fillAndSubmit(page, form);
+    await fillAndSubmit(page, form, interest);
 
     await expect(page.getByText(thanks)).toBeVisible();
     expect(sent).toHaveLength(1);
@@ -92,9 +104,36 @@ for (const { name, path, form, thanks } of FORMS) {
     await answerLeads(page, NEEDS_RECAPTCHA);
     await page.goto(path);
 
-    await fillAndSubmit(page, form);
+    await fillAndSubmit(page, form, interest);
 
     await expect(page.locator(form).getByText('Please complete the reCAPTCHA verification.')).toBeVisible();
     await expect(page.getByText(thanks)).toHaveCount(0);
   });
 }
+
+test.describe('/contact "What brings you here today?"', () => {
+  for (const [label, code] of [
+    ['Explore becoming a client', 'Borrower'],
+    ['Explore partnership opportunities', 'Partner'],
+  ]) {
+    test(`"${label}" is sent as interest "${code}"`, async ({ page }) => {
+      const sent = await answerLeads(page, CREATED);
+      await page.goto('/contact');
+
+      await fillAndSubmit(page, CONTACT_FORM, label);
+
+      await expect(page.getByText(CONTACT_THANKS)).toBeVisible();
+      expect(sent[0]).toMatchObject({ interest: code });
+    });
+  }
+
+  test('without an answer, the field asks for one and nothing is sent', async ({ page }) => {
+    const sent = await answerLeads(page, CREATED);
+    await page.goto('/contact');
+
+    await fillAndSubmit(page, CONTACT_FORM);
+
+    await expect(page.locator(CONTACT_FORM).getByText('Please choose what brings you here today.')).toBeVisible();
+    expect(sent).toHaveLength(0);
+  });
+});
