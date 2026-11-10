@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { leadsService } from '@/services/leads.service';
+import { leadErrorMessage, leadsService } from '@/services/leads.service';
 import { useSiteSettings } from '@/hooks/useCMS';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { useRecaptchaToken } from '@/hooks/useRecaptchaToken';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 import ContactMap from './components/ContactMap';
 
@@ -17,7 +17,7 @@ export default function ContactPage() {
     const interestRef = useRef<HTMLDivElement>(null);
     const { data: response } = useSiteSettings();
     const settings = response?.data;
-    const { executeRecaptcha } = useGoogleReCaptcha();
+    const getRecaptchaToken = useRecaptchaToken();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -64,14 +64,9 @@ export default function ContactPage() {
         setSuccessMessage('');
         setErrorMessage('');
 
-        if (!executeRecaptcha) {
-            setErrorMessage('ReCaptcha not ready. Please try again.');
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
-            const token = await executeRecaptcha('contact_form');
+            // No token when reCAPTCHA is not set up in Site Settings.
+            const token = await getRecaptchaToken();
 
             await leadsService.submitLead({
                 contact_person: formData.name,
@@ -80,7 +75,7 @@ export default function ContactPage() {
                 company_name: formData.company || undefined,
                 interest: formData.interest || undefined,
                 requirements_details: formData.message || undefined,
-                recaptcha_token: token,
+                ...(token ? { recaptcha_token: token } : {}),
             });
 
             setSuccessMessage('Thank you for reaching out! Your message has been sent.');
@@ -92,8 +87,8 @@ export default function ContactPage() {
                 message: ''
             });
             setPhone('');
-        } catch (err: any) {
-            setErrorMessage(err.message || 'Something went wrong. Please try again.');
+        } catch (err: unknown) {
+            setErrorMessage(leadErrorMessage(err));
         } finally {
             setIsSubmitting(false);
         }

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import { leadsService } from '@/services';
+import { leadErrorMessage, leadsService } from '@/services';
+import { useRecaptchaToken } from '@/hooks/useRecaptchaToken';
 import EmailObfuscator from '@/components/common/EmailObfuscator';
 
 export default function ContactSection({ data }: any) {
@@ -9,6 +10,7 @@ export default function ContactSection({ data }: any) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const getRecaptchaToken = useRecaptchaToken();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -42,12 +44,17 @@ export default function ContactSection({ data }: any) {
     setErrorMessage('');
 
     try {
+      // A token only when reCAPTCHA is set up in Site Settings; the API
+      // requires one as soon as a secret is saved there.
+      const token = await getRecaptchaToken();
+
       await leadsService.submitLead({
         contact_person: formData.name,
         email: formData.email,
         phone_number: phone || undefined,
         company_name: formData.company || undefined,
         requirements_details: formData.message || undefined,
+        ...(token ? { recaptcha_token: token } : {}),
       });
 
       setSuccessMessage('Thank you! Your message has been sent successfully.');
@@ -58,8 +65,8 @@ export default function ContactSection({ data }: any) {
         message: ''
       });
       setPhone('');
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Something went wrong. Please try again.');
+    } catch (err: unknown) {
+      setErrorMessage(leadErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }
@@ -79,7 +86,7 @@ export default function ContactSection({ data }: any) {
                     {contact.subtitle}
                   </h6>
                   <h3 className="title wow fadeInUp" data-wow-delay=".3s">
-                    let's work together
+                    let&apos;s work together
                   </h3>
                 </div>
                 <p className="contact-text wow fadeInUp" data-wow-delay=".5s">
@@ -110,7 +117,7 @@ export default function ContactSection({ data }: any) {
             <div className="col-xl-6 col-lg-6">
               <div className="contact-box-style-3">
                 <h3 className="wow fadeInUp" data-wow-delay=".2s">Need Help For Project!</h3>
-                <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let's work together</p>
+                <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let&apos;s work together</p>
 
                 <form className="custom-contact-form" onSubmit={handleSubmit}>
                   <div className="row g-4 text-start mt-4">
