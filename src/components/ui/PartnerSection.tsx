@@ -29,10 +29,18 @@ export default function PartnerSection({ data }) {
                         ))}
                       </ul>
                       <div className="about-content-3 about-button wow fadeInUp animated animated" data-wow-delay=".6s" style={{ paddingTop: '0px' }}>
-                        <a href={panel.cta.link} target="_blank" rel="noopener noreferrer" className="theme-btn btn-style-one">
-                          {panel.cta.text}
-                          <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
-                        </a>
+                        {/* A page of this site opens in the same tab; an outside address in a new one. */}
+                        {panel.cta.link.startsWith('/') ? (
+                          <Link href={panel.cta.link} className="theme-btn btn-style-one">
+                            {panel.cta.text}
+                            <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
+                          </Link>
+                        ) : (
+                          <a href={panel.cta.link} target="_blank" rel="noopener noreferrer" className="theme-btn btn-style-one">
+                            {panel.cta.text}
+                            <span className="icon"><i className="flaticon-finance-arrow-right-svgrepo-com1-2"></i></span>
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
