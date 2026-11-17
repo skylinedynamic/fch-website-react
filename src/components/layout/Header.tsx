@@ -75,14 +75,28 @@ export default function Header() {
            scales the image to its width on desktop (globals.css), so the tab
            is always 17.7% of the hero (100vw minus its 30px side margins);
            reserving that much keeps the links off it at every width.
-           The padding centres the button on the tab's flat top (x 1593-1830,
-           centre 148.5px in from the right edge), less half the button. */
+           The padding centres the button on the tab (at the button's height it
+           spans x 1557-1860, centre 148.5px in from the right edge): that
+           distance, less half the button (154px wide, 128px below 1440px)
+           and less the gap between the header's right edge and the hero's
+           (none below 1700px; 40px from 1700px, where the template widens
+           .main-box's side padding from 30px to 70px). */
         .header-lower .outer-box .header-cta {
           display: flex;
           justify-content: flex-end;
           flex-shrink: 0;
           min-width: calc((100vw - 60px) * 0.18 - 40px);
-          padding-right: max(12px, calc((100vw - 60px) * 148.5 / 1860 - 77px));
+          padding-right: calc((100vw - 60px) * 148.5 / 1860 - 77px);
+        }
+        @media (min-width: 1200px) and (max-width: 1439.98px) {
+          .header-lower .outer-box .header-cta {
+            padding-right: calc((100vw - 60px) * 148.5 / 1860 - 64px);
+          }
+        }
+        @media (min-width: 1700px) {
+          .header-lower .outer-box .header-cta {
+            padding-right: calc((100vw - 60px) * 148.5 / 1860 - 117px);
+          }
         }
         /* Six links plus the space kept for the tab only fit in one row with
            the template's 50px gaps from 1680px up; tighten them below that. */

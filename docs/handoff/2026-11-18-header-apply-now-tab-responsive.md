@@ -20,22 +20,27 @@
   - The hero's bottom corners get the image's own radius, so they stay rounded whichever of the image or the fill reaches the bottom.
   - This applies to every page that uses the hero, about 20 of them. Below 1200px nothing changes: the hero is already a flat colour there.
 - **Header (`Header.tsx`):**
-  - `.header-cta` gets a right padding. It centres the button on the tab's flat top (148.5/1860 of the hero in from the right, less half the button), with a minimum of 12px. The `min-width` that keeps the links off the tab is unchanged.
+  - `.header-cta` gets a right padding that centres the button on the tab. At the button's height the tab spans x 1557–1860 of the image, so its centre is 148.5/1860 of the hero in from the right edge. The `min-width` that keeps the links off the tab is unchanged.
+    - The padding is that distance, less half the button: the button is 154px wide, or 128px below 1440px, where its padding is 22px.
+    - From 1700px up, it also subtracts 40px. The template widens `.main-box`'s side padding from 30px to 70px there, so the header's right edge sits 40px inside the hero's.
+    - **Follow-up review, "button must show in center place":** the first version ignored the 40px and the narrower button, so at 1920px the button sat about 40px left of the tab's centre.
   - Below 1200px the main and sticky headers hide the desktop links and show the hamburger, which matches where Apply Now is hidden. The mobile menu has Apply Now.
 
 ## Files changed
 - `src/app/globals.css`: the desktop hero background is scaled to the hero's width, with the colour fill and the bottom radius.
-- `src/components/layout/Header.tsx`: `.header-cta` padding centres the button on the tab; the mobile menu now switches at 1200px instead of 1024px. The comments are updated.
+- `src/components/layout/Header.tsx`: `.header-cta` padding centres the button on the tab, with separate values below 1440px and from 1700px; the mobile menu now switches at 1200px instead of 1024px. The comments are updated.
 - `e2e/header-apply-tab.spec.ts` (new):
   - **Pixel checks:** at 1200, 1280, 1366, 1440, 1536, 1680, 1920 and 2560px, on `/`, `/faq` and `/terms`, the pixels just left and right of Apply Now must be the dark tab and not the page background. Pixels are decoded with `sharp`.
+  - **Centring:** at the same widths and pages, the button's centre must be within 4px of the tab's centre.
   - **Below 1200px:** at 1024, 1100 and 1199px, the desktop links are hidden, the hamburger opens a menu with Apply Now, and the sticky header shows its toggle.
 
 ## Testing
 - **Red first:**
   - The pixel checks failed 18 of 24 on the old code. The left side failed on `/` at 1200–1680px and on `/faq` at 1200–1280px; the right side failed on `/faq` and `/terms`.
   - The below-1200 checks failed 6 of 6.
+  - The centring checks failed 15 of 24 on the first version of the fix, at 1200–1439px and at 1920 and 2560px.
 - **After the fix:**
-  - `e2e/header-apply-tab.spec.ts`: 30/30 pass.
+  - `e2e/header-apply-tab.spec.ts`: 54/54 pass.
   - Existing header e2e tests (`apply-tracking.spec.ts`, the three "Apply Now button is tracked" tests): 3/3 pass.
   - `npm test`: 48/48 pass.
   - `npm run typecheck` is clean, and eslint is clean on the changed TS files.
@@ -45,4 +50,5 @@
 
 ## Open items
 - The hero's colour fill hard-codes `#144443` (as `--hero-card-color`), the colour inside `hero-bg.png`. If the image is replaced (a licensed hero is still pending), update the colour and the tab geometry numbers (1530/1593/1830/1860, 900/940) in `globals.css` and `Header.tsx`.
+- The centring padding also depends on the button's width (128px or 154px). If the button's padding or font changes, update the 64px/77px/117px values in `Header.tsx`.
 - Not committed.

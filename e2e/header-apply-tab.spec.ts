@@ -13,6 +13,11 @@ const DESKTOP_WIDTHS = [1200, 1280, 1366, 1440, 1536, 1680, 1920, 2560];
 const PAGES = ['/', '/faq', '/terms'];
 const SAMPLE_GAP = 6;
 const MAX_TAB_LUMINANCE = 110;
+// hero-bg.png is 1860px wide; at the button's height the tab spans roughly
+// x 1557-1860, so its centre is 148.5px in from the right edge.
+const HERO_IMAGE_WIDTH = 1860;
+const TAB_CENTRE_FROM_RIGHT = 148.5;
+const CENTRE_TOLERANCE = 4;
 
 const luminanceAt = async (page: Page, x: number, y: number): Promise<number> => {
   const png = await page.screenshot({ clip: { x: Math.round(x), y: Math.round(y), width: 1, height: 1 } });
@@ -60,6 +65,19 @@ for (const path of PAGES) {
 
       expect(left, 'left of the button is the dark tab').toBeLessThan(MAX_TAB_LUMINANCE);
       expect(right, 'right of the button is the dark tab').toBeLessThan(MAX_TAB_LUMINANCE);
+    });
+
+    test(`Apply Now is centred on the hero tab on ${path} at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(path, { waitUntil: 'networkidle' });
+
+      const button = await page.locator('.header-lower .apply-now-btn').boundingBox();
+      const hero = await page.locator('.hero-3').boundingBox();
+      if (!button || !hero) throw new Error('Apply Now or the hero has no bounding box');
+
+      const tabCentre = hero.x + hero.width - hero.width * (TAB_CENTRE_FROM_RIGHT / HERO_IMAGE_WIDTH);
+      const buttonCentre = button.x + button.width / 2;
+      expect(Math.abs(buttonCentre - tabCentre)).toBeLessThanOrEqual(CENTRE_TOLERANCE);
     });
   }
 }
