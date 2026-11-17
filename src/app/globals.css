@@ -350,3 +350,37 @@
 .footer-legal-text p:first-child {
   margin-bottom: 15px;
 }
+/* Hero card (hero-bg.png, 1860x940) on desktop.
+   The Apply Now button sits on the tab drawn in the image's top-right corner
+   (x 1530-1860, top 100px). With `background-size: cover`, a hero taller than
+   the image's ratio (most laptop widths) scales the image to its height and
+   crops the right edge, shrinking the visible tab below the button's width.
+   Scale to the hero's width instead, so the whole tab — 17.7% of the hero —
+   is always shown, and paint the same colour below the image when the hero
+   is taller than it. The hero is 100vw minus its 30px side margins. */
+@media (min-width: 1200px) {
+  .hero-section.hero-3 {
+    --hero-card-color: #144443;
+    --hero-card-radius: calc((100vw - 60px) * 30 / 1860);
+    background-size: 100% auto;
+    background-position: left top;
+    border-bottom-left-radius: var(--hero-card-radius);
+    border-bottom-right-radius: var(--hero-card-radius);
+  }
+
+  /* Starts below the image's grid (which fades out by y=900 of 940) and above
+     its rounded bottom corners; collapses to nothing when the hero is shorter
+     than that. The hero's z-index makes this paint over its background only. */
+  .hero-section.hero-3::before {
+    content: '';
+    position: absolute;
+    top: calc((100vw - 60px) * 900 / 1860);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-color: var(--hero-card-color);
+    border-radius: 0 0 var(--hero-card-radius) var(--hero-card-radius);
+    pointer-events: none;
+  }
+}

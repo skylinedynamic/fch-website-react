@@ -71,16 +71,18 @@ export default function Header() {
           display: inline-flex !important;
         }
         /* Apply Now sits on the dark tab cut into the hero image's top-right
-           corner (hero-bg.png: 1860px wide, tab from x=1530, ~18%). With
-           background-size: cover from the top-left, the visible tab is never
-           wider than 18% of the hero (100vw minus its 30px side margins), so
-           reserving that much keeps the links off the tab at every width.
-           The 40px is the header's own right inset, already inside the tab. */
+           corner (hero-bg.png: 1860px wide, tab from x=1530, ~18%). The hero
+           scales the image to its width on desktop (globals.css), so the tab
+           is always 17.7% of the hero (100vw minus its 30px side margins);
+           reserving that much keeps the links off it at every width.
+           The padding centres the button on the tab's flat top (x 1593-1830,
+           centre 148.5px in from the right edge), less half the button. */
         .header-lower .outer-box .header-cta {
           display: flex;
           justify-content: flex-end;
           flex-shrink: 0;
           min-width: calc((100vw - 60px) * 0.18 - 40px);
+          padding-right: max(12px, calc((100vw - 60px) * 148.5 / 1860 - 77px));
         }
         /* Six links plus the space kept for the tab only fit in one row with
            the template's 50px gaps from 1680px up; tighten them below that. */
@@ -114,11 +116,24 @@ export default function Header() {
         .sticky-header.fixed-header .sticky-header-btn {
           padding: 16px 24px !important;
         }
-        @media (max-width: 1199px) {
+        /* Below 1200px the hero has no tab, so Apply Now leaves the header bar.
+           The template only switches to the mobile menu below 1024px; switch at
+           1200px too, or 1024-1199px shows the links wrapped onto two rows and
+           no Apply Now at all. The mobile menu carries Apply Now. */
+        @media (max-width: 1199.98px) {
           .header-lower .outer-box .header-cta,
           .header-lower .outer-box .btn-style-one,
-          .sticky-header .sticky-button {
+          .sticky-header .sticky-button,
+          .main-header .header-lower .main-menu,
+          .main-header .sticky-header .main-menu {
             display: none !important;
+          }
+          .main-header .header-lower .mobile-nav-toggler,
+          .main-header .sticky-header .mobile-nav-toggler {
+            display: block;
+          }
+          .main-header .header-lower .main-box {
+            justify-content: space-between;
           }
         }
         .sticky-header.fixed-header .sticky-header-btn,
