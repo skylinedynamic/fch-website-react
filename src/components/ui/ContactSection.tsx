@@ -116,7 +116,7 @@ export default function ContactSection({ data }: any) {
             </div>
             <div className="col-xl-6 col-lg-6">
               <div className="contact-box-style-3">
-                <h3 className="wow fadeInUp" data-wow-delay=".2s">Need Help For Project!</h3>
+                <h3 className="wow fadeInUp" data-wow-delay=".2s">Need Help with Your Project?</h3>
                 <p className="wow fadeInUp" data-wow-delay=".4s">We are ready to help your next projects, let&apos;s work together</p>
 
                 <form className="custom-contact-form" onSubmit={handleSubmit}>
